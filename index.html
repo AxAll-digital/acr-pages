@@ -10,7 +10,6 @@
     body {
       font-family: Arial, sans-serif;
       font-size: 1rem;
-      line-height: 1.5em;
       color: #1a1b1f;
       margin: 0;
       padding: 0;
@@ -23,7 +22,6 @@
       padding: 3rem 2rem;
     }
 
-    /* Header */
     .acr-logo {
       max-width: 180px;
       margin-bottom: 2rem;
@@ -34,13 +32,11 @@
       font-size: 2rem;
       font-weight: 700;
       margin: 0 0 0.25rem;
-      color: #1a1b1f;
     }
 
     .acr-edition {
       font-size: 1.1rem;
       margin: 0 0 0.25rem;
-      color: #1a1b1f;
     }
 
     .acr-vpat-version {
@@ -49,69 +45,25 @@
       margin: 0 0 2rem;
     }
 
-    /* Info fields */
-    .acr-field {
-      margin-bottom: 1.25rem;
-    }
+    .acr-field { margin-bottom: 1.25rem; }
+    .acr-field-label { font-weight: 700; display: block; margin-bottom: 0.2rem; }
+    .acr-field-value { white-space: pre-line; }
 
-    .acr-field-label {
+    hr { border: none; border-top: 1px solid #c3d2e0; margin: 2rem 0; }
+
+    h2 { font-size: 1.4rem; font-weight: 700; margin: 2.5rem 0 1rem; }
+    h3.section-heading {
+      font-size: 1.2rem;
       font-weight: 700;
+      margin: 2rem 0 0.25rem;
+    }
+    .section-note {
       font-size: 1rem;
-      display: block;
-      margin-bottom: 0.2rem;
-    }
-
-    .acr-field-value {
-      font-size: 1rem;
-      white-space: pre-line;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px solid #c3d2e0;
-      margin: 2rem 0;
-    }
-
-    /* Section headings */
-    h2 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin: 2.5rem 0 1rem;
+      margin: 0 0 0.75rem;
       color: #1a1b1f;
     }
 
-    /* Standards table */
-    .standards-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 2rem;
-      font-size: 1rem;
-    }
-
-    .standards-table th {
-      background: #1a1b1f;
-      color: #fff;
-      padding: 10px 12px;
-      text-align: left;
-      font-size: 1rem;
-      border-left: 1px solid #404247;
-      border-right: 1px solid #404247;
-    }
-
-    .standards-table td {
-      padding: 10px 12px;
-      border-left: 1px solid #404247;
-      border-right: 1px solid #404247;
-      border-top: 1px solid #c3d2e0;
-      border-bottom: 1px solid #c3d2e0;
-      font-size: 1rem;
-    }
-
-    .standards-table {
-      border: 1px solid #404247;
-    }
-
-    /* ACR criteria tables */
+    /* Tables */
     .acr-table {
       width: 100%;
       border-collapse: collapse;
@@ -142,8 +94,14 @@
       border-bottom: 1px solid #c3d2e0;
     }
 
-    .acr-table tbody tr:nth-child(even) {
-      background: #f7f9fb;
+    .acr-table tbody tr:nth-child(even) { background: #f7f9fb; }
+
+    /* Heading rows in EN tables */
+    .acr-table tr.heading-row td {
+      font-style: italic;
+      font-weight: 600;
+      background: #f0f2f5;
+      color: #1a1b1f;
     }
 
     .acr-table td a {
@@ -152,22 +110,24 @@
       font-weight: 600;
     }
 
-    .acr-table td strong {
-      font-weight: 600;
-    }
-
     .acr-table-title {
       font-size: 1.3rem;
       font-weight: 700;
       margin: 2rem 0 0.75rem;
-      color: #1a1b1f;
+    }
+
+    .acr-en-ref {
+      font-size: 0.875rem;
+      color: #444;
+      margin-top: 0.4rem;
+      white-space: pre-line;
+      line-height: 1.5;
     }
 
     .acr-conformance-supports  { color: #14532d; font-weight: 600; }
     .acr-conformance-partial   { color: #78350f; font-weight: 600; }
     .acr-conformance-not       { color: #7f1d1d; font-weight: 600; }
 
-    /* Footer */
     .acr-footer {
       margin-top: 3rem;
       padding-top: 1.5rem;
@@ -176,89 +136,141 @@
       color: #888;
     }
 
-    .loading {
-      color: #666;
-      padding: 2rem 0;
+    .loading { color: #666; padding: 2rem 0; }
+
+    /* Standards table */
+    .standards-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      border: 1px solid #404247;
+    }
+    .standards-table th {
+      background: #1a1b1f;
+      color: #fff;
+      padding: 10px 12px;
+      text-align: left;
+      border-left: 1px solid #404247;
+      border-right: 1px solid #404247;
+    }
+    .standards-table td {
+      padding: 10px 12px;
+      border-left: 1px solid #404247;
+      border-right: 1px solid #404247;
+      border-top: 1px solid #c3d2e0;
+      border-bottom: 1px solid #c3d2e0;
     }
   </style>
 </head>
 <body>
 <div class="page">
-
-  <!-- Header — filled dynamically -->
-  <div id="acr-header">
-    <p class="loading">Loading report...</p>
-  </div>
-
-  <!-- Criteria tables — filled dynamically -->
-  <div id="acr-criteria">
-    <p class="loading">Loading accessibility criteria...</p>
-  </div>
-
+  <div id="acr-header"><p class="loading">Loading report...</p></div>
+  <div id="acr-body"><p class="loading">Loading accessibility criteria...</p></div>
   <div class="acr-footer">
     "Voluntary Product Accessibility Template" and "VPAT" are registered service marks of the Information Technology Industry Council (ITI)
   </div>
-
 </div>
 
 <script>
 (async function () {
 
-  // ── CONFIG ──────────────────────────────────────────────────
-  const API_BASE = 'https://proxy.junekarlove.com';
-  // ────────────────────────────────────────────────────────────
+  // ── CONFIG ────────────────────────────────────────────────────
+  const API_BASE = 'https://proxy.junekarlove.com'
+  const EN_URL   = 'https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf'
 
-  // Get slug from URL path: accessibility.telia.com/telia → "telia"
-  // For root path we use the subdomain prefix as slug
-  const hostname = window.location.hostname; // e.g. accessibility.liesbethdillen.com
-  const slug = hostname.split('.')[0] === 'accessibility'
-    ? hostname.split('.').slice(1, -1).join('-')   // liesbethdillen
-    : window.location.pathname.split('/').filter(Boolean)[0] || 'unknown';
+  // EN chapter metadata
+  const EN_CHAPTERS = {
+    4:  { label: 'Clause 4: Functional Performance Statements (FPS)', fixedNote: 'Not Applicable. This chapter is informative and does not contain requirements requiring testing. Each aspect of the product\'s functionality under evaluation is described in detail within the technical requirements tables.', noTable: true },
+    5:  { label: 'Clause 5: Generic Requirements' },
+    6:  { label: 'Clause 6: ICT with Two-Way Voice Communication' },
+    7:  { label: 'Clause 7: ICT with Video Capabilities' },
+    8:  { label: 'Clause 8: Hardware' },
+    9:  { label: 'Clause 9: Web', wcagRef: true, noTable: true },
+    10: { label: 'Clause 10: Non-web Documents' },
+    11: { label: 'Clause 11: Software' },
+    12: { label: 'Clause 12: Documentation and Support Services' },
+    13: { label: 'Clause 13: ICT Providing Relay or Emergency Service Access' },
+  }
 
-  // ── Fetch audit info ─────────────────────────────────────────
-  let auditData = null;
+  // ── HELPERS ───────────────────────────────────────────────────
+
+  // Determine if a criterion belongs to WCAG tables or an EN chapter
+  function classifyCriterion(id) {
+    if (!id) return { type: 'wcag' }
+    const parts = id.split('.')
+    const major = parseInt(parts[0])
+    const minor = parts.length > 1 ? parseInt(parts[1]) : 0
+    if (major <= 3) return { type: 'wcag' }
+    if (major === 4 && minor === 1) return { type: 'wcag' }   // 4.1.1, 4.1.2, 4.1.3 are WCAG
+    if (major >= 4 && major <= 13) return { type: 'en', chapter: major }
+    return { type: 'wcag' }
+  }
+
+  function isHeadingRow(conformance) {
+    return !!(conformance && conformance.toLowerCase().includes('heading'))
+  }
+
+  function conformanceClass(c) {
+    if (!c) return ''
+    const l = c.toLowerCase()
+    if (l === 'supports') return 'acr-conformance-supports'
+    if (l.includes('partially')) return 'acr-conformance-partial'
+    if (l.includes('does not')) return 'acr-conformance-not'
+    return ''
+  }
+
+  // ── FETCH DATA ────────────────────────────────────────────────
+  const hostname = window.location.hostname
+  const slug = hostname.startsWith('accessibility.')
+    ? hostname.replace('accessibility.', '').replace(/\.[^.]+$/, '')
+    : (window.location.pathname.split('/').filter(Boolean)[0] || 'unknown')
+
+  let auditData = null
   try {
-    const res = await fetch(`${API_BASE}/api/audit/${slug}`);
-    if (res.ok) auditData = await res.json();
-  } catch (e) { console.warn('Could not load audit info', e); }
+    const r = await fetch(`${API_BASE}/api/audit/${slug}`)
+    if (r.ok) auditData = await r.json()
+  } catch (e) { console.warn('Could not load audit info', e) }
 
-  // ── Fetch ACR criteria ───────────────────────────────────────
-  let records = [];
+  let records = []
   try {
-    const res = await fetch(`${API_BASE}/api/acr/${slug}`);
-    if (res.ok) {
-      const data = await res.json();
-      records = data.records || [];
-    }
-  } catch (e) { console.warn('Could not load criteria', e); }
+    const r = await fetch(`${API_BASE}/api/acr/${slug}`)
+    if (r.ok) { const d = await r.json(); records = d.records || [] }
+  } catch (e) { console.warn('Could not load criteria', e) }
 
-  // ── Render header ────────────────────────────────────────────
-  const header = document.getElementById('acr-header');
+  const clientName  = auditData?.clientName  || ''
+  const productName = auditData?.productName || ''
+  const reportDate  = auditData?.reportDate  || ''
+  const description = auditData?.description || ''
+  const contact     = auditData?.contact     || ''
+  const evalMethods = auditData?.evalMethods || ''
+  const standard    = auditData?.standard    || 'WCAG 2.1 AA'
+  const logoUrl     = auditData?.logoUrl     || ''
+  const vpat        = auditData?.vpat        || 'WCAG Edition'
+  const legalNote   = auditData?.legal       || ''
+  const isEN        = vpat === 'EN 301 549' || vpat === 'International (EU)'
+  const is22        = standard.includes('2.2')
 
-  const clientName   = auditData?.clientName   || '';
-  const productName  = auditData?.productName  || '';
-  const reportDate   = auditData?.reportDate   || '';
-  const description  = auditData?.description  || '';
-  const contact      = auditData?.contact      || '';
-  const evalMethods  = auditData?.evalMethods  || '';
-  const standard     = auditData?.standard     || 'WCAG 2.1 AA';
-  const logoUrl      = auditData?.logoUrl      || '';
-  const vpat         = auditData?.vpat         || 'WCAG Edition';
-  const legalNote    = auditData?.legal        || '';
+  // ── RENDER HEADER ─────────────────────────────────────────────
+  const standardsRows = isEN
+    ? `<tr><td><a href="http://www.w3.org/TR/2008/REC-WCAG20-20081211">Web Content Accessibility Guidelines 2.0</a></td><td>Level A (Yes) Level AA (Yes) Level AAA (No)</td></tr>
+       <tr><td><a href="https://www.w3.org/TR/WCAG21">Web Content Accessibility Guidelines 2.1</a></td><td>Level A (Yes) Level AA (Yes) Level AAA (No)</td></tr>
+       <tr><td><a href="${EN_URL}">EN 301 549 V3.1.1 (2019-11)</a> AND <a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf">EN 301 549 V3.2.1 (2021-03)</a></td><td>Yes</td></tr>`
+    : `<tr><td><a href="http://www.w3.org/TR/2008/REC-WCAG20-20081211">Web Content Accessibility Guidelines 2.0</a></td><td>Level A (Yes) Level AA (Yes) Level AAA (No)</td></tr>
+       <tr><td><a href="https://www.w3.org/TR/WCAG21">Web Content Accessibility Guidelines 2.1</a></td><td>Level A (Yes) Level AA (Yes) Level AAA (No)</td></tr>
+       <tr><td><a href="https://www.w3.org/TR/WCAG22">Web Content Accessibility Guidelines 2.2</a></td><td>${is22 ? 'Level A (Yes) Level AA (Yes) Level AAA (No)' : 'No'}</td></tr>`
 
-  const is22 = standard.includes('2.2');
-
-  header.innerHTML = `
+  document.getElementById('acr-header').innerHTML = `
     ${logoUrl ? `<img class="acr-logo" src="${logoUrl}" alt="${clientName} logo" />` : ''}
     <h1 class="acr-title">${clientName ? clientName + ' ' : ''}Accessibility Conformance Report</h1>
     <p class="acr-edition">${vpat}</p>
     <p class="acr-vpat-version">(Based on VPAT&reg; Version 2.5Rev)</p>
 
-    ${productName  ? `<div class="acr-field"><span class="acr-field-label">Name of Product/Version</span><span class="acr-field-value">${productName}</span></div>` : ''}
-    ${reportDate   ? `<div class="acr-field"><span class="acr-field-label">Report Date</span><span class="acr-field-value">${reportDate}</span></div>` : ''}
-    ${description  ? `<div class="acr-field"><span class="acr-field-label">Product Description</span><span class="acr-field-value">${description}</span></div>` : ''}
-    ${contact      ? `<div class="acr-field"><span class="acr-field-label">Contact Information</span><span class="acr-field-value">${contact}</span></div>` : ''}
-    ${evalMethods  ? `<div class="acr-field"><span class="acr-field-label">Evaluation Methods Used</span><span class="acr-field-value">${evalMethods}</span></div>` : ''}
+    ${productName ? `<div class="acr-field"><span class="acr-field-label">Name of Product/Version</span><span class="acr-field-value">${productName}</span></div>` : ''}
+    ${reportDate  ? `<div class="acr-field"><span class="acr-field-label">Report Date</span><span class="acr-field-value">${reportDate}</span></div>` : ''}
+    ${description ? `<div class="acr-field"><span class="acr-field-label">Product Description</span><span class="acr-field-value">${description}</span></div>` : ''}
+    ${contact     ? `<div class="acr-field"><span class="acr-field-label">Contact Information</span><span class="acr-field-value">${contact}</span></div>` : ''}
+    ${evalMethods ? `<div class="acr-field"><span class="acr-field-label">Evaluation Methods Used</span><span class="acr-field-value">${evalMethods}</span></div>` : ''}
 
     <hr />
 
@@ -266,100 +278,182 @@
     <p>This report covers the degree of conformance for the following accessibility standard/guidelines:</p>
     <table class="standards-table">
       <thead><tr><th>Standard/Guideline</th><th>Included In Report</th></tr></thead>
-      <tbody>
-        <tr><td>Web Content Accessibility Guidelines 2.0</td><td>Level A (Yes) Level AA (Yes) Level AAA (No)</td></tr>
-        <tr><td>Web Content Accessibility Guidelines 2.1</td><td>Level A (Yes) Level AA (Yes) Level AAA (No)</td></tr>
-        <tr><td>Web Content Accessibility Guidelines 2.2</td><td>${is22 ? 'Level A (Yes) Level AA (Yes) Level AAA (No)' : 'No'}</td></tr>
-      </tbody>
+      <tbody>${standardsRows}</tbody>
     </table>
 
     <h2>Terms</h2>
     <ul>
-      <li><strong>Supports</strong> — The functionality of the product has at least one method that meets the criterion without known defects.</li>
+      <li><strong>Supports</strong> — The functionality of the product has at least one method that meets the criterion without known defects or meets with equivalent facilitation.</li>
       <li><strong>Partially Supports</strong> — Some functionality of the product does not meet the criterion.</li>
       <li><strong>Does Not Support</strong> — The majority of product functionality does not meet the criterion.</li>
       <li><strong>Not Applicable</strong> — The criterion is not relevant to the product.</li>
-      <li><strong>Not Evaluated</strong> — The product has not been evaluated against the criterion.</li>
+      <li><strong>Not Evaluated</strong> — The product has not been evaluated against the criterion. This can only be used in WCAG Level AAA criteria.</li>
     </ul>
+    <hr />`
 
-    <hr />
-    <h2>WCAG 2.x Report</h2>
-    <p><em>Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are scoped for full pages, complete processes, and accessibility-supported ways of using technology.</em></p>
-  `;
-
-  // ── Render criteria tables ───────────────────────────────────
-  const container = document.getElementById('acr-criteria');
-
+  // ── CLASSIFY RECORDS ─────────────────────────────────────────
   if (!records.length) {
-    container.innerHTML = '<p>No criteria data found for this audit.</p>';
-    return;
+    document.getElementById('acr-body').innerHTML = '<p>No criteria data found for this audit.</p>'
+    return
   }
 
-  const tables = {
-    A:  { title: 'Table 1: Success Criteria, Level A',  rows: [] },
-    AA: { title: 'Table 2: Success Criteria, Level AA', rows: [] },
-  };
+  const wcagA   = []
+  const wcagAA  = []
+  const enByChapter = {}  // { 7: [...rows], 10: [...rows], ... }
 
   records.forEach(r => {
-    const f = r.fields;
-    const primary     = f['Audit - Criterion ID'] || '';
-    const criterionId = primary.split('\u2014').map(s => s.trim())[1] || '';
-    const name  = Array.isArray(f['Criterion Name'])  ? f['Criterion Name'][0]  || '' : f['Criterion Name']  || '';
-    const level = Array.isArray(f['Level'])            ? f['Level'][0]           || '' : f['Level']           || '';
-    const refUrl = Array.isArray(f['Official Reference URL']) ? f['Official Reference URL'][0] || '' : f['Official Reference URL'] || '';
+    const f = r.fields
+    const primary     = f['Audit - Criterion ID'] || ''
+    const criterionId = primary.split('\u2014').map(s => s.trim())[1] || ''
+    const name        = Array.isArray(f['Criterion Name']) ? f['Criterion Name'][0] || '' : f['Criterion Name'] || ''
+    const level       = Array.isArray(f['Level'])          ? f['Level'][0]          || '' : f['Level']          || ''
+    const refUrl      = Array.isArray(f['Official Reference URL']) ? f['Official Reference URL'][0] || '' : f['Official Reference URL'] || ''
+    const conformance = f['Conformance Level'] || ''
+    const remarks     = f['Remarks and Explanations'] || ''
+    const enRef       = f['EN 301 549 Criteria reference'] || ''
 
-    if (tables[level]) {
-      tables[level].rows.push({
-        criterionId, name, level, refUrl,
-        conformance: f['Conformance Level'] || '',
-        remarks:     f['Remarks and Explanations'] || '',
-      });
+    const row = { criterionId, name, level, refUrl, conformance, remarks, enRef }
+    const cls = classifyCriterion(criterionId)
+
+    if (cls.type === 'wcag') {
+      if (level === 'A')       wcagA.push(row)
+      else if (level === 'AA') wcagAA.push(row)
+    } else {
+      const ch = cls.chapter
+      if (!enByChapter[ch]) enByChapter[ch] = []
+      enByChapter[ch].push(row)
     }
-  });
+  })
 
-  Object.values(tables).forEach(t => {
-    t.rows.sort((a, b) => a.criterionId.localeCompare(b.criterionId, undefined, { numeric: true }));
-  });
+  // Sort WCAG rows by criterion ID
+  const sortById = (a, b) => a.criterionId.localeCompare(b.criterionId, undefined, { numeric: true })
+  wcagA.sort(sortById)
+  wcagAA.sort(sortById)
+  Object.values(enByChapter).forEach(rows => rows.sort(sortById))
 
-  let html = '';
-  Object.values(tables).forEach(t => {
-    if (!t.rows.length) return;
-
-    html += `<h3 class="acr-table-title">${t.title}</h3>
+  // ── BUILD WCAG TABLES ─────────────────────────────────────────
+  function renderWcagTable(title, rows, showEnRef) {
+    if (!rows.length) return ''
+    let html = `<h3 class="acr-table-title">${title}</h3>
     <table class="acr-table">
       <thead><tr>
         <th style="width:38%">Criteria</th>
         <th style="width:18%">Conformance Level</th>
         <th style="width:44%">Remarks and Explanations</th>
-      </tr></thead>
-      <tbody>`;
+      </tr></thead><tbody>`
 
-    t.rows.forEach(row => {
-      const cls = row.conformance === 'Supports'           ? 'acr-conformance-supports'
-                : row.conformance === 'Partially Supports' ? 'acr-conformance-partial'
-                : row.conformance === 'Does Not Support'   ? 'acr-conformance-not' : '';
-
+    rows.forEach(row => {
       const label = row.refUrl
         ? `<a href="${row.refUrl}" target="_blank" rel="noopener"><strong>${row.criterionId} ${row.name}</strong></a>`
-        : `<strong>${row.criterionId} ${row.name}</strong>`;
-
+        : `<strong>${row.criterionId} ${row.name}</strong>`
+      const enRefHtml = (showEnRef && row.enRef)
+        ? `<div class="acr-en-ref">${row.enRef}</div>`
+        : ''
       html += `<tr>
-        <td>${label} (Level ${row.level})</td>
-        <td class="${cls}">${row.conformance}</td>
+        <td>${label} (Level ${row.level})${enRefHtml}</td>
+        <td class="${conformanceClass(row.conformance)}">${row.conformance}</td>
         <td>${row.remarks}</td>
-      </tr>`;
-    });
+      </tr>`
+    })
 
-    html += `</tbody></table>`;
-  });
-
-  if (legalNote) {
-    html += `<h2>Legal Disclaimer</h2><p>${legalNote}</p>`;
+    return html + '</tbody></table>'
   }
 
-  container.innerHTML = html;
+  // ── BUILD EN CHAPTER TABLE ────────────────────────────────────
+  function renderEnChapterTable(rows) {
+    let html = `<table class="acr-table">
+      <thead><tr>
+        <th style="width:38%">Criteria</th>
+        <th style="width:18%">Conformance Level</th>
+        <th style="width:44%">Remarks and Explanations</th>
+      </tr></thead><tbody>`
 
-})();
+    rows.forEach(row => {
+      const isHeading = isHeadingRow(row.conformance)
+      if (isHeading) {
+        html += `<tr class="heading-row">
+          <td colspan="1"><em>${row.criterionId} ${row.name}</em></td>
+          <td>${row.conformance}</td>
+          <td>${row.remarks}</td>
+        </tr>`
+      } else {
+        const label = row.refUrl
+          ? `<a href="${row.refUrl}" target="_blank" rel="noopener"><strong>${row.criterionId} ${row.name}</strong></a>`
+          : `<strong>${row.criterionId}</strong>${row.name ? ' ' + row.name : ''}`
+        html += `<tr>
+          <td>${label}</td>
+          <td class="${conformanceClass(row.conformance)}">${row.conformance}</td>
+          <td>${row.remarks}</td>
+        </tr>`
+      }
+    })
+    return html + '</tbody></table>'
+  }
+
+  // ── ASSEMBLE FULL BODY ────────────────────────────────────────
+  let body = ''
+
+  if (isEN) {
+    // EN edition — WCAG section with intro text
+    body += `<h2>WCAG 2.x Report</h2>
+    <p>Tables 1 and 2 document conformance with EN 301 549:</p>
+    <ul>
+      <li>Clause 9 - Web</li>
+      <li>Clauses 10.1–10.4 of Clause 10 - Non-web documents</li>
+      <li>Clauses 11.1–11.4 and 11.8.2 of Clause 11 - Software</li>
+      <li>Clauses 12.1.2 and 12.2.4 of Clause 12 - Documentation and support services</li>
+    </ul>
+    <p><em>Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are scoped for full pages, complete processes, and accessibility-supported ways of using technology.</em></p>`
+    body += renderWcagTable('Table 1: Success Criteria, Level A',  wcagA,  true)
+    body += renderWcagTable('Table 2: Success Criteria, Level AA', wcagAA, true)
+
+    // EN 301 549 section
+    body += `<hr /><h2>EN 301 549 Report</h2>`
+
+    // Render chapters in order 4 → 13
+    for (let ch = 4; ch <= 13; ch++) {
+      const meta = EN_CHAPTERS[ch]
+      if (!meta) continue
+      const rows = enByChapter[ch] || []
+
+      // Clause 4: always show, fixed note, no table
+      if (ch === 4) {
+        body += `<h3 class="section-heading"><a href="${EN_URL}" target="_blank" rel="noopener">${meta.label}</a></h3>
+        <p class="section-note">Notes: ${meta.fixedNote}</p>`
+        continue
+      }
+
+      // Clause 9: always show, reference to WCAG section, no table
+      if (ch === 9) {
+        body += `<h3 class="section-heading"><a href="${EN_URL}" target="_blank" rel="noopener">${meta.label}</a> <em>(see WCAG 2.x section)</em></h3>
+        <p class="section-note">Notes:</p>`
+        continue
+      }
+
+      // Other chapters: only show if ACR rows exist
+      if (!rows.length) continue
+
+      body += `<h3 class="section-heading"><a href="${EN_URL}" target="_blank" rel="noopener">${meta.label}</a></h3>
+      <p class="section-note">Notes:</p>`
+      body += renderEnChapterTable(rows)
+    }
+
+  } else {
+    // WCAG-only edition
+    body += `<h2>WCAG 2.x Report</h2>
+    <p><em>Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are scoped for full pages, complete processes, and accessibility-supported ways of using technology.</em></p>`
+    body += renderWcagTable('Table 1: Success Criteria, Level A',  wcagA,  false)
+    body += renderWcagTable('Table 2: Success Criteria, Level AA', wcagAA, false)
+  }
+
+  // Legal disclaimer
+  if (legalNote) {
+    body += `<h2>Legal Disclaimer</h2><p style="white-space:pre-line">${legalNote}</p>`
+  }
+
+  document.getElementById('acr-body').innerHTML = body
+
+})()
 </script>
 </body>
 </html>
