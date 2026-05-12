@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accessibility Conformance Report</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+      color: #1a1b1f;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* Header */
+    .acr-logo {
+      max-width: 180px;
+      margin-bottom: 2rem;
+      display: block;
+    }
+
+    .acr-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 0.25rem;
+      color: #1a1b1f;
+    }
+
+    .acr-edition {
+      font-size: 1.1rem;
+      margin: 0 0 0.25rem;
+      color: #1a1b1f;
+    }
+
+    .acr-vpat-version {
+      font-size: 1rem;
+      color: #555;
+      margin: 0 0 2rem;
+    }
+
+    /* Info fields */
+    .acr-field {
+      margin-bottom: 1.25rem;
+    }
+
+    .acr-field-label {
+      font-weight: 700;
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .acr-field-value {
+      font-size: 1rem;
+      white-space: pre-line;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #c3d2e0;
+      margin: 2rem 0;
+    }
+
+    /* Section headings */
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem;
+      color: #1a1b1f;
+    }
+
+    /* Standards table */
+    .standards-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    .standards-table th {
+      background: #1a1b1f;
+      color: #fff;
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 1rem;
+      border-left: 1px solid #404247;
+      border-right: 1px solid #404247;
+    }
+
+    .standards-table td {
+      padding: 10px 12px;
+      border-left: 1px solid #404247;
+      border-right: 1px solid #404247;
+      border-top: 1px solid #c3d2e0;
+      border-bottom: 1px solid #c3d2e0;
+      font-size: 1rem;
+    }
+
+    .standards-table {
+      border: 1px solid #404247;
+    }
+
+    /* ACR criteria tables */
+    .acr-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2.5rem;
+      font-size: 1rem;
+      border: 1px solid #404247;
+    }
+
+    .acr-table th {
+      background: #1a1b1f;
+      color: #fff;
+      padding: 12px 10px;
+      text-align: left;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-left: 1px solid #404247;
+      border-right: 1px solid #404247;
+    }
+
+    .acr-table td {
+      padding: 10px;
+      vertical-align: top;
+      color: #1a1b1f;
+      font-size: 1rem;
+      border-left: 1px solid #404247;
+      border-right: 1px solid #404247;
+      border-top: 1px solid #c3d2e0;
+      border-bottom: 1px solid #c3d2e0;
+    }
+
+    .acr-table tbody tr:nth-child(even) {
+      background: #f7f9fb;
+    }
+
+    .acr-table td a {
+      color: #1a1b1f;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .acr-table td strong {
+      font-weight: 600;
+    }
+
+    .acr-table-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 2rem 0 0.75rem;
+      color: #1a1b1f;
+    }
+
+    .acr-conformance-supports  { color: #14532d; font-weight: 600; }
+    .acr-conformance-partial   { color: #78350f; font-weight: 600; }
+    .acr-conformance-not       { color: #7f1d1d; font-weight: 600; }
+
+    /* Footer */
+    .acr-footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #c3d2e0;
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    .loading {
+      color: #666;
+      padding: 2rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header — filled dynamically -->
+  <div id="acr-header">
+    <p class="loading">Loading report...</p>
+  </div>
+
+  <!-- Criteria tables — filled dynamically -->
+  <div id="acr-criteria">
+    <p class="loading">Loading accessibility criteria...</p>
+  </div>
+
+  <div class="acr-footer">
+    "Voluntary Product Accessibility Template" and "VPAT" are registered service marks of the Information Technology Industry Council (ITI)
+  </div>
+
+</div>
+
+<script>
+(async function () {
+
+  // ── CONFIG ──────────────────────────────────────────────────
+  const API_BASE = 'https://proxy.junekarlove.com';
+  // ────────────────────────────────────────────────────────────
+
+  // Get slug from URL path: accessibility.telia.com/telia → "telia"
+  // For root path we use the subdomain prefix as slug
+  const hostname = window.location.hostname; // e.g. accessibility.liesbethdillen.com
+  const slug = hostname.split('.')[0] === 'accessibility'
+    ? hostname.split('.').slice(1, -1).join('-')   // liesbethdillen
+    : window.location.pathname.split('/').filter(Boolean)[0] || 'unknown';
+
+  // ── Fetch audit info ─────────────────────────────────────────
+  let auditData = null;
+  try {
+    const res = await fetch(`${API_BASE}/api/audit/${slug}`);
+    if (res.ok) auditData = await res.json();
+  } catch (e) { console.warn('Could not load audit info', e); }
+
+  // ── Fetch ACR criteria ───────────────────────────────────────
+  let records = [];
+  try {
+    const res = await fetch(`${API_BASE}/api/acr/${slug}`);
+    if (res.ok) {
+      const data = await res.json();
+      records = data.records || [];
+    }
+  } catch (e) { console.warn('Could not load criteria', e); }
+
+  // ── Render header ────────────────────────────────────────────
+  const header = document.getElementById('acr-header');
+
+  const clientName   = auditData?.clientName   || '';
+  const productName  = auditData?.productName  || '';
+  const reportDate   = auditData?.reportDate   || '';
+  const description  = auditData?.description  || '';
+  const contact      = auditData?.contact      || '';
+  const evalMethods  = auditData?.evalMethods  || '';
+  const standard     = auditData?.standard     || 'WCAG 2.1 AA';
+  const logoUrl      = auditData?.logoUrl      || '';
+  const vpat         = auditData?.vpat         || 'WCAG Edition';
+  const legalNote    = auditData?.legal        || '';
+
+  const is22 = standard.includes('2.2');
+
+  header.innerHTML = `
+    ${logoUrl ? `<img class="acr-logo" src="${logoUrl}" alt="${clientName} logo" />` : ''}
+    <h1 class="acr-title">${clientName ? clientName + ' ' : ''}Accessibility Conformance Report</h1>
+    <p class="acr-edition">${vpat}</p>
+    <p class="acr-vpat-version">(Based on VPAT&reg; Version 2.5Rev)</p>
+
+    ${productName  ? `<div class="acr-field"><span class="acr-field-label">Name of Product/Version</span><span class="acr-field-value">${productName}</span></div>` : ''}
+    ${reportDate   ? `<div class="acr-field"><span class="acr-field-label">Report Date</span><span class="acr-field-value">${reportDate}</span></div>` : ''}
+    ${description  ? `<div class="acr-field"><span class="acr-field-label">Product Description</span><span class="acr-field-value">${description}</span></div>` : ''}
+    ${contact      ? `<div class="acr-field"><span class="acr-field-label">Contact Information</span><span class="acr-field-value">${contact}</span></div>` : ''}
+    ${evalMethods  ? `<div class="acr-field"><span class="acr-field-label">Evaluation Methods Used</span><span class="acr-field-value">${evalMethods}</span></div>` : ''}
+
+    <hr />
+
+    <h2>Applicable Standards/Guidelines</h2>
+    <p>This report covers the degree of conformance for the following accessibility standard/guidelines:</p>
+    <table class="standards-table">
+      <thead><tr><th>Standard/Guideline</th><th>Included In Report</th></tr></thead>
+      <tbody>
+        <tr><td>Web Content Accessibility Guidelines 2.0</td><td>Level A (Yes) Level AA (Yes) Level AAA (No)</td></tr>
+        <tr><td>Web Content Accessibility Guidelines 2.1</td><td>Level A (Yes) Level AA (Yes) Level AAA (No)</td></tr>
+        <tr><td>Web Content Accessibility Guidelines 2.2</td><td>${is22 ? 'Level A (Yes) Level AA (Yes) Level AAA (No)' : 'No'}</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Terms</h2>
+    <ul>
+      <li><strong>Supports</strong> — The functionality of the product has at least one method that meets the criterion without known defects.</li>
+      <li><strong>Partially Supports</strong> — Some functionality of the product does not meet the criterion.</li>
+      <li><strong>Does Not Support</strong> — The majority of product functionality does not meet the criterion.</li>
+      <li><strong>Not Applicable</strong> — The criterion is not relevant to the product.</li>
+      <li><strong>Not Evaluated</strong> — The product has not been evaluated against the criterion.</li>
+    </ul>
+
+    <hr />
+    <h2>WCAG 2.x Report</h2>
+    <p><em>Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are scoped for full pages, complete processes, and accessibility-supported ways of using technology.</em></p>
+  `;
+
+  // ── Render criteria tables ───────────────────────────────────
+  const container = document.getElementById('acr-criteria');
+
+  if (!records.length) {
+    container.innerHTML = '<p>No criteria data found for this audit.</p>';
+    return;
+  }
+
+  const tables = {
+    A:  { title: 'Table 1: Success Criteria, Level A',  rows: [] },
+    AA: { title: 'Table 2: Success Criteria, Level AA', rows: [] },
+  };
+
+  records.forEach(r => {
+    const f = r.fields;
+    const primary     = f['Audit - Criterion ID'] || '';
+    const criterionId = primary.split('\u2014').map(s => s.trim())[1] || '';
+    const name  = Array.isArray(f['Criterion Name'])  ? f['Criterion Name'][0]  || '' : f['Criterion Name']  || '';
+    const level = Array.isArray(f['Level'])            ? f['Level'][0]           || '' : f['Level']           || '';
+    const refUrl = Array.isArray(f['Official Reference URL']) ? f['Official Reference URL'][0] || '' : f['Official Reference URL'] || '';
+
+    if (tables[level]) {
+      tables[level].rows.push({
+        criterionId, name, level, refUrl,
+        conformance: f['Conformance Level'] || '',
+        remarks:     f['Remarks and Explanations'] || '',
+      });
+    }
+  });
+
+  Object.values(tables).forEach(t => {
+    t.rows.sort((a, b) => a.criterionId.localeCompare(b.criterionId, undefined, { numeric: true }));
+  });
+
+  let html = '';
+  Object.values(tables).forEach(t => {
+    if (!t.rows.length) return;
+
+    html += `<h3 class="acr-table-title">${t.title}</h3>
+    <table class="acr-table">
+      <thead><tr>
+        <th style="width:38%">Criteria</th>
+        <th style="width:18%">Conformance Level</th>
+        <th style="width:44%">Remarks and Explanations</th>
+      </tr></thead>
+      <tbody>`;
+
+    t.rows.forEach(row => {
+      const cls = row.conformance === 'Supports'           ? 'acr-conformance-supports'
+                : row.conformance === 'Partially Supports' ? 'acr-conformance-partial'
+                : row.conformance === 'Does Not Support'   ? 'acr-conformance-not' : '';
+
+      const label = row.refUrl
+        ? `<a href="${row.refUrl}" target="_blank" rel="noopener"><strong>${row.criterionId} ${row.name}</strong></a>`
+        : `<strong>${row.criterionId} ${row.name}</strong>`;
+
+      html += `<tr>
+        <td>${label} (Level ${row.level})</td>
+        <td class="${cls}">${row.conformance}</td>
+        <td>${row.remarks}</td>
+      </tr>`;
+    });
+
+    html += `</tbody></table>`;
+  });
+
+  if (legalNote) {
+    html += `<h2>Legal Disclaimer</h2><p>${legalNote}</p>`;
+  }
+
+  container.innerHTML = html;
+
+})();
+</script>
+</body>
+</html>
