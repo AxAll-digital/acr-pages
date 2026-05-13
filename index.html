@@ -228,14 +228,16 @@
   const slug = getSlug();
 
   /* ── fetch ────────────────────────────────────── */
-  let auditData = {}, records = [];
+  let auditData = {}, records = [], scopeRecords = [];
   try {
-    const [ar, cr] = await Promise.all([
+    const [ar, cr, sr] = await Promise.all([
       fetch(`https://proxy.junekarlove.com/api/audit/${slug}`),
-      fetch(`https://proxy.junekarlove.com/api/acr/${slug}`)
+      fetch(`https://proxy.junekarlove.com/api/acr/${slug}`),
+      fetch(`https://proxy.junekarlove.com/api/scope/${slug}`)
     ]);
-    auditData = await ar.json();
-    records   = (await cr.json()).records || [];
+    auditData    = await ar.json();
+    records      = (await cr.json()).records || [];
+    scopeRecords = (await sr.json()).records || [];
   } catch (e) {
     document.getElementById('acr-header').innerHTML = '<p>Error loading report data.</p>';
     return;
@@ -318,12 +320,31 @@
     return table + '</tbody></table>';
   }
 
+  /* ── Evaluation Scope renderer ───────────────── */
+  // Accepts records from /api/scope/:slug
+  // Each record has fields: "Page Title" and "Page URL"
+  function renderEvalScope(recs) {
+    if (!recs || !recs.length) return '';
+    let html = '<ol>';
+    recs.forEach(r => {
+      const f    = r.fields || {};
+      const name = f['Page Title'] || '';
+      const url  = f['Page URL']   || '';
+      if (url) {
+        html += `<li><a href="${esc(url)}" target="_blank" rel="noopener">${esc(name)}</a></li>`;
+      } else if (name) {
+        html += `<li>${esc(name)}</li>`;
+      }
+    });
+    return html + '</ol>';
+  }
+
   /* ── FIX 1+2: header HTML ─────────────────────── */
   // FIX 1: append " Edition" to vpat value
   // FIX 2: product info labels become <h2>
   const headerHtml = `
     ${logoUrl ? `<img class="acr-logo" src="${esc(logoUrl)}" alt="${esc(clientName)} logo" />` : ''}
-    <h1 class="acr-title">${esc(clientName) || 'Accessibility Conformance Report'}</h1>
+    <h1 class="acr-title">${esc(clientName) ? esc(clientName) + ' Accessibility Conformance Report' : 'Accessibility Conformance Report'}</h1>
     ${vpat ? `<p class="acr-edition">${esc(vpat)} Edition</p>` : ''}
     <p class="acr-vpat-version">(Based on VPAT® 2.5 Rev)</p>
 
@@ -340,6 +361,8 @@
     ${contact ? `<h2>Contact Information</h2><p class="acr-field-value">${esc(contact)}</p>` : ''}
 
     ${evalMethods ? `<h2>Evaluation Methods Used</h2><p class="acr-field-value">${esc(evalMethods)}</p>` : ''}
+
+    ${scopeRecords.length ? `<h2>Evaluation Scope</h2>${renderEvalScope(scopeRecords)}` : ''}
 
     <h2>Applicable Standards/Guidelines</h2>
     ${renderStandards(standard)}
