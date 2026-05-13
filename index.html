@@ -592,8 +592,9 @@
       const headingRows = rows.filter(r => r.conformance.includes('Heading cell'));
       const contentRows = rows.filter(r => !r.conformance.includes('Heading cell'));
 
-      // Note: pulled from any heading row that has a sectionNotes value
-      const noteRow    = headingRows.find(r => r.sectionNotes);
+      // Note: pulled from ANY row that has a sectionNotes value
+      // (covers both heading rows and N/A marker rows)
+      const noteRow     = rows.find(r => r.sectionNotes);
       const chapterNote = noteRow ? noteRow.sectionNotes : '';
 
       // Always show the clause heading — even for N/A clauses with no ACR rows
@@ -602,9 +603,10 @@
         body += `<p class="section-note">Notes: ${esc(chapterNote)}</p>`;
       }
 
-      // Only render the table when there are actual content rows
-      // (heading-only = N/A clause with a note but no criteria to list)
-      if (contentRows.length) {
+      // Only render the table when there are content rows with a real status
+      // (Not Applicable-only rows are used purely as note sources — no table)
+      const hasActiveRows = contentRows.some(r => r.conformance !== 'Not Applicable');
+      if (hasActiveRows) {
         body += renderEnChapterTable(rows);
       }
     }
