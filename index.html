@@ -265,6 +265,12 @@
     const rows = [];
     let enAdded = false;
 
+    // When EN 301 549 is present, WCAG 2.1 AA is always included (Clause 9).
+    // Auto-prepend it if the auditor hasn't already added a WCAG entry.
+    const hasWcag = items.some(s => s.toLowerCase().includes('wcag'));
+    const hasEN   = items.some(s => s.toLowerCase().includes('en 301 549'));
+    if (hasEN && !hasWcag) items.unshift('WCAG 2.1 AA');
+
     items.forEach(std => {
       const lc = std.toLowerCase();
 
@@ -582,19 +588,25 @@
         continue;
       }
 
-      // Other chapters: only shown if ACR rows exist
-      if (!rows.length) continue;
+      // Split rows into heading-only and content (non-heading) rows
+      const headingRows = rows.filter(r => r.conformance.includes('Heading cell'));
+      const contentRows = rows.filter(r => !r.conformance.includes('Heading cell'));
 
-      // FIX 7: chapter note from "EN Section Notes" field on any row in this chapter
-      //        only show "Notes:" label if a note actually exists
-      const noteRow = rows.find(r => r.sectionNotes);
+      // Note: pulled from any heading row that has a sectionNotes value
+      const noteRow    = headingRows.find(r => r.sectionNotes);
       const chapterNote = noteRow ? noteRow.sectionNotes : '';
 
+      // Always show the clause heading — even for N/A clauses with no ACR rows
       body += `<h3 class="section-heading"><a href="${EN_PDF}" target="_blank" rel="noopener">${meta.label}</a></h3>`;
       if (chapterNote) {
         body += `<p class="section-note">Notes: ${esc(chapterNote)}</p>`;
       }
-      body += renderEnChapterTable(rows);
+
+      // Only render the table when there are actual content rows
+      // (heading-only = N/A clause with a note but no criteria to list)
+      if (contentRows.length) {
+        body += renderEnChapterTable(rows);
+      }
     }
   }
 
