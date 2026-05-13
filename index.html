@@ -256,43 +256,66 @@
 
   const isEN = vpat === 'EN 301 549';
 
-  /* ── FIX 3: standards renderer ───────────────── */
+  /* ── Standards table (matches official VPAT format) ─────────── */
   function renderStandards(stdStr) {
     if (!stdStr) return '<span>—</span>';
     const items = stdStr.split(',').map(s => s.trim()).filter(Boolean);
-    let out = '';
+    const rows = [];
+    let enAdded = false;
 
     items.forEach(std => {
       const lc = std.toLowerCase();
 
       if (lc.includes('en 301 549')) {
-        // FIX 3b: full linked text for both EN versions; FIX 3c: (Yes) for each
-        out += `<a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.01.01_60/en_301549v030101p.pdf" target="_blank" rel="noopener">EN 301 549 Accessibility requirements for ICT products and services - V3.1.1 (2019-11)</a> (Yes)<br>`;
-        out += `<a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf" target="_blank" rel="noopener">EN 301 549 Accessibility requirements for ICT products and services - V3.2.1 (2021-03)</a> (Yes)<br>`;
+        if (enAdded) return;
+        enAdded = true;
+        rows.push({
+          guidelineHtml:
+            `<a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.01.01_60/en_301549v030101p.pdf" target="_blank" rel="noopener">EN 301 549 Accessibility requirements for ICT products and services - V3.1.1 (2019-11)</a>` +
+            ` <em>AND</em> ` +
+            `<a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf" target="_blank" rel="noopener">EN 301 549 Accessibility requirements for ICT products and services - V3.2.1 (2021-03)</a>`,
+          includedHtml: `(Yes)`,
+        });
 
       } else if (lc.includes('wcag')) {
-        const is22  = std.includes('2.2');
-        const hasAAA= std.toUpperCase().includes('AAA');
-        const hasAA = !hasAAA && std.toUpperCase().includes('AA');
-        const name  = is22
+        const is22   = std.includes('2.2');
+        const hasAAA = std.toUpperCase().includes('AAA');
+        const hasAA  = std.toUpperCase().includes('AA');
+        const name   = is22
           ? 'Web Content Accessibility Guidelines 2.2'
-          : 'Web Content Accessibility Guidelines 2.1 (ISO/IEC 40500)';
-        const url   = is22
-          ? 'https://www.w3.org/TR/WCAG22/'
-          : 'https://www.w3.org/TR/WCAG21/';
-
-        // FIX 3a: line break after each level
-        out += `<a href="${url}" target="_blank" rel="noopener">${name}</a><br>`;
-        out += `Level A (Yes)<br>`;
-        out += `Level AA (${(hasAA || hasAAA) ? 'Yes' : 'No'})<br>`;
-        out += `Level AAA (${hasAAA ? 'Yes' : 'No'})<br>`;
+          : 'Web Content Accessibility Guidelines 2.1';
+        const url    = is22 ? 'https://www.w3.org/TR/WCAG22/' : 'https://www.w3.org/TR/WCAG21/';
+        rows.push({
+          guidelineHtml: `<a href="${url}" target="_blank" rel="noopener">${name}</a>`,
+          includedHtml:
+            `Level A (Yes)<br>` +
+            `Level AA (${hasAA ? 'Yes' : 'No'})<br>` +
+            `Level AAA (${hasAAA ? 'Yes' : 'No'})`,
+        });
 
       } else {
-        out += `${esc(std)} (Yes)<br>`;
+        rows.push({ guidelineHtml: esc(std), includedHtml: '(Yes)' });
       }
     });
 
-    return out;
+    if (!rows.length) return '<span>—</span>';
+
+    let table = `
+    <p>This report covers the degree of conformance for the following accessibility standard/guidelines:</p>
+    <table class="acr-table acr-standards-table">
+      <thead><tr>
+        <th style="width:70%">Standard/Guideline</th>
+        <th style="width:30%;text-align:center">Included In Report</th>
+      </tr></thead><tbody>`;
+
+    rows.forEach(row => {
+      table += `<tr>
+        <td>${row.guidelineHtml}</td>
+        <td style="text-align:center;vertical-align:middle">${row.includedHtml}</td>
+      </tr>`;
+    });
+
+    return table + '</tbody></table>';
   }
 
   /* ── FIX 1+2: header HTML ─────────────────────── */
@@ -319,7 +342,7 @@
     ${evalMethods ? `<h2>Evaluation Methods Used</h2><p class="acr-field-value">${esc(evalMethods)}</p>` : ''}
 
     <h2>Applicable Standards/Guidelines</h2>
-    <div class="acr-standards-value">${renderStandards(standard)}</div>
+    ${renderStandards(standard)}
   `;
 
   document.getElementById('acr-header').innerHTML = headerHtml;
