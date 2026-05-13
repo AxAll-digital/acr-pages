@@ -215,7 +215,17 @@
   }
 
   /* ── slug from URL ────────────────────────────── */
-  const slug = window.location.pathname.split('/').filter(Boolean).pop() || 'default';
+  // Slug extraction:
+  // • Direct Vercel testing  → acr-pages.vercel.app/liesbethdillen  → from pathname
+  // • Client custom domain   → accessibility.liesbethdillen.com     → from hostname (parts[1])
+  function getSlug() {
+    const pathSlug = window.location.pathname.split('/').filter(Boolean)[0];
+    if (pathSlug) return pathSlug;
+    const parts = window.location.hostname.split('.');
+    // accessibility.liesbethdillen.com → ['accessibility','liesbethdillen','com'] → parts[1]
+    return parts.length >= 3 ? parts[1] : parts[0];
+  }
+  const slug = getSlug();
 
   /* ── fetch ────────────────────────────────────── */
   let auditData = {}, records = [];
