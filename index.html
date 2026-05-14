@@ -7,6 +7,18 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
 
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     body {
       font-family: Arial, sans-serif;
       font-size: 1rem;
@@ -51,12 +63,6 @@
       font-size: 1.25rem;
       font-weight: 700;
       margin: 2rem 0 0.4rem;
-    }
-
-    h3.acr-table-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin: 2rem 0 0.5rem;
     }
 
     h3.section-heading {
@@ -105,6 +111,15 @@
       border-collapse: collapse;
       font-size: 0.95rem;
       margin-bottom: 2rem;
+    }
+
+    .acr-table caption {
+      text-align: left;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0 0 0.5rem 0;
+      color: #1a1b1f;
+      caption-side: top;
     }
 
     .acr-table th {
@@ -336,6 +351,7 @@
     let table = `
     <p>This report covers the degree of conformance for the following accessibility standard/guidelines:</p>
     <table class="acr-table acr-standards-table">
+      <caption class="sr-only">Applicable Standards and Guidelines</caption>
       <thead><tr>
         <th style="width:70%">Standard/Guideline</th>
         <th style="width:30%;text-align:center">Included In Report</th>
@@ -475,8 +491,8 @@
   function renderWcagTable(title, rows, showEnRef) {
     if (!rows.length) return '';
     let html = `
-    <h3 class="acr-table-title">${title}</h3>
     <table class="acr-table">
+      <caption>${title}</caption>
       <thead><tr>
         <th style="width:38%">Criteria</th>
         <th style="width:18%">Conformance Level</th>
