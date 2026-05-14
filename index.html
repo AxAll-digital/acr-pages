@@ -516,19 +516,19 @@
   }
 
   /* ── EN chapter metadata ──────────────────────── */
-  const EN_PDF = 'https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf';
+  const EN_BASE = 'https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf';
   const EN_CHAPTERS = {
-    4:  { label: 'Clause 4: Functional Performance Statements',
+    4:  { label: 'Clause 4: Functional Performance Statements', url: `${EN_BASE}#page=20`,
           note: 'Not Applicable. This chapter is informative and does not contain requirements requiring testing. Each aspect of the product\'s functionality under evaluation is described in detail within the technical requirements tables.' },
-    5:  { label: 'Clause 5: Generic Requirements' },
-    6:  { label: 'Clause 6: ICT with Two-Way Voice Communication' },
-    7:  { label: 'Clause 7: ICT with Video Capabilities' },
-    8:  { label: 'Clause 8: Hardware' },
-    9:  { label: 'Clause 9: Web' },
-    10: { label: 'Clause 10: Non-Web Documents' },
-    11: { label: 'Clause 11: Software' },
-    12: { label: 'Clause 12: Documentation and Support Services' },
-    13: { label: 'Clause 13: ICT Providing Relay or Emergency Service Access' },
+    5:  { label: 'Clause 5: Generic Requirements',                        url: `${EN_BASE}#page=23` },
+    6:  { label: 'Clause 6: ICT with Two-Way Voice Communication',        url: `${EN_BASE}#page=30` },
+    7:  { label: 'Clause 7: ICT with Video Capabilities',                 url: `${EN_BASE}#page=35` },
+    8:  { label: 'Clause 8: Hardware',                                    url: `${EN_BASE}#page=37` },
+    9:  { label: 'Clause 9: Web',                                         url: `${EN_BASE}#page=45` },
+    10: { label: 'Clause 10: Non-Web Documents',                          url: `${EN_BASE}#page=52` },
+    11: { label: 'Clause 11: Software',                                   url: `${EN_BASE}#page=64` },
+    12: { label: 'Clause 12: Documentation and Support Services',         url: `${EN_BASE}#page=84` },
+    13: { label: 'Clause 13: ICT Providing Relay or Emergency Service Access', url: `${EN_BASE}#page=86` },
   };
 
   /* ── assemble body ────────────────────────────── */
@@ -556,7 +556,7 @@
   // FIX 5: complete WCAG note with link
   if (isEN) {
     body += `
-    <h2>WCAG 2.x Report</h2>
+    <h2 id="wcag-report">WCAG 2.x Report</h2>
     <p>Tables 1 and 2 document conformance with the following criteria from EN 301 549:</p>
     <ul>
       <li>Clause 9 — Web</li>
@@ -567,7 +567,7 @@
     <p class="section-note">Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are scoped for full pages, complete processes, and accessibility-supported ways of using technology as documented in the <a href="https://www.w3.org/TR/WCAG20/#conformance-reqs" target="_blank" rel="noopener">WCAG 2.0 Conformance Requirements</a>.</p>`;
   } else {
     body += `
-    <h2>WCAG 2.x Report</h2>
+    <h2 id="wcag-report">WCAG 2.x Report</h2>
     <p class="section-note">Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are scoped for full pages, complete processes, and accessibility-supported ways of using technology as documented in the <a href="https://www.w3.org/TR/WCAG20/#conformance-reqs" target="_blank" rel="noopener">WCAG 2.0 Conformance Requirements</a>.</p>`;
   }
 
@@ -585,14 +585,14 @@
 
       // Clause 4: always shown, fixed note
       if (ch === 4) {
-        body += `<h3 class="section-heading"><a href="${EN_PDF}" target="_blank" rel="noopener">${meta.label}</a></h3>`;
+        body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${meta.label}</a></h3>`;
         body += `<p class="section-note">Notes: ${meta.note}</p>`;
         continue;
       }
 
       // Clause 9: always shown, reference to WCAG section
       if (ch === 9) {
-        body += `<h3 class="section-heading"><a href="${EN_PDF}#page=54" target="_blank" rel="noopener">${meta.label}</a></h3>`;
+        body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${meta.label}</a> (see <a href="#wcag-report">WCAG 2.x section</a>)</h3>`;
         body += `<p class="section-note">See WCAG 2.x section above.</p>`;
         continue;
       }
@@ -608,7 +608,7 @@
       const chapterNote = noteRow ? noteRow.sectionNotes.trim() : '';
 
       // Always show the clause heading — even for N/A clauses with no ACR rows
-      body += `<h3 class="section-heading"><a href="${EN_PDF}" target="_blank" rel="noopener">${meta.label}</a></h3>`;
+      body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${meta.label}</a></h3>`;
       if (chapterNote) {
         body += `<p class="section-note">Notes: ${esc(chapterNote)}</p>`;
       }
