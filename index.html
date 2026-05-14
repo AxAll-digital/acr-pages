@@ -292,13 +292,16 @@
         });
 
       } else if (lc.includes('wcag')) {
+        const is20   = std.includes('2.0');
         const is22   = std.includes('2.2');
         const hasAAA = std.toUpperCase().includes('AAA');
         const hasAA  = std.toUpperCase().includes('AA');
-        const name   = is22
-          ? 'Web Content Accessibility Guidelines 2.2'
-          : 'Web Content Accessibility Guidelines 2.1';
-        const url    = is22 ? 'https://www.w3.org/TR/WCAG22/' : 'https://www.w3.org/TR/WCAG21/';
+        const name   = is22 ? 'Web Content Accessibility Guidelines 2.2'
+                     : is20 ? 'Web Content Accessibility Guidelines 2.0'
+                     :        'Web Content Accessibility Guidelines 2.1';
+        const url    = is22 ? 'https://www.w3.org/TR/WCAG22/'
+                     : is20 ? 'http://www.w3.org/TR/2008/REC-WCAG20-20081211'
+                     :        'https://www.w3.org/TR/WCAG21/';
         rows.push({
           guidelineHtml: `<a href="${url}" target="_blank" rel="noopener">${name}</a>`,
           includedHtml:
