@@ -196,24 +196,28 @@
       .replace(/"/g,'&quot;');
   }
 
-  // REST API (v0) returns singleSelect as plain string, lookup as array.
-  // Handle both gracefully.
-  function strVal(v) {
+  // Handles Airtable REST API lookup field format:
+  // { linkedRecordIds: ['recXXX'], valuesByLinkedRecordId: { recXXX: ['value'] } }
+  // Also handles plain strings, arrays, and singleSelect objects.
+  function lookupVal(v) {
     if (!v) return '';
     if (typeof v === 'string') return v;
-    if (typeof v === 'object' && v.name) return v.name; // object shape (newer API)
-    return String(v);
-  }
-
-  function arrStrVal(v) {
-    if (!v) return '';
+    if (typeof v === 'object' && v.name) return v.name;
     if (Array.isArray(v)) {
       const first = v[0];
       if (!first) return '';
-      if (typeof first === 'object' && first.name) return first.name;
-      return String(first);
+      return typeof first === 'object' && first.name ? first.name : String(first);
     }
-    return strVal(v);
+    // Airtable lookup with linked record IDs
+    if (v.linkedRecordIds && v.valuesByLinkedRecordId) {
+      const id  = v.linkedRecordIds[0];
+      if (!id) return '';
+      const vals = v.valuesByLinkedRecordId[id];
+      if (!vals || !vals.length) return '';
+      const first = vals[0];
+      return typeof first === 'object' && first.name ? first.name : String(first);
+    }
+    return '';
   }
 
   /* ── slug from URL ────────────────────────────── */
@@ -394,20 +398,20 @@
     const f = r.fields;
 
     // Primary field: "LD Website — 1.4.12"
-    const primary     = strVal(f['Audit - Criterion ID']);
+    const primary     = lookupVal(f['Audit - Criterion ID']);
     const dashIdx     = primary.indexOf('—');
     const criterionId = (dashIdx >= 0 ? primary.slice(dashIdx + 1) : primary).trim();
 
-    const name        = arrStrVal(f['Criterion Name']);
-    const level       = arrStrVal(f['Level']);        // "A" or "AA"
-    const refUrl      = arrStrVal(f['Official Reference URL']);
-    const conformance = strVal(f['Conformance Level']);
-    const remarks     = strVal(f['Remarks and Explanations']);
+    const name        = lookupVal(f['Criterion Name']);
+    const level       = lookupVal(f['Level']);        // "A" or "AA"
+    const refUrl      = lookupVal(f['Official Reference URL']);
+    const conformance = lookupVal(f['Conformance Level']);
+    const remarks     = lookupVal(f['Remarks and Explanations']);
     // FIX 6b fix: use field NAME not field ID
-    const enRef       = strVal(f['EN 301 549 Criteria reference']);
+    const enRef       = lookupVal(f['EN 301 549 Criteria reference']);
     // FIX 7: override wins; fall back to default from Criteria lookup
-    const sectionNotes = strVal(f['EN Section Notes Override'])
-                      || arrStrVal(f['EN Section Notes (from Criterion)']);
+    const sectionNotes = lookupVal(f['EN Section Notes Override'])
+                      || lookupVal(f['EN Section Notes (from Criterion)']);
 
     const row = { criterionId, name, level, refUrl, conformance, remarks, enRef, sectionNotes };
 
