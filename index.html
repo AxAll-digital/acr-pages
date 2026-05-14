@@ -152,6 +152,18 @@
       color: #444;
       margin-top: 0.4rem;
       line-height: 1.5;
+      font-style: italic;
+    }
+
+    .acr-en-ref ul {
+      margin: 0.2rem 0 0 1.25rem;
+      padding: 0;
+      list-style: disc;
+      font-style: normal;
+    }
+
+    .acr-en-ref ul li {
+      margin-bottom: 0.15rem;
     }
 
     /* Terms / notes */
@@ -436,6 +448,20 @@
   wcagAA.sort(numSort);
   Object.values(enByChapter).forEach(arr => arr.sort(numSort));
 
+  /* ── EN ref renderer — parses bullet text into a proper list ─ */
+  function renderEnRef(text) {
+    if (!text || !text.trim()) return '';
+    // Split on newlines; strip leading bullet chars (•, ●, -, *)
+    const lines = text.split('\n')
+      .map(l => l.trim())
+      .filter(Boolean)
+      .map(l => l.replace(/^[•●\-\*]\s*/, '').trim())
+      .filter(Boolean);
+    if (!lines.length) return '';
+    const items = lines.map(l => `<li>${esc(l)}</li>`).join('');
+    return `<span class="acr-en-ref"><em>Also applies to: EN 301 549 Criteria</em><ul>${items}</ul></span>`;
+  }
+
   /* ── render helpers ───────────────────────────── */
   function conformanceClass(c) {
     if (c === 'Supports')           return 'acr-conformance-supports';
@@ -465,10 +491,8 @@
         ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a> (Level ${esc(row.level)})`
         : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong> (Level ${esc(row.level)})`;
 
-      // FIX 6b: EN ref below (only in EN edition)
-      const enRefHtml = (showEnRef && row.enRef)
-        ? `<span class="acr-en-ref"><em>Also applies to: EN 301 549 Criteria</em><br>${esc(row.enRef)}</span>`
-        : '';
+      // FIX 6b: EN ref as proper bullet list (only in EN edition)
+      const enRefHtml = (showEnRef && row.enRef) ? renderEnRef(row.enRef) : '';
 
       html += `<tr>
         <td>${criterionLink}${enRefHtml}</td>
