@@ -179,10 +179,12 @@
   </style>
 </head>
 <body>
+<main>
 <div class="page">
   <div id="acr-header"><p style="color:#888">Loading report…</p></div>
   <div id="acr-body"></div>
 </div>
+</main>
 
 <script>
 (async function () {
@@ -265,11 +267,15 @@
     const rows = [];
     let enAdded = false;
 
-    // When EN 301 549 is present, WCAG 2.1 AA is always included (Clause 9).
-    // Auto-prepend it if the auditor hasn't already added a WCAG entry.
-    const hasWcag = items.some(s => s.toLowerCase().includes('wcag'));
-    const hasEN   = items.some(s => s.toLowerCase().includes('en 301 549'));
-    if (hasEN && !hasWcag) items.unshift('WCAG 2.1 AA');
+    // EN 301 549 always includes both WCAG 2.0 and 2.1 (Clauses 9/10/11).
+    // Auto-inject whichever versions are missing so the table is always complete.
+    const hasEN    = items.some(s => s.toLowerCase().includes('en 301 549'));
+    const hasWcag20 = items.some(s => s.toLowerCase().includes('wcag 2.0'));
+    const hasWcag21 = items.some(s => s.toLowerCase().includes('wcag 2.1'));
+    if (hasEN) {
+      if (!hasWcag21) items.unshift('WCAG 2.1 AA');
+      if (!hasWcag20) items.unshift('WCAG 2.0 AA');
+    }
 
     items.forEach(std => {
       const lc = std.toLowerCase();
@@ -594,8 +600,9 @@
 
       // Note: pulled from ANY row that has a sectionNotes value
       // (covers both heading rows and N/A marker rows)
-      const noteRow     = rows.find(r => r.sectionNotes);
-      const chapterNote = noteRow ? noteRow.sectionNotes : '';
+      // .trim() prevents stray newlines/spaces from triggering an empty "Notes:" label
+      const noteRow     = rows.find(r => r.sectionNotes && r.sectionNotes.trim());
+      const chapterNote = noteRow ? noteRow.sectionNotes.trim() : '';
 
       // Always show the clause heading — even for N/A clauses with no ACR rows
       body += `<h3 class="section-heading"><a href="${EN_PDF}" target="_blank" rel="noopener">${meta.label}</a></h3>`;
