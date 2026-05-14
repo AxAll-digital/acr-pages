@@ -391,6 +391,56 @@
     return table + '</tbody></table>';
   }
 
+  /* ── Formatted text renderer ─────────────────────────────────
+     Converts plain text with • top-level and - sub-level bullets
+     into semantic <ul><li> lists, with plain lines as <p> elements.
+  ──────────────────────────────────────────────────────────── */
+  function renderFormattedText(text) {
+    if (!text || !text.trim()) return '';
+
+    const lines = text.split('\n');
+    let html = '';
+    let ulOpen    = false;
+    let liOpen    = false;
+    let subUlOpen = false;
+
+    const closeSubList = () => { if (subUlOpen) { html += '</ul>'; subUlOpen = false; } };
+    const closeLi      = () => { if (liOpen)    { closeSubList(); html += '</li>'; liOpen = false; } };
+    const closeList    = () => { if (ulOpen)    { closeLi(); html += '</ul>'; ulOpen = false; } };
+
+    for (const raw of lines) {
+      const line    = raw.trim();
+      if (!line) continue;
+
+      const isBullet = /^[•●]/.test(line);
+      const isSub    = /^[-–]/.test(line);
+
+      if (isBullet) {
+        if (!ulOpen) { html += '<ul>'; ulOpen = true; }
+        else closeLi();
+        html   += `<li>${esc(line.replace(/^[•●]\s*/, ''))}`;
+        liOpen  = true;
+      } else if (isSub) {
+        // Sub-item: nest inside the current <li> if we're in a list,
+        // otherwise treat as its own top-level list item
+        if (ulOpen) {
+          if (!subUlOpen) { html += '<ul>'; subUlOpen = true; }
+          html += `<li>${esc(line.replace(/^[-–]\s*/, ''))}</li>`;
+        } else {
+          if (!ulOpen) { html += '<ul>'; ulOpen = true; }
+          else closeLi();
+          html  += `<li>${esc(line.replace(/^[-–]\s*/, ''))}</li>`;
+        }
+      } else {
+        closeList();
+        html += `<p class="acr-field-value">${esc(line)}</p>`;
+      }
+    }
+
+    closeList();
+    return html || `<p class="acr-field-value">${esc(text)}</p>`;
+  }
+
   /* ── Evaluation Scope renderer ───────────────── */
   // Accepts records from /api/scope/:slug
   // Each record has fields: "Page Title" and "Page URL"
@@ -431,7 +481,7 @@
 
     ${contact ? `<h2>Contact Information</h2><p class="acr-field-value">${esc(contact)}</p>` : ''}
 
-    ${evalMethods ? `<h2>Evaluation Methods Used</h2><p class="acr-field-value">${esc(evalMethods)}</p>` : ''}
+    ${evalMethods ? `<h2>Evaluation Methods Used</h2>${renderFormattedText(evalMethods)}` : ''}
 
     ${scopeRecords.length ? `<h2>Evaluation Scope</h2>${renderEvalScope(scopeRecords)}` : ''}
 
