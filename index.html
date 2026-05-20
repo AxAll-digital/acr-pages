@@ -288,9 +288,9 @@
   let auditData = {}, records = [], scopeRecords = [];
   try {
     const [ar, cr, sr] = await Promise.all([
-      fetch(`https://proxy.junekarlove.com/api/audit/${slug}`),
-      fetch(`https://proxy.junekarlove.com/api/acr/${slug}`),
-      fetch(`https://proxy.junekarlove.com/api/scope/${slug}`)
+      fetch(`https://proxy.axall.digital/api/audit/${slug}`),
+      fetch(`https://proxy.axall.digital/api/acr/${slug}`),
+      fetch(`https://proxy.axall.digital/api/scope/${slug}`)
     ]);
     auditData    = await ar.json();
     records      = (await cr.json()).records || [];
