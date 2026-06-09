@@ -266,13 +266,17 @@
             <h3>Approved by</h3>
             <address id="approved-by"></address>
           </div>
+          <div class="issuance-block">
+            <h3>Approved by</h3>
+            <address id="approved-by"></address>
+          </div>
         </div>
       </section>
 
       <!-- Certificate -->
       <section aria-labelledby="cert-heading">
         <h2 id="cert-heading">Accessibility evaluation certificate</h2>
-        <p>This <span class="product-type-ref">website</span> has been evaluated by Axall and is listed on the <a href="https://axall.digital/accessibility-registry" target="_blank" rel="noopener">Axall Accessibility Registry</a>.</p>
+        <p>This <span class="product-type-ref">website</span> has been evaluated by Axall and is listed on the <a id="registry-link" href="https://axall.digital/accessibility-registry" target="_blank" rel="noopener">Axall Accessibility Registry</a>.</p>
         <div class="certificate-block">
           <p>Certificate ID</p>
           <p class="certificate-id" id="certificate-id"></p>
@@ -402,10 +406,27 @@
         `);
       }
 
-      // Limitations
-      const limText = d.knownLimitations
-        ? `<p>${d.knownLimitations.replace(/\n/g, '</p><p>')}</p>`
-        : `<p>Parts of this ${typeLabel} are not fully accessible. Known limitations are documented in the Accessibility Conformance Report.</p>`;
+      // Limitations — render markdown-style content from Airtable richText
+      function renderLimitations(text) {
+        if (!text || !text.trim()) return `<p>Parts of this ${typeLabel} are not fully accessible. Known limitations are documented in the Accessibility Conformance Report.</p>`;
+        const lines = text.split('\n');
+        let html = '';
+        lines.forEach(raw => {
+          const line = raw.trim();
+          if (!line) return;
+          if (/^###\s+/.test(line)) {
+            html += `<h3 style="font-size:1rem;font-weight:600;margin:1rem 0 0.35rem">${line.replace(/^###\s+/, '')}</h3>`;
+          } else if (/^##\s+/.test(line)) {
+            html += `<h3 style="font-size:1rem;font-weight:600;margin:1rem 0 0.35rem">${line.replace(/^##\s+/, '')}</h3>`;
+          } else if (/^[•●\-\*]\s+/.test(line)) {
+            html += `<ul style="padding-left:1.25rem;margin-bottom:0.5rem"><li>${line.replace(/^[•●\-\*]\s+/, '')}</li></ul>`;
+          } else {
+            html += `<p>${line}</p>`;
+          }
+        });
+        return html;
+      }
+      const limText = renderLimitations(d.knownLimitations);
       const fixNote = d.plannedFixTimeline
         ? `<p>We are actively working to address these issues. Significant improvements are planned for ${d.plannedFixTimeline}.</p>`
         : `<p>We are actively working to address these issues and welcome your feedback.</p>`;
@@ -453,11 +474,18 @@
       setText('statement-date', formatDate(d.statementDate));
       setText('testing-period', d.testingPeriod);
 
-      // Approved by
-      setText('approved-by', d.clientName);
+      // Approved by — client organisation name only
+      const approvedEl = document.getElementById('approved-by');
+      if (approvedEl) approvedEl.textContent = d.clientName;
 
       // Certificate
       setText('certificate-id', d.certificateId);
+
+      // Registry link
+      if (d.registryUrl) {
+        const link = document.getElementById('registry-link');
+        if (link) link.href = d.registryUrl;
+      }
 
       // Update product-type spans in static text
       document.querySelectorAll('.product-type-ref').forEach(el => {
