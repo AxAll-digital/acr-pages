@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accessibility Statement</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f6f7f9;
+      color: #1a1b1f;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .page-wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* Header */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #d7e0e5;
+      margin-bottom: 2.5rem;
+      gap: 1rem;
+    }
+
+    .client-logo {
+      max-height: 40px;
+      max-width: 180px;
+      object-fit: contain;
+    }
+
+    .axall-badge {
+      font-size: 0.75rem;
+      color: #1a1b1f;
+      text-align: right;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+
+    .axall-badge a {
+      color: #1a1b1f;
+      text-decoration: underline;
+    }
+
+    /* Page title */
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      line-height: 1.25;
+    }
+
+    .subtitle {
+      color: #555;
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid #d7e0e5;
+    }
+
+    p { margin-bottom: 0.75rem; }
+    p:last-child { margin-bottom: 0; }
+
+    ul {
+      padding-left: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    li { margin-bottom: 0.35rem; }
+
+    a { color: #1a1b1f; }
+
+    /* Compliance status badge */
+    .compliance-badge {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .compliance-badge.partial {
+      background: #fef3c7;
+      color: #78350f;
+    }
+
+    .compliance-badge.full {
+      background: #dcfce7;
+      color: #14532d;
+    }
+
+    .compliance-badge.none {
+      background: #fee2e2;
+      color: #7f1d1d;
+    }
+
+    /* Issuance block */
+    .issuance-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+    }
+
+    @media (max-width: 520px) {
+      .issuance-grid { grid-template-columns: 1fr; }
+    }
+
+    .issuance-block h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+
+    .issuance-block address {
+      font-style: normal;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* Certificate */
+    .certificate-block {
+      background: #fff;
+      border: 1px solid #d7e0e5;
+      border-radius: 4px;
+      padding: 1rem 1.25rem;
+      margin-top: 0.75rem;
+    }
+
+    .certificate-block p {
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .certificate-id {
+      font-family: monospace;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    /* ACR link */
+    .acr-link-block {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #d7e0e5;
+      font-size: 0.9rem;
+    }
+
+    /* Loading / error states */
+    #loading, #error {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: #555;
+    }
+
+    #error { color: #7f1d1d; }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div id="loading">Loading…</div>
+    <div id="error" class="hidden">This accessibility statement could not be loaded.</div>
+
+    <div id="content" class="hidden">
+
+      <header class="site-header">
+        <img id="client-logo" class="client-logo hidden" src="" alt="" />
+        <div class="axall-badge">
+          Accessibility evaluated by<br>
+          <a href="https://axall.digital" target="_blank" rel="noopener">Axall (AxAll UAB)</a>
+        </div>
+      </header>
+
+      <h1 id="page-title">Accessibility Statement</h1>
+      <p class="subtitle" id="page-subtitle"></p>
+
+      <!-- How you should be able to use this -->
+      <section aria-labelledby="usage-heading">
+        <h2 id="usage-heading" id="how-to-use">How you should be able to use this <span id="product-type-label">product</span></h2>
+        <div id="usage-text"></div>
+      </section>
+
+      <!-- Compatibility (apps only) -->
+      <section id="compatibility-section" aria-labelledby="compat-heading" class="hidden">
+        <h2 id="compat-heading">Compatibility with assistive technology</h2>
+        <p>The app is designed to work with the most widely used assistive technologies, including:</p>
+        <ul>
+          <li>The latest version of Google Chrome and Apple Safari browsers</li>
+          <li>TalkBack (Android) and VoiceOver (iOS/iPadOS) screen readers</li>
+        </ul>
+      </section>
+
+      <!-- Limitations -->
+      <section aria-labelledby="limitations-heading">
+        <h2 id="limitations-heading">Limitations</h2>
+        <div id="limitations-text"></div>
+        <p>For a complete list of known issues and their status, see the <a id="acr-link-inline" href="acr">Accessibility Conformance Report</a>.</p>
+      </section>
+
+      <!-- Feedback -->
+      <section aria-labelledby="feedback-heading">
+        <h2 id="feedback-heading">Feedback</h2>
+        <p>If you find anything on this <span class="product-type-ref">website</span> difficult to use, please contact us:</p>
+        <div id="contact-info"></div>
+        <p id="response-time-text"></p>
+        <p>When submitting feedback, please include as much detail as possible about the issue and the page or section it relates to. Guidance on <a href="https://www.w3.org/WAI/users/inaccessible" target="_blank" rel="noopener">how to contact organisations about inaccessible websites</a> is available from W3C.</p>
+      </section>
+
+      <!-- Technical information -->
+      <section aria-labelledby="technical-heading">
+        <h2 id="technical-heading">Technical information</h2>
+        <p id="client-name-commitment"></p>
+        <p id="standard-text"></p>
+        <div class="compliance-badge" id="compliance-badge"></div>
+        <p id="compliance-detail"></p>
+      </section>
+
+      <!-- Preparation -->
+      <section aria-labelledby="preparation-heading">
+        <h2 id="preparation-heading">Preparation of this statement</h2>
+        <p>This accessibility statement was prepared on <strong id="statement-date"></strong>.</p>
+        <p>The <span class="product-type-ref">website</span> underwent testing in <strong id="testing-period"></strong>. The evaluation was conducted by Axall (AxAll UAB).</p>
+      </section>
+
+      <!-- Issuance -->
+      <section aria-labelledby="issuance-heading">
+        <h2 id="issuance-heading">Official issuance and approval</h2>
+        <div class="issuance-grid">
+          <div class="issuance-block">
+            <h3>Issued by</h3>
+            <address>
+              Axall (AxAll UAB)<br>
+              Perkunkiemio g. 53, LT-12144<br>
+              Vilnius, Lithuania<br>
+              <a href="https://axall.digital" target="_blank" rel="noopener">axall.digital</a><br>
+              <a href="mailto:letstalk@axall.digital">letstalk@axall.digital</a>
+            </address>
+          </div>
+          <div class="issuance-block">
+            <h3>Approved by</h3>
+            <address id="approved-by"></address>
+          </div>
+        </div>
+      </section>
+
+      <!-- Certificate -->
+      <section aria-labelledby="cert-heading">
+        <h2 id="cert-heading">Accessibility evaluation certificate</h2>
+        <p>This <span class="product-type-ref">website</span> has been evaluated by Axall and is listed on the <a href="https://axall.digital/accessibility-registry" target="_blank" rel="noopener">Axall Accessibility Registry</a>.</p>
+        <div class="certificate-block">
+          <p>Certificate ID</p>
+          <p class="certificate-id" id="certificate-id"></p>
+        </div>
+      </section>
+
+      <!-- ACR link -->
+      <div class="acr-link-block">
+        <a id="acr-link-bottom" href="acr">View the full Accessibility Conformance Report →</a>
+      </div>
+
+    </div><!-- /#content -->
+  </div>
+
+  <script>
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    function slug() {
+      const host = window.location.hostname; // e.g. accessibility.liesbethdillen.com
+      const parts = host.split('.');
+      // strip leading "accessibility." subdomain, use remaining as slug key
+      // Worker resolves via KV, so we pass the full host minus "accessibility."
+      // Actually Worker uses slug from path — we pass it via ?slug= param or derive from hostname
+      // Pattern: accessibility.CLIENT.com → slug = CLIENT
+      // But KV key is "audit:liesbethdillen" → slug = "liesbethdillen"
+      // We derive by taking second-level domain (parts[1] if parts[0]==="accessibility")
+      if (parts[0] === 'accessibility' && parts.length >= 3) {
+        return parts[1];
+      }
+      // Fallback: use URL param ?slug=xxx for local testing
+      return new URLSearchParams(window.location.search).get('slug') || '';
+    }
+
+    function setText(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val || '';
+    }
+
+    function setHtml(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = val || '';
+    }
+
+    function show(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
+
+    function hide(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    function formatDate(isoDate) {
+      if (!isoDate) return '';
+      const d = new Date(isoDate);
+      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    // ── Fetch & render ────────────────────────────────────────────────────────
+
+    async function init() {
+      const s = slug();
+      if (!s) { showError(); return; }
+
+      let data;
+      try {
+        const resp = await fetch(`https://proxy.axall.digital/api/statement/${s}`);
+        if (!resp.ok) throw new Error(resp.status);
+        data = await resp.json();
+      } catch (e) {
+        showError();
+        return;
+      }
+
+      render(data);
+    }
+
+    function showError() {
+      hide('loading');
+      show('error');
+    }
+
+    function render(d) {
+      hide('loading');
+      show('content');
+
+      // Determine product type label
+      const isApp = /app|mobile/i.test(d.productType);
+      const isDoc = /document/i.test(d.productType);
+      const typeLabel = isApp ? 'app' : isDoc ? 'document' : 'website';
+      const typeCapital = typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1);
+
+      // Update all product-type references
+      document.querySelectorAll('.product-type-ref').forEach(el => {
+        el.textContent = typeLabel;
+      });
+
+      // Page title
+      document.title = `Accessibility Statement — ${d.auditTitle}`;
+      setText('page-title', `Accessibility Statement for ${d.auditTitle}`);
+      setText('page-subtitle', `This statement applies to ${d.auditTitle}, operated by ${d.clientName}.`);
+
+      // Logo
+      if (d.logoUrl) {
+        const logo = document.getElementById('client-logo');
+        logo.src = d.logoUrl;
+        logo.alt = `${d.clientName} logo`;
+        show('client-logo');
+      }
+
+      // "How to use" section
+      setText('product-type-label', typeLabel);
+      if (isApp) {
+        setHtml('usage-text', `
+          <p>We aim to make this app inclusive and easy to use for people of all abilities.</p>
+          <p>The app is designed to be user-friendly in its default state. Many users benefit from adjusting device accessibility settings — such as enabling a screen reader, changing the colour scheme, or increasing the font size.</p>
+          <p>Guidance is available from <a href="https://support.google.com/accessibility/android/answer/6006564" target="_blank" rel="noopener">Android accessibility overview</a> and <a href="https://support.apple.com/guide/iphone/iph3e2e4367/ios" target="_blank" rel="noopener">iPhone accessibility features</a>.</p>
+          <p>If you encounter difficulties, please contact us using the details in the Feedback section below.</p>
+        `);
+        show('compatibility-section');
+      } else {
+        setHtml('usage-text', `
+          <p>We strive to make this ${typeLabel} inclusive and easy to use for people of all abilities.</p>
+          <p>Many users benefit from customising their device settings — such as having content read aloud, changing the colour scheme, or enlarging the font size. Guidance is available from <a href="https://www.w3.org/WAI/users/browsing" target="_blank" rel="noopener">W3C: Better Web Browsing</a>.</p>
+          <p>If you encounter difficulties, please contact us using the details in the Feedback section below.</p>
+        `);
+      }
+
+      // Limitations
+      const limText = d.knownLimitations
+        ? `<p>${d.knownLimitations.replace(/\n/g, '</p><p>')}</p>`
+        : `<p>Parts of this ${typeLabel} are not fully accessible. Known limitations are documented in the Accessibility Conformance Report.</p>`;
+      const fixNote = d.plannedFixTimeline
+        ? `<p>We are actively working to address these issues. Significant improvements are planned for ${d.plannedFixTimeline}.</p>`
+        : `<p>We are actively working to address these issues and welcome your feedback.</p>`;
+      setHtml('limitations-text', limText + fixNote);
+
+      // Contact / feedback
+      setHtml('contact-info', `<p>${d.contactInformation.replace(/\n/g, '<br>')}</p>`);
+      if (d.feedbackResponseTime) {
+        setText('response-time-text', `We aim to respond within ${d.feedbackResponseTime} of receiving your message.`);
+      } else {
+        hide('response-time-text');
+      }
+
+      // Technical / compliance
+      setText('client-name-commitment',
+        `${d.clientName} is committed to making this ${typeLabel} accessible in accordance with Directive (EU) 2019/882 on accessibility requirements for products and services (European Accessibility Act).`
+      );
+
+      // Standard label
+      const standardLabel = d.standard === 'EN 301 549'
+        ? 'EN 301 549 V3.2.1 and Web Content Accessibility Guidelines (WCAG) 2.1 Level AA'
+        : d.standard === 'WCAG'
+        ? 'Web Content Accessibility Guidelines (WCAG) 2.2 Level AA'
+        : d.standard;
+      setText('standard-text', `The evaluation was conducted against the ${standardLabel}.`);
+
+      // Compliance badge
+      const badge = document.getElementById('compliance-badge');
+      const statusLower = (d.complianceStatus || '').toLowerCase();
+      if (statusLower.includes('fully')) {
+        badge.textContent = 'Fully compliant';
+        badge.className = 'compliance-badge full';
+        setText('compliance-detail', `This ${typeLabel} is fully compliant with the applicable standard.`);
+      } else if (statusLower.includes('does not') || statusLower.includes('non')) {
+        badge.textContent = 'Does not comply';
+        badge.className = 'compliance-badge none';
+        setText('compliance-detail', `This ${typeLabel} does not currently meet the requirements of the applicable standard.`);
+      } else {
+        badge.textContent = 'Partially compliant';
+        badge.className = 'compliance-badge partial';
+        setText('compliance-detail', `This ${typeLabel} partially meets the requirements of the applicable standard. Known non-conformances are listed above and detailed in the Accessibility Conformance Report.`);
+      }
+
+      // Preparation dates
+      setText('statement-date', formatDate(d.statementDate));
+      setText('testing-period', d.testingPeriod);
+
+      // Approved by
+      setText('approved-by', d.clientName);
+
+      // Certificate
+      setText('certificate-id', d.certificateId);
+
+      // Update product-type spans in static text
+      document.querySelectorAll('.product-type-ref').forEach(el => {
+        el.textContent = typeLabel;
+      });
+
+      // h1 lang — set html lang to en (default)
+      document.documentElement.lang = 'en';
+    }
+
+    init();
+  </script>
+</body>
+</html>
