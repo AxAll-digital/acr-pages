@@ -439,8 +439,8 @@
     let html = '<ol>';
     recs.forEach(r => {
       const f    = r.fields || {};
-      const name = f['Page Title'] || '';
-      const url  = f['Page URL']   || '';
+      const name = f['Scope Item Title'] || f['Page Title'] || '';
+      const url  = f['URL / Reference link'] || f['Page URL'] || '';
       if (url) {
         html += `<li><a href="${esc(url)}" target="_blank" rel="noopener">${esc(name)}</a></li>`;
       } else if (name) {
