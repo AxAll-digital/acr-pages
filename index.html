@@ -225,8 +225,8 @@
       <!-- Preparation -->
       <section aria-labelledby="preparation-heading">
         <h2 id="preparation-heading">Preparation of this statement</h2>
-        <p>This accessibility statement was prepared on <strong id="statement-date"></strong>.</p>
-        <p>The <span id="preparation-label"></span> underwent testing in <strong id="testing-period"></strong>. The evaluation was conducted by AxAll UAB.</p>
+        <p id="preparation-date-sentence"></p>
+        <p id="preparation-testing-sentence"></p>
       </section>
 
       <!-- Issuance -->
@@ -294,6 +294,21 @@
       return new Date(isoDate + 'T12:00:00').toLocaleDateString('en-GB', {
         day: 'numeric', month: 'long', year: 'numeric'
       });
+    }
+
+    // Renders address block — converts markdown links and newlines to HTML
+    function renderAddress(text) {
+      if (!text) return '';
+      let html = text
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+          (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
+        .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
+          (_, label, url) => `<a href="${url}">${label}</a>`)
+        .replace(/(https?:\/\/[^\s<]+)/g,
+          url => `<a href="${url}" target="_blank" rel="noopener">${url.replace(/^https?:\/\//, '')}</a>`)
+        .replace(/([\w.+-]+@[\w-]+\.[\w.]+)/g,
+          email => `<a href="mailto:${email}">${email}</a>`);
+      return html.split('\n').filter(l => l.trim()).join('<br>');
     }
 
     function renderRichText(text) {
@@ -431,20 +446,27 @@
         `The ${labelCapital} is ${statusText} with the ${d.complianceStandardHtml || d.standard}.`
       );
 
-      setText('compliance-acr-note',
-        'The compliance status is based on the results of a digital accessibility conformance evaluation. Detailed information about the evaluation, including its findings, scope, and methods, can be found in the Accessibility Conformance Report.'
+      setHtml('compliance-acr-note',
+        `The compliance status is based on the results of a digital accessibility conformance evaluation. Detailed information about the evaluation, including its findings, scope, and methods, can be found in the <a href="acr">Accessibility Conformance Report</a>.`
       );
 
       // ── Preparation
-      setText('statement-date',  formatDate(d.statementDate));
-      setText('testing-period',  d.testingPeriod);
+      const preparedOn   = formatDate(d.statementDate);
+      const reviewedOn   = formatDate(d.lastReviewedDate);
+      const reviewedPart = reviewedOn ? ` and last reviewed on <strong>${reviewedOn}</strong>` : '';
+      setHtml('preparation-date-sentence',
+        `This accessibility statement was prepared on <strong>${preparedOn}</strong>${reviewedPart}.`
+      );
+      setHtml('preparation-testing-sentence',
+        `The ${label} underwent testing in <strong>${d.testingPeriod || '—'}</strong> against the ${d.standard || 'applicable standard'}. The evaluation was conducted by AxAll UAB.`
+      );
 
-      // ── Issuance — fetched from Airtable Settings
+      // ── Issuance — rendered with link support
       const issuedByEl = document.getElementById('issued-by');
-      if (issuedByEl) issuedByEl.textContent = d.axallDetails || 'AxAll UAB';
+      if (issuedByEl) issuedByEl.innerHTML = renderAddress(d.axallDetails) || 'AxAll UAB';
 
       const approvedByEl = document.getElementById('approved-by');
-      if (approvedByEl) approvedByEl.textContent = d.clientDetails || d.clientName;
+      if (approvedByEl) approvedByEl.innerHTML = renderAddress(d.clientDetails) || d.clientName;
 
       // ── Certificate
       setText('certificate-id', d.certificateId);
