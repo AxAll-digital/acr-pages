@@ -341,6 +341,503 @@
       lines.forEach(raw => {
         const line = raw.trim();
         if (!line) return;
+        if (/^#{1,6}\s+/.test(line)) {
+          html += `<h3 style="font-size:1rem;font-weight:600;margin:1rem 0 0.35rem">${line.replace(/^#{1,6}\s+/, '')}</h3>`;
+        } else if (/^[•●]\s+/.test(line)) {
+          html += `<ul style="padding-left:1.25rem;margin-bottom:0.5rem"><li>${line.replace(/^[•●]\s+/, '')}</li></ul>`;
+        } else {
+          // strip leading/trailing bold markers and any remaining ** or __
+          const clean = line.replace(/^\*+/, '').replace(/\*+$/, '').replace(/\*\*(.*?)\*\*/g, '$1').trim();
+          if (clean) html += `<p>${clean}</p>`;
+        }
+      });
+      return html;
+    }
+
+    function renderUsageText(text) {
+      if (!text) return '';
+      let html = text.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+        (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`
+      );
+      html = html.replace(/\((https?:\/\/[^)]+)\)/g,
+        (_, url) => `(<a href="${url}" target="_blank" rel="noopener">${url.replace(/^https?:\/\//, '')}</a>)`
+      );
+      const paras = html.split(/\n\n+/).filter(p => p.trim());
+      return paras.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+    }
+
+    async function init() {
+      const s = slug();
+      if (!s) { showError(); return; }
+
+      let data;
+      try {
+        const resp = await fetch(`https://proxy.axall.digital/api/statement/${s}`);
+        if (!resp.ok) throw new Error(resp.status);
+        data = await resp.json();
+      } catch (e) {
+        showError();
+        return;
+      }
+
+      render(data);
+    }
+
+    function showError() {
+      hide('loading');
+      show('error');
+    }
+
+    function render(d) {
+      hide('loading');
+      show('content');
+
+      const label = d.shortLabel || 'product';
+
+      // ── Page title
+      document.title = `Accessibility Statement — ${d.auditTitle}`;
+
+      // ── Intro
+      setHtml('page-subtitle', d.introSentence || '');
+
+      // ── Logo
+      if (d.logoUrl) {
+        const logo = document.getElementById('client-logo');
+        logo.src  = d.logoUrl;
+        logo.alt  = `${d.clientName} logo`;
+        show('client-logo');
+      }
+
+      // ── Product type labels
+      setText('product-type-label',  label);
+      setText('limitations-label',   label);
+      setText('feedback-label',      label);
+      setText('feedback-label-2',    label);
+      setText('technical-label',     label);
+      setText('preparation-label',   label);
+      setText('cert-label',          label);
+
+      // ── How to use
+      setHtml('usage-text', d.usageText
+        ? renderUsageText(d.usageText)
+        : `<p>We strive to make this ${label} inclusive and easy to use for people of all abilities.</p>`
+      );
+
+      // ── Compatibility
+      if (d.showCompat && d.compatText) {
+        setHtml('compat-text', renderRichText(d.compatText));
+        show('compatibility-section');
+      }
+
+      // ── Limitations
+      const limHtml = d.knownLimitations
+        ? renderRichText(d.knownLimitations)
+        : `<p>Parts of this ${label} are not fully accessible. Known limitations are documented in the Accessibility Conformance Report.</p>`;
+      const fixNote = d.plannedFixTimeline
+        ? `<p>We are actively working to address these issues. Significant improvements are planned for ${d.plannedFixTimeline}.</p>`
+        : `<p>We are actively working to address these issues and welcome your feedback.</p>`;
+      setHtml('limitations-text', limHtml + fixNote);
+
+      // ── Feedback
+      setHtml('contact-info', renderRichText(d.contactInformation || ''));
+
+      // ── Technical / compliance
+      const labelCapital = label.charAt(0).toUpperCase() + label.slice(1);
+      setText('client-name-commitment',
+        `${d.clientName} is committed to making its ${label} accessible, in accordance with ${d.directive || 'Directive (EU) 2019/882 on the accessibility requirements for products and services (European Accessibility Act, EAA)'}.`
+      );
+
+      const statusLower = (d.complianceStatus || '').toLowerCase();
+      let statusText    = 'partially compliant';
+
+      if (statusLower.includes('fully')) {
+        statusText = 'fully compliant';
+      } else if (statusLower.includes('does not') || statusLower.includes('non')) {
+        statusText = 'not compliant';
+      }
+
+      setHtml('compliance-sentence',
+        `The ${labelCapital} is ${statusText} with the ${d.complianceStandardHtml || d.standard}.`
+      );
+
+      setHtml('compliance-acr-note',
+        `The compliance status is based on the results of a digital accessibility conformance evaluation. Detailed information about the evaluation, including its findings, scope, and methods, can be found in the <a href="acr">Accessibility Conformance Report</a>.`
+      );
+
+      // ── Preparation
+      const preparedOn   = formatDate(d.statementDate);
+      const reviewedOn   = formatDate(d.lastReviewedDate);
+      const reviewedPart = reviewedOn ? ` and last reviewed on <strong>${reviewedOn}</strong>` : '';
+      setHtml('preparation-date-sentence',
+        `This accessibility statement was prepared on <strong>${preparedOn}</strong>${reviewedPart}.`
+      );
+      setHtml('preparation-testing-sentence',
+        `The ${label} underwent testing in <strong>${d.testingPeriod || '—'}</strong> against the ${d.standard || 'applicable standard'}. The evaluation was conducted by AxAll UAB.`
+      );
+
+      // ── Issuance — rendered with link support
+      const issuedByEl = document.getElementById('issued-by');
+      if (issuedByEl) issuedByEl.innerHTML = renderAddress(d.axallDetails) || 'AxAll UAB';
+
+      const approvedByEl = document.getElementById('approved-by');
+      if (approvedByEl) approvedByEl.innerHTML = renderAddress(d.clientDetails) || d.clientName;
+
+      // ── Certificate
+      setText('certificate-id', d.certificateId);
+      if (d.registryUrl) {
+        const link = document.getElementById('registry-link');
+        if (link) link.href = d.registryUrl;
+      }
+
+      document.documentElement.lang = 'en';
+    }
+
+    init();
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accessibility Statement</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #1a1b1f;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .page-wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #d7e0e5;
+      margin-bottom: 2.5rem;
+      gap: 1rem;
+    }
+
+    .client-logo {
+      max-height: 40px;
+      max-width: 180px;
+      object-fit: contain;
+    }
+
+    .axall-badge {
+      font-size: 0.75rem;
+      color: #1a1b1f;
+      text-align: right;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+
+    .axall-badge a {
+      color: #1a1b1f;
+      text-decoration: underline;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      line-height: 1.25;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    section { margin-bottom: 2.5rem; }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 2.5rem 0 0.6rem;
+    }
+
+    h3.subsection {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    p { margin-bottom: 0.75rem; }
+    p:last-child { margin-bottom: 0; }
+
+    ul {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    li { margin-bottom: 0.35rem; }
+
+    a { color: #1a1b1f; }
+
+    .compliance-badge {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .compliance-badge.partial { background: #fef3c7; color: #78350f; }
+    .compliance-badge.full    { background: #dcfce7; color: #14532d; }
+    .compliance-badge.none    { background: #fee2e2; color: #7f1d1d; }
+
+    .issuance-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+    }
+
+    @media (max-width: 520px) {
+      .issuance-grid { grid-template-columns: 1fr; }
+    }
+
+    .issuance-block h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+
+    .issuance-block address {
+      font-style: normal;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .certificate-block {
+      background: #fff;
+      border: 1px solid #d7e0e5;
+      border-radius: 4px;
+      padding: 1rem 1.25rem;
+      margin-top: 0.75rem;
+    }
+
+    .certificate-block p {
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .certificate-id {
+      font-family: monospace;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .acr-link-block {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #d7e0e5;
+      font-size: 0.9rem;
+    }
+
+    #loading, #error {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: #555;
+    }
+
+    #error { color: #7f1d1d; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <div id="loading">Loading…</div>
+    <div id="error" class="hidden">This accessibility statement could not be loaded.</div>
+
+    <div id="content" class="hidden">
+
+      <header class="site-header">
+        <img id="client-logo" class="client-logo hidden" src="" alt="" />
+        <div class="axall-badge">
+          Accessibility evaluated by<br>
+          <a href="https://axall.digital" target="_blank" rel="noopener">AxAll UAB</a>
+        </div>
+      </header>
+
+      <h1>Accessibility Statement</h1>
+      <p class="subtitle" id="page-subtitle"></p>
+
+      <hr style="border:none;border-top:1px solid #d7e0e5;margin:0 0 2.5rem">
+
+      <!-- How you should be able to use this -->
+      <section aria-labelledby="usage-heading">
+        <h2 id="usage-heading">How you should be able to use this <span id="product-type-label"></span></h2>
+        <div id="usage-text"></div>
+      </section>
+
+      <!-- Compatibility (shown conditionally) -->
+      <section id="compatibility-section" aria-labelledby="compat-heading" class="hidden">
+        <h2 id="compat-heading">Compatibility with assistive technology</h2>
+        <div id="compat-text"></div>
+      </section>
+
+      <!-- Limitations -->
+      <section aria-labelledby="limitations-heading">
+        <h2 id="limitations-heading">Limitations of this <span id="limitations-label"></span>'s accessibility</h2>
+        <div id="limitations-text"></div>
+        <p>For a complete list of known issues and their status, see the <a href="acr">Accessibility Conformance Report</a>.</p>
+      </section>
+
+      <!-- Feedback -->
+      <section aria-labelledby="feedback-heading">
+        <h2 id="feedback-heading">Feedback</h2>
+        <p>If you find anything on this <span id="feedback-label"></span> difficult to use, please contact us:</p>
+        <div id="contact-info"></div>
+        <p>To assist us in addressing your issue, we kindly ask you to provide the details recommended in <a href="https://www.w3.org/WAI/users/inaccessible" target="_blank" rel="noopener">"Contacting Organizations about Inaccessible Websites" (external site)</a> with your request. We appreciate all constructive feedback on the accessibility or usability of this <span id="feedback-label-2"></span> and will thoughtfully review it.</p>
+      </section>
+
+      <!-- Technical information -->
+      <section aria-labelledby="technical-heading">
+        <h2 id="technical-heading">Technical information about this <span id="technical-label"></span>'s accessibility</h2>
+        <p id="client-name-commitment"></p>
+        <h3 class="subsection">Compliance status</h3>
+        <p id="compliance-sentence"></p>
+        <p id="compliance-acr-note"></p>
+      </section>
+
+      <!-- Preparation -->
+      <section aria-labelledby="preparation-heading">
+        <h2 id="preparation-heading">Preparation of this statement</h2>
+        <p id="preparation-date-sentence"></p>
+        <p id="preparation-testing-sentence"></p>
+      </section>
+
+      <!-- Issuance -->
+      <section aria-labelledby="issuance-heading">
+        <h2 id="issuance-heading">Official issuance and approval</h2>
+        <div class="issuance-grid">
+          <div class="issuance-block">
+            <h3>Issued by</h3>
+            <address id="issued-by"></address>
+          </div>
+          <div class="issuance-block">
+            <h3>Approved by</h3>
+            <address id="approved-by"></address>
+          </div>
+        </div>
+      </section>
+
+      <!-- Certificate -->
+      <section aria-labelledby="cert-heading">
+        <h2 id="cert-heading">Accessibility evaluation certificate</h2>
+        <p>This <span id="cert-label"></span> has been evaluated by AxAll UAB and is listed on the <a id="registry-link" href="https://axall.digital/accessibility-registry" target="_blank" rel="noopener">Axall Accessibility Registry</a>.</p>
+        <div class="certificate-block">
+          <p>Certificate ID</p>
+          <p class="certificate-id" id="certificate-id"></p>
+        </div>
+      </section>
+
+      <!-- ACR link -->
+      <div class="acr-link-block">
+        <a href="acr">View the full Accessibility Conformance Report →</a>
+      </div>
+
+    </div><!-- /#content -->
+  </div>
+
+  <script>
+    function slug() {
+      const parts = window.location.hostname.split('.');
+      if (parts[0] === 'accessibility' && parts.length >= 3) return parts[1];
+      return new URLSearchParams(window.location.search).get('slug') || '';
+    }
+
+    function setText(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val || '';
+    }
+
+    function setHtml(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = val || '';
+    }
+
+    function show(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
+
+    function hide(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    function formatDate(isoDate) {
+      if (!isoDate) return '';
+      return new Date(isoDate + 'T12:00:00').toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      });
+    }
+
+    // Renders address block — converts markdown links and bare URLs/emails to HTML
+    function renderAddress(text) {
+      if (!text) return '';
+      return text.split('\n')
+        .filter(l => l.trim())
+        .map(line => {
+          // markdown link [label](url)
+          if (/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/.test(line)) {
+            return line
+              .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+                (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
+              .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
+                (_, label, url) => `<a href="${url}">${label}</a>`);
+          }
+          // markdown mailto [label](mailto:...)
+          if (/\[([^\]]+)\]\((mailto:[^)]+)\)/.test(line)) {
+            return line.replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
+              (_, label, url) => `<a href="${url}">${label}</a>`);
+          }
+          // bare URL
+          if (/^https?:\/\//.test(line.trim())) {
+            const url = line.trim();
+            return `<a href="${url}" target="_blank" rel="noopener">${url.replace(/^https?:\/\//, '')}</a>`;
+          }
+          // bare domain (www.xxx.xxx)
+          if (/^www\./.test(line.trim())) {
+            const domain = line.trim();
+            return `<a href="https://${domain}" target="_blank" rel="noopener">${domain}</a>`;
+          }
+          // bare email
+          if (/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(line.trim())) {
+            const email = line.trim();
+            return `<a href="mailto:${email}">${email}</a>`;
+          }
+          return line;
+        })
+        .join('<br>');
+    }
+
+    function renderRichText(text) {
+      if (!text || !text.trim()) return '';
+      const lines = text.split('\n');
+      let html = '';
+      lines.forEach(raw => {
+        const line = raw.trim();
+        if (!line) return;
         if (/^###\s+/.test(line)) {
           html += `<h3 style="font-size:1rem;font-weight:600;margin:1rem 0 0.35rem">${line.replace(/^###\s+/, '')}</h3>`;
         } else if (/^##\s+/.test(line)) {
