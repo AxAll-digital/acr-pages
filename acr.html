@@ -403,21 +403,31 @@
     if (!text || !text.trim()) return '';
     const lines = text.split('\n');
     let html = '';
-    let ulOpen = false, liOpen = false, subUlOpen = false;
+    let ulOpen = false, olOpen = false, liOpen = false, subUlOpen = false;
     const closeSubList = () => { if (subUlOpen) { html += '</ul>'; subUlOpen = false; } };
     const closeLi      = () => { if (liOpen) { closeSubList(); html += '</li>'; liOpen = false; } };
-    const closeList    = () => { if (ulOpen) { closeLi(); html += '</ul>'; ulOpen = false; } };
+    const closeList    = () => {
+      if (ulOpen) { closeLi(); html += '</ul>'; ulOpen = false; }
+      if (olOpen) { closeLi(); html += '</ol>'; olOpen = false; }
+    };
     for (const raw of lines) {
       const line = raw.trim();
       if (!line) continue;
-      const isBullet = /^[•●]/.test(line);
-      const isSub    = /^[-–]/.test(line);
+      const isBullet   = /^[•●]/.test(line);
+      const isNumbered = /^\d+\.\s/.test(line);
+      const isSub      = /^[-–]/.test(line);
       if (isBullet) {
+        if (olOpen) { closeLi(); html += '</ol>'; olOpen = false; }
         if (!ulOpen) { html += '<ul>'; ulOpen = true; } else closeLi();
         html  += `<li>${esc(line.replace(/^[•●]\s*/, ''))}`;
         liOpen = true;
+      } else if (isNumbered) {
+        if (ulOpen) { closeLi(); html += '</ul>'; ulOpen = false; }
+        if (!olOpen) { html += '<ol>'; olOpen = true; } else closeLi();
+        html  += `<li>${esc(line.replace(/^\d+\.\s*/, ''))}`;
+        liOpen = true;
       } else if (isSub) {
-        if (ulOpen) {
+        if (ulOpen || olOpen) {
           if (!subUlOpen) { html += '<ul>'; subUlOpen = true; }
           html += `<li>${esc(line.replace(/^[-–]\s*/, ''))}</li>`;
         } else {
