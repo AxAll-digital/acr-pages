@@ -350,8 +350,8 @@
             (_, label, url) => `<a href="${url}">${label}</a>`)
           // bold **text**
           .replace(/\*\*(.*?)\*\*/g, '$1')
-          // bare emails
-          .replace(/(?<![/"'>])([\w.+-]+@[\w-]+\.[\w.]+)/g,
+          // bare emails not already in an href
+          .replace(/(?<![/"'>])([\w.+-]+@[\w-]+\.[\w.]+)(?![^<]*<\/a>)/g,
             email => `<a href="mailto:${email}">${email}</a>`);
       };
 
@@ -386,9 +386,7 @@
         } else if (/^[•●]\s+/.test(line)) {
           html += `<ul style="padding-left:1.25rem;margin-bottom:0.5rem"><li>${line.replace(/^[•●]\s+/, '')}</li></ul>`;
         } else {
-          // strip leading/trailing bold markers and any remaining ** or __
-          const clean = line.replace(/^\*+/, '').replace(/\*+$/, '').replace(/\*\*(.*?)\*\*/g, '$1').trim();
-          if (clean) html += `<p>${clean}</p>`;
+          html += `<p>${line}</p>`;
         }
       });
       return html;
