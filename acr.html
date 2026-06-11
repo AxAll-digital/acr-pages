@@ -29,7 +29,7 @@
     }
 
     .page {
-      max-width: 960px;
+      max-width: 780px;
       margin: 0 auto;
       padding: 3rem 2rem;
     }
@@ -58,7 +58,6 @@
       margin: 0 0 2rem;
     }
 
-    /* FIX 2: intro field labels are now <h2> — style them consistently */
     h2 {
       font-size: 1.25rem;
       font-weight: 700;
@@ -79,6 +78,52 @@
 
     h3.section-heading a {
       color: inherit;
+    }
+
+    /* Evaluator / method blocks */
+    .eval-block {
+      margin-bottom: 1.25rem;
+    }
+
+    .eval-block-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .eval-block-subtitle {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 0.35rem;
+    }
+
+    .eval-block p {
+      font-size: 0.95rem;
+      margin-bottom: 0.4rem;
+      line-height: 1.6;
+    }
+
+    .eval-block ul {
+      margin: 0.25rem 0 0.5rem 1.5rem;
+      padding: 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .eval-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.4rem;
+    }
+
+    .eval-tag {
+      background: #f0f4f8;
+      border: 1px solid #d0dce8;
+      border-radius: 3px;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.8rem;
+      color: #2a3a4a;
     }
 
     .acr-field-value {
@@ -107,11 +152,10 @@
 
     hr {
       border: none;
-      border-top: 1px solid #c3d2e0;
+      border-top: 1px solid #d7e0e5;
       margin: 2.5rem 0;
     }
 
-    /* Tables */
     .acr-table {
       width: 100%;
       border-collapse: collapse;
@@ -120,7 +164,6 @@
       margin-bottom: 2rem;
     }
 
-    /* Lists in field value sections (Eval Methods, Eval Scope, etc.) */
     .acr-field-value ol,
     .acr-field-value ul,
     #acr-header ol,
@@ -162,15 +205,9 @@
       line-height: 1.5;
     }
 
-    .acr-table tr:nth-child(even) td {
-      background: #f5f8fb;
-    }
+    .acr-table tr:nth-child(even) td { background: #f5f8fb; }
+    .acr-table tr:nth-child(odd)  td { background: #fff; }
 
-    .acr-table tr:nth-child(odd) td {
-      background: #fff;
-    }
-
-    /* FIX 8: EN heading rows override zebra striping */
     .acr-table tr.en-heading-row td {
       background: #e8edf2 !important;
       font-style: italic;
@@ -178,13 +215,11 @@
       color: #2a3a4a;
     }
 
-    /* Conformance level colours */
-    .acr-conformance-supports   { color: #1a6e35; font-weight: 600; }
-    .acr-conformance-partial    { color: #7a4a00; font-weight: 600; }
-    .acr-conformance-not        { color: #a01c1c; font-weight: 600; }
-    .acr-conformance-na         { color: #555;    font-weight: 600; }
+    .acr-conformance-supports { color: #1a6e35; font-weight: 600; }
+    .acr-conformance-partial  { color: #7a4a00; font-weight: 600; }
+    .acr-conformance-not      { color: #a01c1c; font-weight: 600; }
+    .acr-conformance-na       { color: #555;    font-weight: 600; }
 
-    /* FIX 6b: EN ref text below criterion */
     .acr-en-ref {
       display: block;
       font-size: 0.85rem;
@@ -201,19 +236,14 @@
       font-style: normal;
     }
 
-    .acr-en-ref ul li {
-      margin-bottom: 0.15rem;
-    }
+    .acr-en-ref ul li { margin-bottom: 0.15rem; }
 
-    /* Terms / notes */
     .acr-terms ul {
       padding-left: 1.5rem;
       margin: 0.5rem 0 1rem;
     }
 
-    .acr-terms li {
-      margin-bottom: 0.35rem;
-    }
+    .acr-terms li { margin-bottom: 0.35rem; }
 
     .acr-note {
       font-size: 0.95rem;
@@ -221,10 +251,7 @@
       line-height: 1.6;
     }
 
-    .acr-note a, .section-note a {
-      color: #0057b8;
-    }
-
+    .acr-note a, .section-note a { color: #0057b8; }
     a { color: #0057b8; }
     a:hover { text-decoration: underline; }
   </style>
@@ -240,16 +267,12 @@
 <script>
 (async function () {
 
-  /* ── helpers ─────────────────────────────────── */
   function esc(str) {
     return String(str || '')
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
       .replace(/"/g,'&quot;');
   }
 
-  // Handles Airtable REST API lookup field format:
-  // { linkedRecordIds: ['recXXX'], valuesByLinkedRecordId: { recXXX: ['value'] } }
-  // Also handles plain strings, arrays, and singleSelect objects.
   function lookupVal(v) {
     if (!v) return '';
     if (typeof v === 'string') return v;
@@ -259,7 +282,6 @@
       if (!first) return '';
       return typeof first === 'object' && first.name ? first.name : String(first);
     }
-    // Airtable lookup with linked record IDs
     if (v.linkedRecordIds && v.valuesByLinkedRecordId) {
       const id  = v.linkedRecordIds[0];
       if (!id) return '';
@@ -271,21 +293,13 @@
     return '';
   }
 
-  /* ── slug from URL ────────────────────────────── */
-  // Slug extraction:
-  // • Direct Vercel testing  → acr-pages.vercel.app/liesbethdillen  → from pathname
-  // • Client custom domain   → accessibility.liesbethdillen.com     → from hostname (parts[1])
   function getSlug() {
     const parts = window.location.hostname.split('.');
-    if (parts[0] === 'accessibility' && parts.length >= 3) {
-      return parts[1];
-    }
-    // Local testing fallback
+    if (parts[0] === 'accessibility' && parts.length >= 3) return parts[1];
     return new URLSearchParams(window.location.search).get('slug') || '';
   }
   const slug = getSlug();
 
-  /* ── fetch ────────────────────────────────────── */
   let auditData = {}, records = [], scopeRecords = [];
   try {
     const [ar, cr, sr] = await Promise.all([
@@ -302,30 +316,32 @@
   }
 
   const {
-    clientName  = '',
-    productName = '',
-    reportDate  = '',
-    description = '',
-    contact     = '',
-    evalMethods = '',
-    standard    = '',
-    vpat        = '',
-    legal       = '',
-    logoUrl     = ''
+    clientName            = '',
+    productName           = '',
+    reportDate            = '',
+    description           = '',
+    axallContact          = '',
+    leadEvaluator         = null,
+    disabilityReviewer    = null,
+    methodRecords         = [],
+    assistiveTechnologies = [],
+    automatedTools        = [],
+    standard              = '',
+    vpat                  = '',
+    legal                 = '',
+    logoUrl               = ''
   } = auditData;
 
   const isEN = vpat === 'EN 301 549';
 
-  /* ── Standards table (matches official VPAT format) ─────────── */
+  /* ── Standards table ─────────────────────────── */
   function renderStandards(stdStr) {
     if (!stdStr) return '<span>—</span>';
     const items = stdStr.split(',').map(s => s.trim()).filter(Boolean);
     const rows = [];
     let enAdded = false;
 
-    // EN 301 549 always includes both WCAG 2.0 and 2.1 (Clauses 9/10/11).
-    // Auto-inject whichever versions are missing so the table is always complete.
-    const hasEN    = items.some(s => s.toLowerCase().includes('en 301 549'));
+    const hasEN     = items.some(s => s.toLowerCase().includes('en 301 549'));
     const hasWcag20 = items.some(s => s.toLowerCase().includes('wcag 2.0'));
     const hasWcag21 = items.some(s => s.toLowerCase().includes('wcag 2.1'));
     if (hasEN) {
@@ -335,7 +351,6 @@
 
     items.forEach(std => {
       const lc = std.toLowerCase();
-
       if (lc.includes('en 301 549')) {
         if (enAdded) return;
         enAdded = true;
@@ -346,26 +361,21 @@
             `<a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf" target="_blank" rel="noopener">EN 301 549 Accessibility requirements for ICT products and services - V3.2.1 (2021-03)</a>`,
           includedHtml: `(Yes)`,
         });
-
       } else if (lc.includes('wcag')) {
-        const is20   = std.includes('2.0');
-        const is22   = std.includes('2.2');
+        const is20 = std.includes('2.0');
+        const is22 = std.includes('2.2');
         const hasAAA = std.toUpperCase().includes('AAA');
         const hasAA  = std.toUpperCase().includes('AA');
-        const name   = is22 ? 'Web Content Accessibility Guidelines 2.2'
-                     : is20 ? 'Web Content Accessibility Guidelines 2.0'
-                     :        'Web Content Accessibility Guidelines 2.1';
-        const url    = is22 ? 'https://www.w3.org/TR/WCAG22/'
-                     : is20 ? 'http://www.w3.org/TR/2008/REC-WCAG20-20081211'
-                     :        'https://www.w3.org/TR/WCAG21/';
+        const name = is22 ? 'Web Content Accessibility Guidelines 2.2'
+                   : is20 ? 'Web Content Accessibility Guidelines 2.0'
+                   :        'Web Content Accessibility Guidelines 2.1';
+        const url  = is22 ? 'https://www.w3.org/TR/WCAG22/'
+                   : is20 ? 'http://www.w3.org/TR/2008/REC-WCAG20-20081211'
+                   :        'https://www.w3.org/TR/WCAG21/';
         rows.push({
           guidelineHtml: `<a href="${url}" target="_blank" rel="noopener">${name}</a>`,
-          includedHtml:
-            `Level A (Yes)<br>` +
-            `Level AA (${hasAA ? 'Yes' : 'No'})<br>` +
-            `Level AAA (${hasAAA ? 'Yes' : 'No'})`,
+          includedHtml:  `Level A (Yes)<br>Level AA (${hasAA ? 'Yes' : 'No'})<br>Level AAA (${hasAAA ? 'Yes' : 'No'})`,
         });
-
       } else {
         rows.push({ guidelineHtml: esc(std), includedHtml: '(Yes)' });
       }
@@ -381,70 +391,48 @@
         <th style="width:70%">Standard/Guideline</th>
         <th style="width:30%;text-align:center">Included In Report</th>
       </tr></thead><tbody>`;
-
     rows.forEach(row => {
-      table += `<tr>
-        <td>${row.guidelineHtml}</td>
-        <td style="text-align:center;vertical-align:middle">${row.includedHtml}</td>
-      </tr>`;
+      table += `<tr><td>${row.guidelineHtml}</td><td style="text-align:center;vertical-align:middle">${row.includedHtml}</td></tr>`;
     });
-
     return table + '</tbody></table>';
   }
 
-  /* ── Formatted text renderer ─────────────────────────────────
-     Converts plain text with • top-level and - sub-level bullets
-     into semantic <ul><li> lists, with plain lines as <p> elements.
-  ──────────────────────────────────────────────────────────── */
+  /* ── Formatted text renderer ─────────────────── */
   function renderFormattedText(text) {
     if (!text || !text.trim()) return '';
-
     const lines = text.split('\n');
     let html = '';
-    let ulOpen    = false;
-    let liOpen    = false;
-    let subUlOpen = false;
-
+    let ulOpen = false, liOpen = false, subUlOpen = false;
     const closeSubList = () => { if (subUlOpen) { html += '</ul>'; subUlOpen = false; } };
-    const closeLi      = () => { if (liOpen)    { closeSubList(); html += '</li>'; liOpen = false; } };
-    const closeList    = () => { if (ulOpen)    { closeLi(); html += '</ul>'; ulOpen = false; } };
-
+    const closeLi      = () => { if (liOpen) { closeSubList(); html += '</li>'; liOpen = false; } };
+    const closeList    = () => { if (ulOpen) { closeLi(); html += '</ul>'; ulOpen = false; } };
     for (const raw of lines) {
-      const line    = raw.trim();
+      const line = raw.trim();
       if (!line) continue;
-
       const isBullet = /^[•●]/.test(line);
       const isSub    = /^[-–]/.test(line);
-
       if (isBullet) {
-        if (!ulOpen) { html += '<ul>'; ulOpen = true; }
-        else closeLi();
-        html   += `<li>${esc(line.replace(/^[•●]\s*/, ''))}`;
-        liOpen  = true;
+        if (!ulOpen) { html += '<ul>'; ulOpen = true; } else closeLi();
+        html  += `<li>${esc(line.replace(/^[•●]\s*/, ''))}`;
+        liOpen = true;
       } else if (isSub) {
-        // Sub-item: nest inside the current <li> if we're in a list,
-        // otherwise treat as its own top-level list item
         if (ulOpen) {
           if (!subUlOpen) { html += '<ul>'; subUlOpen = true; }
           html += `<li>${esc(line.replace(/^[-–]\s*/, ''))}</li>`;
         } else {
-          if (!ulOpen) { html += '<ul>'; ulOpen = true; }
-          else closeLi();
-          html  += `<li>${esc(line.replace(/^[-–]\s*/, ''))}</li>`;
+          if (!ulOpen) { html += '<ul>'; ulOpen = true; } else closeLi();
+          html += `<li>${esc(line.replace(/^[-–]\s*/, ''))}</li>`;
         }
       } else {
         closeList();
         html += `<p class="acr-field-value">${esc(line)}</p>`;
       }
     }
-
     closeList();
     return html || `<p class="acr-field-value">${esc(text)}</p>`;
   }
 
   /* ── Evaluation Scope renderer ───────────────── */
-  // Accepts records from /api/scope/:slug
-  // Each record has fields: "Page Title" and "Page URL"
   function renderEvalScope(recs) {
     if (!recs || !recs.length) return '';
     let html = '<ol>';
@@ -461,9 +449,82 @@
     return html + '</ol>';
   }
 
-  /* ── FIX 1+2: header HTML ─────────────────────── */
-  // FIX 1: append " Edition" to vpat value
-  // FIX 2: product info labels become <h2>
+  /* ── Contact Information renderer ────────────── */
+  function renderContact(axallContact, leadEval, disabilityRev) {
+    let html = '';
+
+    // Axall contact block
+    if (axallContact) {
+      const lines = axallContact.split('\n').filter(l => l.trim());
+      const contactHtml = lines.map(line => {
+        return line
+          .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+            (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
+          .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
+            (_, label, url) => `<a href="${url}">${label}</a>`);
+      }).join('<br>');
+      html += `<p class="acr-field-value">${contactHtml}</p>`;
+    }
+
+    // Lead evaluator
+    if (leadEval && leadEval.name) {
+      html += `<div class="eval-block">`;
+      html += `<p class="eval-block-title">Lead Evaluator: ${esc(leadEval.name)}</p>`;
+      if (leadEval.jobTitle) html += `<p class="eval-block-subtitle">${esc(leadEval.jobTitle)}</p>`;
+      html += `</div>`;
+    }
+
+    // Disability reviewer
+    if (disabilityRev && disabilityRev.name) {
+      html += `<div class="eval-block">`;
+      html += `<p class="eval-block-title">Disability Reviewer: ${esc(disabilityRev.name)}</p>`;
+      if (disabilityRev.jobTitle) html += `<p class="eval-block-subtitle">${esc(disabilityRev.jobTitle)}`;
+      if (disabilityRev.disability) html += ` — ${esc(disabilityRev.disability)}`;
+      if (disabilityRev.jobTitle || disabilityRev.disability) html += `</p>`;
+      html += `</div>`;
+    }
+
+    return html;
+  }
+
+  /* ── Evaluation Methods renderer ─────────────── */
+  function renderEvalMethods(methods, assistiveTechs, autoTools) {
+    if (!methods.length && !assistiveTechs.length && !autoTools.length) return '';
+    let html = '';
+
+    methods.forEach(m => {
+      html += `<div class="eval-block">`;
+      html += `<p class="eval-block-title">${esc(m.name)}`;
+      if (m.coverage) html += ` <span style="font-weight:400;color:#555;">(${esc(m.coverage)})</span>`;
+      html += `</p>`;
+      if (m.description) html += `<p>${esc(m.description)}</p>`;
+      if (m.tools && m.tools.trim()) {
+        html += renderFormattedText(m.tools);
+      }
+      html += `</div>`;
+    });
+
+    if (assistiveTechs.length) {
+      html += `<p style="margin-top:0.75rem"><strong>Assistive technologies used:</strong></p>`;
+      html += `<div class="eval-tags">`;
+      assistiveTechs.forEach(t => { html += `<span class="eval-tag">${esc(t)}</span>`; });
+      html += `</div>`;
+    }
+
+    if (autoTools.length) {
+      html += `<p style="margin-top:0.75rem"><strong>Automated tools used:</strong></p>`;
+      html += `<div class="eval-tags">`;
+      autoTools.forEach(t => { html += `<span class="eval-tag">${esc(t)}</span>`; });
+      html += `</div>`;
+    }
+
+    return html;
+  }
+
+  /* ── Header HTML ─────────────────────────────── */
+  const contactHtml   = renderContact(axallContact, leadEvaluator, disabilityReviewer);
+  const evalHtml      = renderEvalMethods(methodRecords, assistiveTechnologies, automatedTools);
+
   const headerHtml = `
     ${logoUrl ? `<img class="acr-logo" src="${esc(logoUrl)}" alt="${esc(clientName)} logo" />` : ''}
     <h1 class="acr-title">${esc(clientName) ? esc(clientName) + ' Accessibility Conformance Report' : 'Accessibility Conformance Report'}</h1>
@@ -480,9 +541,9 @@
 
     ${description ? `<h2>Product Description</h2><p class="acr-field-value">${esc(description)}</p>` : ''}
 
-    ${contact ? `<h2>Contact Information</h2><p class="acr-field-value">${esc(contact)}</p>` : ''}
+    ${contactHtml ? `<h2>Contact Information</h2>${contactHtml}` : ''}
 
-    ${evalMethods ? `<h2>Evaluation Methods Used</h2>${renderFormattedText(evalMethods)}` : ''}
+    ${evalHtml ? `<h2>Evaluation Methods Used</h2>${evalHtml}` : ''}
 
     ${scopeRecords.length ? `<h2>Evaluation Scope</h2>${renderEvalScope(scopeRecords)}` : ''}
 
@@ -492,68 +553,50 @@
 
   document.getElementById('acr-header').innerHTML = headerHtml;
 
-  /* ── parse ACR records ────────────────────────── */
+  /* ── Parse ACR records ────────────────────────── */
   const wcagA  = [];
   const wcagAA = [];
-  const enByChapter = {};   // { chapterNum: [row, ...] }
+  const enByChapter = {};
 
   records.forEach(r => {
     const f = r.fields;
-
-    // Primary field: "LD Website — 1.4.12"
     const primary     = lookupVal(f['Audit - Criterion ID']);
     const dashIdx     = primary.indexOf('—');
     const criterionId = (dashIdx >= 0 ? primary.slice(dashIdx + 1) : primary).trim();
-
     const name        = lookupVal(f['Criterion Name']);
-    const level       = lookupVal(f['Level']);        // "A" or "AA"
+    const level       = lookupVal(f['Level']);
     const refUrl      = lookupVal(f['Official Reference URL (from Criterion)']);
     const conformance = lookupVal(f['Conformance Level']);
     const remarks     = lookupVal(f['Remarks and Explanations']);
-    // FIX 6b fix: use field NAME not field ID
     const enRef       = lookupVal(f['EN 301 549 Criteria reference']);
-    // FIX 7: override wins; fall back to default from Criteria lookup
     const sectionNotes = lookupVal(f['EN Section Notes Override'])
                       || lookupVal(f['EN Section Notes (from Criterion)']);
-
     const row = { criterionId, name, level, refUrl, conformance, remarks, enRef, sectionNotes };
-
     const firstNum = parseFloat(criterionId);
     if (isNaN(firstNum)) return;
-
     if (firstNum >= 1 && firstNum < 5) {
-      // WCAG criteria 1.x – 4.x
-      if (level === 'A')        wcagA.push(row);
-      else if (level === 'AA')  wcagAA.push(row);
+      if (level === 'A')       wcagA.push(row);
+      else if (level === 'AA') wcagAA.push(row);
     } else if (firstNum >= 5 && firstNum <= 13) {
-      // EN 301 549 criteria 5.x – 13.x
       const ch = Math.floor(firstNum);
       if (!enByChapter[ch]) enByChapter[ch] = [];
       enByChapter[ch].push(row);
     }
   });
 
-  // Sort numerically
   const numSort = (a, b) => a.criterionId.localeCompare(b.criterionId, undefined, { numeric: true });
   wcagA.sort(numSort);
   wcagAA.sort(numSort);
   Object.values(enByChapter).forEach(arr => arr.sort(numSort));
 
-  /* ── EN ref renderer — parses bullet text into a proper list ─ */
   function renderEnRef(text) {
     if (!text || !text.trim()) return '';
-    // Split on newlines; strip leading bullet chars (•, ●, -, *)
-    const lines = text.split('\n')
-      .map(l => l.trim())
-      .filter(Boolean)
-      .map(l => l.replace(/^[•●\-\*]\s*/, '').trim())
-      .filter(Boolean);
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean)
+      .map(l => l.replace(/^[•●\-\*]\s*/, '').trim()).filter(Boolean);
     if (!lines.length) return '';
-    const items = lines.map(l => `<li>${esc(l)}</li>`).join('');
-    return `<span class="acr-en-ref"><em>Also applies to: EN 301 549 Criteria</em><ul>${items}</ul></span>`;
+    return `<span class="acr-en-ref"><em>Also applies to: EN 301 549 Criteria</em><ul>${lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul></span>`;
   }
 
-  /* ── render helpers ───────────────────────────── */
   function conformanceClass(c) {
     if (c === 'Supports')           return 'acr-conformance-supports';
     if (c === 'Partially Supports') return 'acr-conformance-partial';
@@ -562,7 +605,6 @@
     return '';
   }
 
-  // FIX 6a + 6b: criterion link + EN ref below
   function renderWcagTable(title, rows, showEnRef) {
     if (!rows.length) return '';
     let html = `
@@ -573,29 +615,17 @@
         <th style="width:18%">Conformance Level</th>
         <th style="width:44%">Remarks and Explanations</th>
       </tr></thead><tbody>`;
-
     rows.forEach(row => {
       const cls = conformanceClass(row.conformance);
-
-      // FIX 6a: link on criterion name
       const criterionLink = row.refUrl
         ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a> (Level ${esc(row.level)})`
         : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong> (Level ${esc(row.level)})`;
-
-      // FIX 6b: EN ref as proper bullet list (only in EN edition)
       const enRefHtml = (showEnRef && row.enRef) ? renderEnRef(row.enRef) : '';
-
-      html += `<tr>
-        <td>${criterionLink}${enRefHtml}</td>
-        <td class="${cls}">${esc(row.conformance)}</td>
-        <td>${esc(row.remarks)}</td>
-      </tr>`;
+      html += `<tr><td>${criterionLink}${enRefHtml}</td><td class="${cls}">${esc(row.conformance)}</td><td>${esc(row.remarks)}</td></tr>`;
     });
-
     return html + '</tbody></table>';
   }
 
-  // FIX 8: EN chapter table with heading row detection
   function renderEnChapterTable(rows) {
     if (!rows.length) return '';
     let html = `
@@ -605,55 +635,38 @@
         <th style="width:18%">Conformance Level</th>
         <th style="width:44%">Remarks and Explanations</th>
       </tr></thead><tbody>`;
-
     rows.forEach(row => {
-      // Detect heading rows by Conformance Level value set explicitly in Airtable
       const isHeading = row.conformance.includes('Heading cell');
-
       if (isHeading) {
-        // FIX 8: render as heading cell
-        html += `<tr class="en-heading-row">
-          <td><strong><em>${esc(row.criterionId)} ${esc(row.name)}</em></strong></td>
-          <td>Heading cell – no response required</td>
-          <td>Heading cell – no response required</td>
-        </tr>`;
+        html += `<tr class="en-heading-row"><td><strong><em>${esc(row.criterionId)} ${esc(row.name)}</em></strong></td><td>Heading cell – no response required</td><td>Heading cell – no response required</td></tr>`;
       } else {
         const cls = conformanceClass(row.conformance);
         const criterionLabel = row.refUrl
           ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a>`
           : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong>`;
-
-        html += `<tr>
-          <td>${criterionLabel}</td>
-          <td class="${cls}">${esc(row.conformance)}</td>
-          <td>${esc(row.remarks)}</td>
-        </tr>`;
+        html += `<tr><td>${criterionLabel}</td><td class="${cls}">${esc(row.conformance)}</td><td>${esc(row.remarks)}</td></tr>`;
       }
     });
-
     return html + '</tbody></table>';
   }
 
-  /* ── EN chapter metadata ──────────────────────── */
   const EN_BASE = 'https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf';
   const EN_CHAPTERS = {
     4:  { label: 'Clause 4: Functional Performance Statements', url: `${EN_BASE}#page=20`,
           note: 'Not Applicable. This chapter is informative and does not contain requirements requiring testing. Each aspect of the product\'s functionality under evaluation is described in detail within the technical requirements tables.' },
-    5:  { label: 'Clause 5: Generic Requirements',                        url: `${EN_BASE}#page=23` },
-    6:  { label: 'Clause 6: ICT with Two-Way Voice Communication',        url: `${EN_BASE}#page=30` },
-    7:  { label: 'Clause 7: ICT with Video Capabilities',                 url: `${EN_BASE}#page=35` },
-    8:  { label: 'Clause 8: Hardware',                                    url: `${EN_BASE}#page=37` },
-    9:  { label: 'Clause 9: Web',                                         url: `${EN_BASE}#page=45` },
-    10: { label: 'Clause 10: Non-Web Documents',                          url: `${EN_BASE}#page=52` },
-    11: { label: 'Clause 11: Software',                                   url: `${EN_BASE}#page=64` },
-    12: { label: 'Clause 12: Documentation and Support Services',         url: `${EN_BASE}#page=84` },
+    5:  { label: 'Clause 5: Generic Requirements',                             url: `${EN_BASE}#page=23` },
+    6:  { label: 'Clause 6: ICT with Two-Way Voice Communication',             url: `${EN_BASE}#page=30` },
+    7:  { label: 'Clause 7: ICT with Video Capabilities',                      url: `${EN_BASE}#page=35` },
+    8:  { label: 'Clause 8: Hardware',                                         url: `${EN_BASE}#page=37` },
+    9:  { label: 'Clause 9: Web',                                              url: `${EN_BASE}#page=45` },
+    10: { label: 'Clause 10: Non-Web Documents',                               url: `${EN_BASE}#page=52` },
+    11: { label: 'Clause 11: Software',                                        url: `${EN_BASE}#page=64` },
+    12: { label: 'Clause 12: Documentation and Support Services',              url: `${EN_BASE}#page=84` },
     13: { label: 'Clause 13: ICT Providing Relay or Emergency Service Access', url: `${EN_BASE}#page=86` },
   };
 
-  /* ── assemble body ────────────────────────────── */
   let body = '';
 
-  // FIX 4: Terms section with intro text + 3 notes
   body += `
   <hr/>
   <h2>Terms</h2>
@@ -672,7 +685,6 @@
   </div>
   <hr/>`;
 
-  // FIX 5: complete WCAG note with link
   if (isEN) {
     body += `
     <h2 id="wcag-report">WCAG 2.x Report</h2>
@@ -693,55 +705,32 @@
   body += renderWcagTable('Table 1: Success Criteria, Level A',  wcagA,  isEN);
   body += renderWcagTable('Table 2: Success Criteria, Level AA', wcagAA, isEN);
 
-  // EN 301 549 section
   if (isEN) {
     body += `<hr/><h2>EN 301 549 Report</h2>`;
-
     for (let ch = 4; ch <= 13; ch++) {
       const meta = EN_CHAPTERS[ch];
       if (!meta) continue;
       const rows = enByChapter[ch] || [];
-
-      // Clause 4: always shown, fixed note
       if (ch === 4) {
         body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${meta.label}</a></h3>`;
         body += `<p class="section-note">Notes: ${meta.note}</p>`;
         continue;
       }
-
-      // Clause 9: always shown, reference to WCAG section
       if (ch === 9) {
         body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${meta.label}</a> (see <a href="#wcag-report">WCAG 2.x section</a>)</h3>`;
         body += `<p class="section-note">See WCAG 2.x section above.</p>`;
         continue;
       }
-
-      // Split rows into heading-only and content (non-heading) rows
-      const headingRows = rows.filter(r => r.conformance.includes('Heading cell'));
       const contentRows = rows.filter(r => !r.conformance.includes('Heading cell'));
-
-      // Note: pulled from ANY row that has a sectionNotes value
-      // (covers both heading rows and N/A marker rows)
-      // .trim() prevents stray newlines/spaces from triggering an empty "Notes:" label
       const noteRow     = rows.find(r => r.sectionNotes && r.sectionNotes.trim());
       const chapterNote = noteRow ? noteRow.sectionNotes.trim() : '';
-
-      // Always show the clause heading — even for N/A clauses with no ACR rows
       body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${meta.label}</a></h3>`;
-      if (chapterNote) {
-        body += `<p class="section-note">Notes: ${esc(chapterNote)}</p>`;
-      }
-
-      // Only render the table when there are content rows with a real status
-      // (Not Applicable-only rows are used purely as note sources — no table)
+      if (chapterNote) body += `<p class="section-note">Notes: ${esc(chapterNote)}</p>`;
       const hasActiveRows = contentRows.some(r => r.conformance !== 'Not Applicable');
-      if (hasActiveRows) {
-        body += renderEnChapterTable(rows);
-      }
+      if (hasActiveRows) body += renderEnChapterTable(rows);
     }
   }
 
-  // Legal disclaimer
   if (legal) {
     body += `<hr/><h2>Legal Disclaimer</h2><p style="white-space:pre-line">${esc(legal)}</p>`;
   }
