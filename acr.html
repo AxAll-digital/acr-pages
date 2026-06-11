@@ -317,6 +317,7 @@
 
   const {
     clientName            = '',
+    auditTitle            = '',
     productName           = '',
     reportDate            = '',
     description           = '',
@@ -527,7 +528,7 @@
 
   const headerHtml = `
     ${logoUrl ? `<img class="acr-logo" src="${esc(logoUrl)}" alt="${esc(clientName)} logo" />` : ''}
-    <h1 class="acr-title">${esc(clientName) ? esc(clientName) + ' Accessibility Conformance Report' : 'Accessibility Conformance Report'}</h1>
+    <h1 class="acr-title">${esc(auditTitle) ? esc(auditTitle) + ' Accessibility Conformance Report' : 'Accessibility Conformance Report'}</h1>
     ${vpat ? `<p class="acr-edition">${esc(vpat)} Edition</p>` : ''}
     <p class="acr-vpat-version">(Based on VPAT® 2.5 Rev)</p>
 
