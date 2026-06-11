@@ -35,6 +35,35 @@
       padding: 3rem 2rem;
     }
 
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #d7e0e5;
+      margin-bottom: 2.5rem;
+      gap: 1rem;
+    }
+
+    .client-logo {
+      max-height: 40px;
+      max-width: 180px;
+      object-fit: contain;
+    }
+
+    .axall-badge {
+      font-size: 0.75rem;
+      color: #1a1b1f;
+      text-align: right;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+
+    .axall-badge a {
+      color: #1a1b1f;
+      text-decoration: underline;
+    }
+
     .acr-logo {
       max-width: 180px;
       margin-bottom: 2rem;
@@ -584,7 +613,14 @@
     : `This conformance report is based on the results of an accessibility evaluation conducted by ${specialistText}.`;
 
   const headerHtml = `
-    ${logoUrl ? `<img class="acr-logo" src="${esc(logoUrl)}" alt="${esc(clientName)} logo" />` : ''}
+    <header class="site-header">
+      ${logoUrl ? `<img class="client-logo" src="${esc(logoUrl)}" alt="${esc(clientName)} logo" />` : '<div></div>'}
+      <div class="axall-badge">
+        Accessibility evaluated by<br>
+        <a href="https://axall.digital" target="_blank" rel="noopener">AxAll UAB</a>
+      </div>
+    </header>
+
     <h1 class="acr-title">${esc(auditTitle) ? esc(auditTitle) + ' Accessibility Conformance Report' : 'Accessibility Conformance Report'}</h1>
     ${vpat ? `<p class="acr-edition">${esc(vpat)} Edition</p>` : ''}
     <p class="acr-vpat-version">(Based on VPAT® 2.5 Rev)</p>
