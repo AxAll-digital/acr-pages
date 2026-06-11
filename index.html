@@ -296,18 +296,21 @@
       });
     }
 
-    // Renders address block — converts markdown links and newlines to HTML
+    // Renders address block — converts markdown links then bare URLs/emails
     function renderAddress(text) {
       if (!text) return '';
+      // Step 1: convert markdown links [label](url)
       let html = text
         .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
           (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
         .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
-          (_, label, url) => `<a href="${url}">${label}</a>`)
-        .replace(/(https?:\/\/[^\s<]+)/g,
-          url => `<a href="${url}" target="_blank" rel="noopener">${url.replace(/^https?:\/\//, '')}</a>`)
-        .replace(/([\w.+-]+@[\w-]+\.[\w.]+)/g,
-          email => `<a href="mailto:${email}">${email}</a>`);
+          (_, label, url) => `<a href="${url}">${label}</a>`);
+      // Step 2: convert bare emails not already inside an href
+      html = html.replace(/(?<!href="mailto:)([\w.+-]+@[\w-]+\.[\w.]+)(?![^<]*<\/a>)/g,
+        email => `<a href="mailto:${email}">${email}</a>`);
+      // Step 3: convert bare URLs not already inside an href
+      html = html.replace(/(?<!href=")(https?:\/\/[^\s<"]+)(?![^<]*<\/a>)/g,
+        url => `<a href="${url}" target="_blank" rel="noopener">${url.replace(/^https?:\/\//, '')}</a>`);
       return html.split('\n').filter(l => l.trim()).join('<br>');
     }
 
