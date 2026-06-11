@@ -562,6 +562,27 @@
   const contactHtml   = renderContact(axallContact, leadEvaluator, disabilityReviewer);
   const evalHtml      = renderEvalMethods(methodRecords, assistiveTechnologies, automatedTools);
 
+  // Build evaluation methods intro
+  const scopeCount    = scopeRecords.length;
+  const shortLabel    = auditData.shortLabel || 'website';
+  const scopeItemWord = shortLabel === 'application' ? 'screens'
+                      : shortLabel === 'document'    ? 'documents'
+                      : shortLabel === 'documents'   ? 'documents'
+                      : shortLabel === 'software'    ? 'screens'
+                      : 'web pages';
+
+  let specialistText = 'AxAll UAB specialist';
+  if (disabilityReviewer && disabilityReviewer.name) {
+    const org = disabilityReviewer.organisation
+      ? `${disabilityReviewer.organisation} `
+      : 'disability community ';
+    specialistText = `AxAll UAB and ${org}specialists`;
+  }
+
+  const evalIntro = scopeCount > 0
+    ? `This conformance report is based on the results of an accessibility evaluation conducted by ${specialistText}, which included a sample of ${scopeCount} ${scopeItemWord}. These ${scopeItemWord} were selected by AxAll UAB as representative of the overall accessibility and functionality of the ${esc(auditTitle)}. The ${scopeItemWord} are listed below in the section "Evaluation scope".`
+    : `This conformance report is based on the results of an accessibility evaluation conducted by ${specialistText}.`;
+
   const headerHtml = `
     ${logoUrl ? `<img class="acr-logo" src="${esc(logoUrl)}" alt="${esc(clientName)} logo" />` : ''}
     <h1 class="acr-title">${esc(auditTitle) ? esc(auditTitle) + ' Accessibility Conformance Report' : 'Accessibility Conformance Report'}</h1>
@@ -580,7 +601,7 @@
 
     ${contactHtml ? `<h2>Contact Information</h2>${contactHtml}` : ''}
 
-    ${evalHtml ? `<h2>Evaluation Methods Used</h2>${evalHtml}` : ''}
+    ${evalHtml ? `<h2>Evaluation Methods Used</h2><p class="acr-field-value">${evalIntro}</p>${evalHtml}` : ''}
 
     ${scopeRecords.length ? `<h2>Evaluation Scope</h2>${renderEvalScope(scopeRecords)}` : ''}
 
