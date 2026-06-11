@@ -86,19 +86,19 @@
     }
 
     .eval-block-title {
+      font-size: 1.1rem;
       font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 0.2rem;
+      margin: 2rem 0 0.4rem;
     }
 
     .eval-block-subtitle {
-      font-size: 0.9rem;
-      color: #555;
+      font-size: 1rem;
+      color: #1a1b1f;
       margin-bottom: 0.35rem;
     }
 
     .eval-block p {
-      font-size: 0.95rem;
+      font-size: 1rem;
       margin-bottom: 0.4rem;
       line-height: 1.6;
     }
@@ -106,7 +106,7 @@
     .eval-block ul {
       margin: 0.25rem 0 0.5rem 1.5rem;
       padding: 0;
-      font-size: 0.95rem;
+      font-size: 1rem;
       line-height: 1.6;
     }
 
@@ -114,7 +114,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.35rem;
-      margin-top: 0.4rem;
+      margin: 0.4rem 0 1rem;
     }
 
     .eval-tag {
@@ -506,21 +506,20 @@
     }
 
     if (leadEval && leadEval.name) {
-      html += `<div class="eval-block">`;
-      html += `<p class="eval-block-title">Lead Evaluator: ${esc(leadEval.name)}</p>`;
-      if (leadEval.jobTitle) html += `<p class="eval-block-subtitle">${esc(leadEval.jobTitle)}</p>`;
-      html += `</div>`;
+      html += `<h3 class="eval-block-title">Evaluator${disabilityRev && disabilityRev.name ? 's' : ''}</h3>`;
+      html += `<p>Lead Evaluator: ${esc(leadEval.name)}`;
+      if (leadEval.jobTitle) html += ` — ${esc(leadEval.jobTitle)}`;
+      html += `</p>`;
     }
 
     if (disabilityRev && disabilityRev.name) {
-      html += `<div class="eval-block">`;
-      html += `<p class="eval-block-title">Disability Reviewer: ${esc(disabilityRev.name)}</p>`;
-      if (disabilityRev.jobTitle || disabilityRev.disability) {
-        html += `<p class="eval-block-subtitle">${esc(disabilityRev.jobTitle || '')}`;
-        if (disabilityRev.disability) html += ` — ${esc(disabilityRev.disability)}`;
-        html += `</p>`;
+      if (!leadEval || !leadEval.name) {
+        html += `<h3 class="eval-block-title">Evaluators</h3>`;
       }
-      html += `</div>`;
+      html += `<p>Disability Reviewer: ${esc(disabilityRev.name)}`;
+      if (disabilityRev.jobTitle) html += ` — ${esc(disabilityRev.jobTitle)}`;
+      if (disabilityRev.disability) html += ` (${esc(disabilityRev.disability)})`;
+      html += `</p>`;
     }
 
     return html;
@@ -532,26 +531,24 @@
     let html = '';
 
     methods.forEach(m => {
-      html += `<div class="eval-block">`;
-      html += `<p class="eval-block-title">${esc(m.name)}`;
-      if (m.coverage) html += ` <span style="font-weight:400;color:#555;">(${esc(m.coverage)})</span>`;
-      html += `</p>`;
+      html += `<h3 class="eval-block-title">${esc(m.name)}`;
+      if (m.coverage) html += ` <span style="font-weight:400;color:#1a1b1f;">(${esc(m.coverage)})</span>`;
+      html += `</h3>`;
       if (m.description) html += `<p>${esc(m.description)}</p>`;
       if (m.tools && m.tools.trim()) {
         html += renderFormattedText(m.tools);
       }
-      html += `</div>`;
     });
 
     if (assistiveTechs.length) {
-      html += `<p style="margin-top:0.75rem"><strong>Assistive technologies used:</strong></p>`;
+      html += `<h3 class="eval-block-title">Assistive technologies used</h3>`;
       html += `<div class="eval-tags">`;
       assistiveTechs.forEach(t => { html += `<span class="eval-tag">${esc(t)}</span>`; });
       html += `</div>`;
     }
 
     if (autoTools.length) {
-      html += `<p style="margin-top:0.75rem"><strong>Automated tools used:</strong></p>`;
+      html += `<h3 class="eval-block-title">Automated tools used</h3>`;
       html += `<div class="eval-tags">`;
       autoTools.forEach(t => { html += `<span class="eval-tag">${esc(t)}</span>`; });
       html += `</div>`;
