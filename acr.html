@@ -450,24 +450,51 @@
     return html + '</ol>';
   }
 
+  /* ── Rich text renderer for contact field ────── */
+  function renderRichContact(text) {
+    if (!text) return '';
+    const lines = text.split('\n');
+    let html = '';
+    let inList = false;
+
+    const convertInline = (line) => {
+      return line
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+          (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
+        .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
+          (_, label, url) => `<a href="${url}">${label}</a>`)
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .replace(/(?<![/"'>])([\w.+-]+@[\w-]+\.[\w.]+)(?![^<]*<\/a>)/g,
+          email => `<a href="mailto:${email}">${email}</a>`);
+    };
+
+    lines.forEach(raw => {
+      const line = raw.trim();
+      if (!line) {
+        if (inList) { html += '</ul>'; inList = false; }
+        return;
+      }
+      if (/^[-*•●]\s+/.test(line)) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += `<li>${convertInline(line.replace(/^[-*•●]\s+/, ''))}</li>`;
+      } else {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<p class="acr-field-value">${convertInline(line)}</p>`;
+      }
+    });
+
+    if (inList) html += '</ul>';
+    return html;
+  }
+
   /* ── Contact Information renderer ────────────── */
-  function renderContact(axallContact, leadEval, disabilityRev) {
+  function renderContact(contactText, leadEval, disabilityRev) {
     let html = '';
 
-    // Axall contact block
-    if (axallContact) {
-      const lines = axallContact.split('\n').filter(l => l.trim());
-      const contactHtml = lines.map(line => {
-        return line
-          .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
-            (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
-          .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
-            (_, label, url) => `<a href="${url}">${label}</a>`);
-      }).join('<br>');
-      html += `<p class="acr-field-value">${contactHtml}</p>`;
+    if (contactText) {
+      html += renderRichContact(contactText);
     }
 
-    // Lead evaluator
     if (leadEval && leadEval.name) {
       html += `<div class="eval-block">`;
       html += `<p class="eval-block-title">Lead Evaluator: ${esc(leadEval.name)}</p>`;
@@ -475,13 +502,14 @@
       html += `</div>`;
     }
 
-    // Disability reviewer
     if (disabilityRev && disabilityRev.name) {
       html += `<div class="eval-block">`;
       html += `<p class="eval-block-title">Disability Reviewer: ${esc(disabilityRev.name)}</p>`;
-      if (disabilityRev.jobTitle) html += `<p class="eval-block-subtitle">${esc(disabilityRev.jobTitle)}`;
-      if (disabilityRev.disability) html += ` — ${esc(disabilityRev.disability)}`;
-      if (disabilityRev.jobTitle || disabilityRev.disability) html += `</p>`;
+      if (disabilityRev.jobTitle || disabilityRev.disability) {
+        html += `<p class="eval-block-subtitle">${esc(disabilityRev.jobTitle || '')}`;
+        if (disabilityRev.disability) html += ` — ${esc(disabilityRev.disability)}`;
+        html += `</p>`;
+      }
       html += `</div>`;
     }
 
