@@ -7,161 +7,30 @@
   <script src="/translations.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #fff;
-      color: #1a1b1f;
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
-    .page-wrapper {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem 4rem;
-    }
-
-    .site-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 2rem;
-      border-bottom: 1px solid #d7e0e5;
-      margin-bottom: 2.5rem;
-      gap: 1rem;
-    }
-
-    .client-logo {
-      max-height: 40px;
-      max-width: 180px;
-      object-fit: contain;
-    }
-
-    .axall-badge {
-      font-size: 0.75rem;
-      color: #1a1b1f;
-      text-align: right;
-      line-height: 1.4;
-      flex-shrink: 0;
-    }
-
-    .axall-badge a {
-      color: #1a1b1f;
-      text-decoration: underline;
-    }
-
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      line-height: 1.25;
-    }
-
-    .subtitle {
-      font-size: 1rem;
-      margin-bottom: 2.5rem;
-      line-height: 1.6;
-    }
-
+    body { font-family: Arial, sans-serif; background: #fff; color: #1a1b1f; font-size: 1rem; line-height: 1.6; }
+    .page-wrapper { max-width: 780px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+    .site-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 2rem; border-bottom: 1px solid #d7e0e5; margin-bottom: 2.5rem; gap: 1rem; }
+    .client-logo { max-height: 40px; max-width: 180px; object-fit: contain; }
+    .axall-badge { font-size: 0.75rem; color: #1a1b1f; text-align: right; line-height: 1.4; flex-shrink: 0; }
+    .axall-badge a { color: #1a1b1f; text-decoration: underline; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.25; }
+    .subtitle { font-size: 1rem; margin-bottom: 2.5rem; line-height: 1.6; }
     section { margin-bottom: 2.5rem; }
-
-    h2 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin: 2.5rem 0 0.6rem;
-    }
-
-    h3.subsection {
-      font-size: 1rem;
-      font-weight: 600;
-      margin: 1.25rem 0 0.5rem;
-    }
-
+    h2 { font-size: 1.25rem; font-weight: 700; margin: 2.5rem 0 0.6rem; }
+    h3.subsection { font-size: 1rem; font-weight: 600; margin: 1.25rem 0 0.5rem; }
     p { margin-bottom: 0.75rem; }
     p:last-child { margin-bottom: 0; }
-
-    ul {
-      padding-left: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
+    ul { padding-left: 1.5rem; margin-bottom: 1rem; }
     li { margin-bottom: 0.35rem; }
-
     a { color: #1a1b1f; }
-
-    .compliance-badge {
-      display: inline-block;
-      padding: 0.2rem 0.65rem;
-      border-radius: 3px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-    }
-
-    .compliance-badge.partial { background: #fef3c7; color: #78350f; }
-    .compliance-badge.full    { background: #dcfce7; color: #14532d; }
-    .compliance-badge.none    { background: #fee2e2; color: #7f1d1d; }
-
-    .issuance-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-top: 0.75rem;
-    }
-
-    @media (max-width: 520px) {
-      .issuance-grid { grid-template-columns: 1fr; }
-    }
-
-    .issuance-block h3 {
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #555;
-      margin-bottom: 0.5rem;
-    }
-
-    .issuance-block address {
-      font-style: normal;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      white-space: pre-line;
-    }
-
-    .certificate-block {
-      background: #fff;
-      border: 1px solid #d7e0e5;
-      border-radius: 4px;
-      padding: 1rem 1.25rem;
-      margin-top: 0.75rem;
-    }
-
-    .certificate-block p {
-      font-size: 0.9rem;
-      margin-bottom: 0.25rem;
-    }
-
-    .certificate-id {
-      font-family: monospace;
-      font-size: 1rem;
-      font-weight: 600;
-    }
-
-    .acr-link-block {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #d7e0e5;
-      font-size: 0.9rem;
-    }
-
-    #loading, #error {
-      text-align: center;
-      padding: 4rem 1rem;
-      color: #555;
-    }
-
+    .issuance-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 0.75rem; }
+    .issuance-block h3 { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #555; margin-bottom: 0.5rem; }
+    .issuance-block address { font-style: normal; font-size: 0.9rem; line-height: 1.6; white-space: pre-line; }
+    .certificate-block { background: #fff; border: 1px solid #d7e0e5; border-radius: 4px; padding: 1rem 1.25rem; margin-top: 0.75rem; }
+    .certificate-block p { font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .certificate-id { font-family: monospace; font-size: 1rem; font-weight: 600; }
+    .acr-link-block { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #d7e0e5; font-size: 0.9rem; }
+    #loading, #error { text-align: center; padding: 4rem 1rem; color: #555; }
     #error { color: #7f1d1d; }
     .hidden { display: none; }
   </style>
@@ -170,20 +39,15 @@
   <div class="page-wrapper">
     <div id="loading">Loading…</div>
     <div id="error" class="hidden">This accessibility statement could not be loaded.</div>
-
     <div id="content" class="hidden">
 
       <header class="site-header">
         <img id="client-logo" class="client-logo hidden" src="" alt="" />
-        <div class="axall-badge" id="axall-badge">
-          Accessibility evaluated by<br>
-          <a href="https://axall.digital" target="_blank" rel="noopener">AxAll UAB</a>
-        </div>
+        <div class="axall-badge" id="axall-badge"></div>
       </header>
 
-      <h1 id="page-title">Accessibility Statement</h1>
-      <p class="subtitle" id="page-subtitle"></p>
-
+      <h1 id="page-title"></h1>
+      <div class="subtitle" id="page-subtitle"></div>
       <hr style="border:none;border-top:1px solid #d7e0e5;margin:0 0 2.5rem">
 
       <section aria-labelledby="usage-heading">
@@ -230,20 +94,17 @@
             <h3 id="issued-by-label"></h3>
             <address id="issued-by"></address>
           </div>
-          <div class="issuance-block">
-            <h3 id="approved-by-label"></h3>
-            <address id="approved-by"></address>
-          </div>
         </div>
       </section>
 
       <section aria-labelledby="cert-heading">
         <h2 id="cert-heading"></h2>
-        <p id="cert-sentence"></p>
+        <p id="cert-body"></p>
         <div class="certificate-block">
           <p id="cert-id-label"></p>
           <p class="certificate-id" id="certificate-id"></p>
         </div>
+        <p id="cert-registry-link"></p>
       </section>
 
       <div class="acr-link-block">
@@ -263,87 +124,48 @@
     }
 
     function getLangFromHost() {
-      const parts = window.location.hostname.split('.');
-      if (parts[0] === 'prieinamumas') return 'lt';
-      return 'en';
+      return window.location.hostname.split('.')[0] === 'prieinamumas' ? 'lt' : 'en';
     }
 
-    function setText(id, val) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = val || '';
-    }
-
-    function setHtml(id, val) {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = val || '';
-    }
-
-    function show(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('hidden');
-    }
-
-    function hide(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('hidden');
-    }
+    function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val || ''; }
+    function setHtml(id, val) { const el = document.getElementById(id); if (el) el.innerHTML = val || ''; }
+    function show(id) { const el = document.getElementById(id); if (el) el.classList.remove('hidden'); }
+    function hide(id) { const el = document.getElementById(id); if (el) el.classList.add('hidden'); }
 
     function formatDate(isoDate, lang) {
       if (!isoDate) return '';
       const locale = lang === 'lt' ? 'lt-LT' : 'en-GB';
-      return new Date(isoDate + 'T12:00:00').toLocaleDateString(locale, {
-        day: 'numeric', month: 'long', year: 'numeric'
-      });
+      return new Date(isoDate + 'T12:00:00').toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function getDomain(url) {
+      if (!url) return '';
+      try { return new URL(url.startsWith('http') ? url : 'https://' + url).hostname.replace(/^www\./, ''); }
+      catch { return url.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0]; }
     }
 
     function renderAddress(text) {
       if (!text) return '';
-      return text.split('\n')
-        .filter(l => l.trim())
-        .map(line => {
-          if (/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/.test(line)) {
-            return line
-              .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
-                (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
-              .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
-                (_, label, url) => `<a href="${url}">${label}</a>`);
-          }
-          if (/\[([^\]]+)\]\((mailto:[^)]+)\)/.test(line)) {
-            return line.replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
-              (_, label, url) => `<a href="${url}">${label}</a>`);
-          }
-          if (/^https?:\/\//.test(line.trim())) {
-            const url = line.trim();
-            return `<a href="${url}" target="_blank" rel="noopener">${url.replace(/^https?:\/\//, '')}</a>`;
-          }
-          if (/^www\./.test(line.trim())) {
-            const domain = line.trim();
-            return `<a href="https://${domain}" target="_blank" rel="noopener">${domain}</a>`;
-          }
-          if (/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(line.trim())) {
-            const email = line.trim();
-            return `<a href="mailto:${email}">${email}</a>`;
-          }
-          return line;
-        })
-        .join('<br>');
+      return text.split('\n').filter(l => l.trim()).map(line => {
+        if (/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/.test(line))
+          return line.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
+                     .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g, (_, label, url) => `<a href="${url}">${label}</a>`);
+        if (/^https?:\/\//.test(line.trim())) { const u = line.trim(); return `<a href="${u}" target="_blank" rel="noopener">${u.replace(/^https?:\/\//, '')}</a>`; }
+        if (/^www\./.test(line.trim())) { const d = line.trim(); return `<a href="https://${d}" target="_blank" rel="noopener">${d}</a>`; }
+        if (/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(line.trim())) { const e = line.trim(); return `<a href="mailto:${e}">${e}</a>`; }
+        return line;
+      }).join('<br>');
     }
 
     function renderContactInfo(text) {
       if (!text) return '';
       const lines = text.split('\n');
-      let html = '';
-      let inList = false;
-      const convertInline = (line) => {
-        return line
-          .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
-            (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
-          .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
-            (_, label, url) => `<a href="${url}">${label}</a>`)
-          .replace(/\*\*(.*?)\*\*/g, '$1')
-          .replace(/(?<![/"'>])([\w.+-]+@[\w-]+\.[\w.]+)(?![^<]*<\/a>)/g,
-            email => `<a href="mailto:${email}">${email}</a>`);
-      };
+      let html = '', inList = false;
+      const convertInline = line => line
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, (_, l, u) => `<a href="${u}" target="_blank" rel="noopener">${l}</a>`)
+        .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g, (_, l, u) => `<a href="${u}">${l}</a>`)
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .replace(/(?<![/"'>])([\w.+-]+@[\w-]+\.[\w.]+)(?![^<]*<\/a>)/g, e => `<a href="mailto:${e}">${e}</a>`);
       lines.forEach(raw => {
         const line = raw.trim();
         if (!line) { if (inList) { html += '</ul>'; inList = false; } return; }
@@ -361,39 +183,50 @@
 
     function renderRichText(text) {
       if (!text || !text.trim()) return '';
-      const lines = text.split('\n');
       let html = '';
-      lines.forEach(raw => {
+      text.split('\n').forEach(raw => {
         const line = raw.trim();
         if (!line) return;
-        if (/^#{1,6}\s+/.test(line)) {
-          html += `<h3 style="font-size:1rem;font-weight:600;margin:1rem 0 0.35rem">${line.replace(/^#{1,6}\s+/, '')}</h3>`;
-        } else if (/^[•●]\s+/.test(line)) {
-          html += `<ul style="padding-left:1.25rem;margin-bottom:0.5rem"><li>${line.replace(/^[•●]\s+/, '')}</li></ul>`;
-        } else {
-          html += `<p>${line}</p>`;
-        }
+        if (/^#{1,6}\s+/.test(line)) html += `<h3 style="font-size:1rem;font-weight:600;margin:1rem 0 0.35rem">${line.replace(/^#{1,6}\s+/, '')}</h3>`;
+        else if (/^[•●]\s+/.test(line)) html += `<ul style="padding-left:1.25rem;margin-bottom:0.5rem"><li>${line.replace(/^[•●]\s+/, '')}</li></ul>`;
+        else html += `<p>${line}</p>`;
       });
       return html;
     }
 
-    function renderUsageText(text) {
-      if (!text) return '';
-      let html = text.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
-        (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`
-      );
-      html = html.replace(/\((https?:\/\/[^)]+)\)/g,
-        (_, url) => `(<a href="${url}" target="_blank" rel="noopener">${url.replace(/^https?:\/\//, '')}</a>)`
-      );
-      const paras = html.split(/\n\n+/).filter(p => p.trim());
-      return paras.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+    // Builds the intro sentence from VPAT product types + product URL + client name
+    function buildIntro(d, t, lang) {
+      const vpatTypes = d.vpatProductTypes || []; // multi-select from Audits
+      const productUrl = d.productUrl || '';
+      const clientName = d.clientDetails || '';
+      const domain = getDomain(productUrl);
+
+      const lines = [];
+      vpatTypes.forEach(type => {
+        const lc = (typeof type === 'object' ? type.name : type).toLowerCase();
+        if (lc.includes('web') && !lc.includes('non')) {
+          lines.push(`${t.introWebsite}: ${domain || productUrl}`);
+        } else if (lc.includes('mobile') || lc.includes('app')) {
+          const appName = langField(d.productVersion, d.productVersionLT, lang) || '';
+          lines.push(`${t.introApp}${appName ? ': ' + appName : ''}`);
+        } else if (lc.includes('document')) {
+          lines.push(t.introDocs);
+        }
+      });
+
+      // Fallback if no VPAT types set — use product URL
+      if (!lines.length && productUrl) {
+        lines.push(`${t.introWebsite}: ${domain || productUrl}`);
+      }
+
+      const listHtml = lines.map(l => `<li>${l}</li>`).join('');
+      return `<p>${t.introAppliesTo} ${clientName}:</p><ul>${listHtml}</ul><p>(${t.introReferredAs} &ldquo;${t.introCollective}&rdquo;)</p>`;
     }
 
     async function init() {
       const rawSlug  = getSlug();
       const hostLang = getLangFromHost();
       const slug     = rawSlug ? `${rawSlug}:${hostLang}` : '';
-
       if (!slug) { showError(); return; }
 
       let data;
@@ -401,191 +234,139 @@
         const resp = await fetch(`https://proxy.axall.digital/api/statement/${slug}`);
         if (!resp.ok) throw new Error(resp.status);
         data = await resp.json();
-      } catch (e) {
-        showError();
-        return;
-      }
+      } catch (e) { showError(); return; }
 
       render(data);
     }
 
-    function showError() {
-      hide('loading');
-      show('error');
-    }
+    function showError() { hide('loading'); show('error'); }
 
     function render(d) {
       hide('loading');
       show('content');
 
-      // ── Lang init ──────────────────────────────────────────────────────────
       const lang = d.lang || 'en';
-      const t    = initLang(lang); // from translations.js — sets <html lang>
+      const t    = initLang(lang);
+      const s    = d.settings || {};
 
-      // ── Resolve bilingual fields ───────────────────────────────────────────
-      const auditTitle     = langField(d.auditTitle,         d.auditTitleLT,         lang);
-      const productDesc    = langField(d.productDescription, d.productDescriptionLT, lang);
-      const contactTxt     = langField(d.contactInfo,        d.contactInfoLT,        lang);
-      const knownLims      = langField(d.knownLimitations,   d.knownLimitationsLT,   lang);
-      const plannedFix     = langField(d.plannedFix,         d.plannedFixLT,         lang);
-      const testingPeriod  = langField(d.testingPeriod,      d.testingPeriodLT,      lang);
-      const axallDetails   = langField(d.settings?.axallDetailsEN, d.settings?.axallDetailsLT, lang);
-      const usageTxt       = langField(d.productType?.usageEN,     d.productType?.usageLT,     lang);
-      const compatTxt      = langField(d.productType?.compatEN,    d.productType?.compatLT,    lang);
-      const label          = langField(d.productType?.referredAsEN, d.productType?.referredAsLT, lang) || 'product';
-      const labelCap       = label.charAt(0).toUpperCase() + label.slice(1);
+      // Resolved bilingual data fields
+      const auditTitle    = langField(d.auditTitle,         d.auditTitleLT,         lang);
+      const clientName    = d.clientDetails || '';
+      const contactTxt    = langField(d.contactInfo,        d.contactInfoLT,        lang);
+      const knownLims     = langField(d.knownLimitations,   d.knownLimitationsLT,   lang);
+      const plannedFix    = langField(d.plannedFix,         d.plannedFixLT,         lang);
+      const testingPeriod = langField(d.testingPeriod,      d.testingPeriodLT,      lang);
+      const axallDetails  = langField(s.axallDetailsEN,     s.axallDetailsLT,       lang);
+      const usageTxt      = langField(d.productType?.usageEN, d.productType?.usageLT, lang);
+      const compatTxt     = langField(d.productType?.compatEN, d.productType?.compatLT, lang);
 
-      // ── Page meta ──────────────────────────────────────────────────────────
+      // ── Page meta
       document.title = `${t.statementTitle} — ${auditTitle}`;
       setText('page-title', t.statementTitle);
 
-      // ── Badge ──────────────────────────────────────────────────────────────
+      // ── Badge
       const badgeLabel = lang === 'lt' ? 'Prieinamumą įvertino' : 'Accessibility evaluated by';
       setHtml('axall-badge', `${badgeLabel}<br><a href="https://axall.digital" target="_blank" rel="noopener">AxAll UAB</a>`);
 
-      // ── Subtitle ───────────────────────────────────────────────────────────
-      setHtml('page-subtitle', d.introSentence || '');
-
-      // ── Logo ───────────────────────────────────────────────────────────────
+      // ── Logo
       if (d.logoUrl) {
         const logo = document.getElementById('client-logo');
-        logo.src   = d.logoUrl;
-        logo.alt   = `${d.clientDetails || ''} logo`;
-        show('client-logo');
+        logo.src = d.logoUrl; logo.alt = `${clientName} logo`; show('client-logo');
       }
 
-      // ── Usage section ──────────────────────────────────────────────────────
-      setText('usage-heading', `${t.nameOfProduct.split('/')[0]} ${label}`); // "How you should be able to use this website"
-      // Reuse a generic heading pattern from the original
-      document.getElementById('usage-heading').textContent =
-        lang === 'lt'
-          ? `Kaip turėtumėte galėti naudotis šiuo (-ia) ${label}`
-          : `How you should be able to use this ${label}`;
-      setHtml('usage-text', usageTxt
-        ? renderUsageText(usageTxt)
-        : `<p>${lang === 'lt' ? `Siekiame, kad ši (-is) ${label} būtų prieinama (-as) ir patogi (-us) naudoti visiems, nepriklausomai nuo gebėjimų.` : `We strive to make this ${label} inclusive and easy to use for people of all abilities.`}</p>`
-      );
+      // ── Intro subtitle
+      setHtml('page-subtitle', buildIntro(d, t, lang));
 
-      // ── Compatibility ──────────────────────────────────────────────────────
+      // ── Usage
+      setText('usage-heading', t.usageHeading);
+      if (usageTxt) {
+        // Airtable override — split on double newline into paragraphs
+        const paras = usageTxt.split(/\n\n+/).filter(p => p.trim());
+        setHtml('usage-text', paras.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join(''));
+      } else {
+        // Fallback from translations.js — contains <a> so use innerHTML directly
+        const paras = t.usageFallback.split('\n').filter(p => p.trim());
+        setHtml('usage-text', paras.map(p => `<p>${p}</p>`).join(''));
+      }
+
+      // ── Compatibility
       if (d.productType?.showCompat && compatTxt) {
-        document.getElementById('compat-heading').textContent =
-          lang === 'lt' ? 'Suderinamumas su pagalbinėmis technologijomis' : 'Compatibility with assistive technology';
+        const compatHeading = lang === 'lt' ? 'Suderinamumas su pagalbinėmis technologijomis' : 'Compatibility with assistive technology';
+        setText('compat-heading', compatHeading);
         setHtml('compat-text', renderRichText(compatTxt));
         show('compatibility-section');
       }
 
-      // ── Limitations ────────────────────────────────────────────────────────
-      document.getElementById('limitations-heading').textContent =
-        lang === 'lt'
-          ? `Šio (-ios) ${label} prieinamumo apribojimai`
-          : `Limitations of this ${label}'s accessibility`;
-
-      const limHtml = knownLims
-        ? renderRichText(knownLims)
-        : `<p>${lang === 'lt' ? `Dalis šio (-ios) ${label} nėra visiškai prieinama (-as).` : `Parts of this ${label} are not fully accessible.`}</p>`;
+      // ── Limitations
+      setText('limitations-heading', t.limitationsHeading);
+      const limHtml = knownLims ? renderRichText(knownLims)
+        : `<p>${lang === 'lt' ? 'Dalis šių skaitmeninių paslaugų nėra visiškai prieinamos.' : 'Parts of these digital services are not fully accessible.'}</p>`;
       const fixNote = plannedFix
         ? `<p>${lang === 'lt' ? `Aktyviai dirbame, kad ištaisytume šias problemas. Reikšmingi patobulinimai planuojami ${plannedFix}.` : `We are actively working to address these issues. Significant improvements are planned for ${plannedFix}.`}</p>`
         : `<p>${lang === 'lt' ? 'Aktyviai dirbame, kad ištaisytume šias problemas, ir laukiame jūsų atsiliepimų.' : 'We are actively working to address these issues and welcome your feedback.'}</p>`;
       setHtml('limitations-text', limHtml + fixNote);
+      setHtml('acr-link-note', lang === 'lt'
+        ? 'Išsamų žinomų problemų ir jų būsenos sąrašą rasite <a href="acr">Prieinamumo atitikties ataskaitoje</a>.'
+        : 'For a complete list of known issues and their status, see the <a href="acr">Accessibility Conformance Report</a>.');
 
-      const acrLinkNote = lang === 'lt'
-        ? `Išsamų žinomų problemų ir jų būsenos sąrašą rasite <a href="acr">Prieinamumo atitikties ataskaitoje</a>.`
-        : `For a complete list of known issues and their status, see the <a href="acr">Accessibility Conformance Report</a>.`;
-      setHtml('acr-link-note', acrLinkNote);
-
-      // ── Feedback ───────────────────────────────────────────────────────────
+      // ── Feedback
       setText('feedback-heading', t.feedbackHeading);
-      document.getElementById('feedback-intro').textContent =
-        lang === 'lt'
-          ? `Jei šioje (-iame) ${label} kažkas jums sunkiai naudojama (-as), susisiekite su mumis:`
-          : `If you find anything on this ${label} difficult to use, please contact us:`;
+      setText('feedback-intro', t.feedbackIntro);
       setHtml('contact-info', renderContactInfo(contactTxt || ''));
+      setHtml('feedback-note', t.feedbackNote);
 
-      const feedbackNoteHtml = lang === 'lt'
-        ? `Norėdami padėti mums išspręsti jūsų problemą, prašome pateikti informaciją, rekomenduojamą dokumente <a href="https://www.w3.org/WAI/users/inaccessible" target="_blank" rel="noopener">„Kaip susisiekti su organizacijomis dėl neprieinamų svetainių"</a>. Dėkojame už visus konstruktyvius atsiliepimus apie šio (-ios) ${label} prieinamumą.`
-        : `To assist us in addressing your issue, we kindly ask you to provide the details recommended in <a href="https://www.w3.org/WAI/users/inaccessible" target="_blank" rel="noopener">"Contacting Organizations about Inaccessible Websites"</a>. We appreciate all constructive feedback on the accessibility of this ${label}.`;
-      setHtml('feedback-note', feedbackNoteHtml);
+      // ── Technical
+      setText('technical-heading', t.technicalHeading);
+      const directive = directiveLabel(d.applicableDirective, lang);
+      setText('client-name-commitment', `${clientName} ${t.technicalCommitment} ${directive}.`);
+      setText('compliance-subheading', t.complianceSubheading);
 
-      // ── Technical / compliance ─────────────────────────────────────────────
-      document.getElementById('technical-heading').textContent =
-        lang === 'lt'
-          ? `Techninė informacija apie šio (-ios) ${label} prieinamumą`
-          : `Technical information about this ${label}'s accessibility`;
+      // Compliance sentence — product name + status + EN standard + WCAG
+      const productName  = langField(d.productVersion, d.productVersionLT, lang) || auditTitle;
+      const statusLabel  = complianceLabel(d.complianceStatus || '', lang);
+      const en321Label   = langField(s.en321LabelEN, s.en321LabelLT, lang);
+      const en321Url     = s.en321URL || '';
+      const wcag21Label  = langField(s.wcag21LabelEN, s.wcag21LabelLT, lang);
+      const wcag21Url    = s.wcag21URL || '';
+      const isEnStandard = (d.vpat || '').includes('EN 301 549');
 
-      const directive = d.applicableDirective || 'Directive (EU) 2019/882';
-      const directiveLT = directiveLabel(d.applicableDirective, lang);
-      document.getElementById('client-name-commitment').textContent =
-        lang === 'lt'
-          ? `${d.clientDetails || ''} įsipareigoja užtikrinti šio (-ios) ${label} prieinamumą pagal ${directiveLT}.`
-          : `${d.clientDetails || ''} is committed to making its ${label} accessible, in accordance with ${directiveLT}.`;
+      let complianceSentence = `${productName} ${statusLabel}`;
+      if (isEnStandard) {
+        complianceSentence += ` ${lang === 'lt' ? 'su' : 'with'} <a href="${en321Url}" target="_blank" rel="noopener">${en321Label}</a> ${lang === 'lt' ? 'ir' : 'and'} <a href="${wcag21Url}" target="_blank" rel="noopener">${wcag21Label}</a>.`;
+      } else {
+        complianceSentence += ` ${lang === 'lt' ? 'su' : 'with'} ${d.vpat || ''}.`;
+      }
+      setHtml('compliance-sentence', complianceSentence);
+      setHtml('compliance-acr-note', t.complianceNote);
 
-      setText('compliance-subheading', t.complianceStatus);
+      // ── Preparation
+      setText('preparation-heading', t.preparationHeading);
+      const preparedOn  = formatDate(d.statementDate, lang);
+      const reviewedOn  = formatDate(d.lastReviewed, lang);
+      const reviewedPart = reviewedOn ? `, ${t.lastReviewedOn} <strong>${reviewedOn}</strong>` : '';
+      setHtml('preparation-date-sentence', `${t.preparedOn} <strong>${preparedOn}</strong>${reviewedPart}.`);
 
-      const statusRaw   = d.complianceStatus || '';
-      const statusLabel = complianceLabel(statusRaw, lang);
-      const standard    = d.vpat || 'EN 301 549';
-
-      setHtml('compliance-sentence',
-        lang === 'lt'
-          ? `Ši (-is) ${label} <strong>${statusLabel}</strong> su ${standard}.`
-          : `The ${labelCap} is <strong>${statusLabel}</strong> with ${standard}.`
-      );
-
-      const acrNoteHtml = lang === 'lt'
-        ? `Atitikties statusas grindžiamas skaitmeninio prieinamumo atitikties vertinimo rezultatais. Išsamią informaciją apie vertinimą, įskaitant jo išvadas, apimtį ir metodus, rasite <a href="acr">Prieinamumo atitikties ataskaitoje</a>.`
-        : `The compliance status is based on the results of a digital accessibility conformance evaluation. Detailed information about the evaluation, including its findings, scope, and methods, can be found in the <a href="acr">Accessibility Conformance Report</a>.`;
-      setHtml('compliance-acr-note', acrNoteHtml);
-
-      // ── Preparation ────────────────────────────────────────────────────────
-      document.getElementById('preparation-heading').textContent =
-        lang === 'lt' ? 'Šio pareiškimo parengimas' : 'Preparation of this statement';
-
-      const preparedOn   = formatDate(d.statementDate, lang);
-      const reviewedOn   = formatDate(d.lastReviewed, lang);
-      const reviewedPart = reviewedOn
-        ? (lang === 'lt' ? ` ir paskutinį kartą peržiūrėtas <strong>${reviewedOn}</strong>` : ` and last reviewed on <strong>${reviewedOn}</strong>`)
-        : '';
-      setHtml('preparation-date-sentence',
-        lang === 'lt'
-          ? `Šis prieinamumo pareiškimas parengtas <strong>${preparedOn}</strong>${reviewedPart}.`
-          : `This accessibility statement was prepared on <strong>${preparedOn}</strong>${reviewedPart}.`
-      );
+      const standard = d.vpat || '';
       setHtml('preparation-testing-sentence',
-        lang === 'lt'
-          ? `Ši (-is) ${label} buvo testuota (-as) <strong>${testingPeriod || '—'}</strong> pagal ${standard}. Vertinimą atliko AxAll UAB.`
-          : `The ${label} underwent testing in <strong>${testingPeriod || '—'}</strong> against ${standard}. The evaluation was conducted by AxAll UAB.`
+        `${t.testedIn} <strong>${testingPeriod || '—'}</strong> ${t.testedAgainst} ${standard} ${lang === 'lt' ? 'reikalavimus' : ''}. ${t.testedSample}`
       );
 
-      // ── Issuance ───────────────────────────────────────────────────────────
-      document.getElementById('issuance-heading').textContent =
-        lang === 'lt' ? 'Oficialus išleidimas ir patvirtinimas' : 'Official issuance and approval';
-      setText('issued-by-label',   lang === 'lt' ? 'Išdavė' : 'Issued by');
-      setText('approved-by-label', lang === 'lt' ? 'Patvirtino' : 'Approved by');
-
+      // ── Issuance
+      setText('issuance-heading', t.issuanceHeading);
+      setText('issued-by-label', t.issuedBy);
       const issuedByEl = document.getElementById('issued-by');
       if (issuedByEl) issuedByEl.innerHTML = renderAddress(axallDetails) || 'AxAll UAB';
 
-      const approvedByEl = document.getElementById('approved-by');
-      if (approvedByEl) approvedByEl.innerHTML = renderAddress(d.clientDetails) || '';
-
-      // ── Certificate ────────────────────────────────────────────────────────
-      setText('cert-heading', lang === 'lt' ? 'Prieinamumo vertinimo sertifikatas' : 'Accessibility evaluation certificate');
-
-      const registryLabel = lang === 'lt' ? 'Axall prieinamumo registre' : 'Axall Accessibility Registry';
-      const certSentence = lang === 'lt'
-        ? `Ši (-is) ${label} buvo įvertinta (-as) AxAll UAB ir įtraukta (-as) į <a id="registry-link" href="${d.registryUrl || 'https://axall.digital/accessibility-registry'}" target="_blank" rel="noopener">${registryLabel}</a>.`
-        : `This ${label} has been evaluated by AxAll UAB and is listed on the <a id="registry-link" href="${d.registryUrl || 'https://axall.digital/accessibility-registry'}" target="_blank" rel="noopener">${registryLabel}</a>.`;
-      setHtml('cert-sentence', certSentence);
-      setText('cert-id-label', lang === 'lt' ? 'Sertifikato ID' : 'Certificate ID');
+      // ── Certification
+      setText('cert-heading', t.certHeading);
+      setText('cert-body', t.certBody);
+      setText('cert-id-label', t.certIdLabel);
       setText('certificate-id', d.certificateId || '');
+      const registryUrl = d.registryUrl || 'https://axall.digital/accessibility-registry';
+      setHtml('cert-registry-link', `<a href="${registryUrl}" target="_blank" rel="noopener">${t.certRegistryLink}</a>`);
 
-      // ── ACR link ───────────────────────────────────────────────────────────
-      const acrLink = document.getElementById('view-acr-link');
-      if (acrLink) {
-        acrLink.textContent = lang === 'lt'
-          ? 'Peržiūrėti visą prieinamumo atitikties ataskaitą →'
-          : 'View the full Accessibility Conformance Report →';
-      }
+      // ── ACR link
+      setText('view-acr-link', t.viewFullAcr);
     }
 
     init();
