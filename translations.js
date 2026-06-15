@@ -216,6 +216,56 @@ const UI = {
     enReport:               'EN 301 549 Report',
     enClauseLabel:          'Clause',
 
+    // Statement — intro sentence parts
+    introAppliesTo:         'This accessibility statement applies to the following digital services provided by',
+    introWebsite:           'Website',
+    introApp:               'Mobile application',
+    introDocs:              'Non-Web Documents: published electronic documents',
+    introReferredAs:        'further referred to as',
+    introCollective:        'the digital services',
+
+    // Statement — usage fallback text (shown when no Airtable override)
+    usageFallback:          'We aim to make our digital services inclusive and accessible for people of all abilities.\nMany users may benefit from adjusting their device, operating system, or browser accessibility settings or using assistive technologies—for example, screen readers, display and text size adjustments, or color and contrast settings.\nFor guidance, please refer to your device, operating system, or browser accessibility help resources, which explain how to configure these features. If you need help adapting our services to your needs, please <a href="#feedback-heading">contact us for assistance</a>.',
+
+    // Statement — usage section heading
+    usageHeading:           'How you should be able to use these digital services',
+
+    // Statement — limitations section heading
+    limitationsHeading:     'Limitations of these digital services\' accessibility',
+
+    // Statement — feedback
+    feedbackIntro:          'If you encounter any accessibility issues or difficulties, please let us know via:',
+    feedbackNote:           'To help us address your issue, please include the details recommended in <a href="https://www.w3.org/WAI/users/inaccessible" target="_blank" rel="noopener">"Contacting Organizations about Inaccessible Websites" (external site)</a>. We welcome all constructive feedback and will carefully review accessibility and usability issues.',
+
+    // Statement — technical section
+    technicalHeading:       'Technical information on accessibility',
+    technicalCommitment:    'is committed to making its digital products accessible, in accordance with',
+
+    // Statement — compliance
+    complianceSubheading:   'Compliance status',
+    complianceNote:         'Compliance status is based on the results of an accessibility conformance evaluation. Detailed information about the evaluation, including its scope, methods, and findings, is available in the <a href="acr">Accessibility Conformance Report</a>.',
+
+    // Statement — preparation
+    preparationHeading:     'Preparation of this statement',
+    preparedOn:             'This accessibility statement was prepared on',
+    lastReviewedOn:         'and last reviewed on',
+    testedIn:               'The digital service was tested in',
+    testedAgainst:          'against',
+    testedSample:           'The evaluation included a representative sample of user flows and content.',
+
+    // Statement — issuance
+    issuanceHeading:        'Official issuance and approval',
+    issuedBy:               'Issued by',
+
+    // Statement — certification
+    certHeading:            'Accessibility certification',
+    certBody:               'The digital service is listed in the Accessibility Registry by Axall.',
+    certIdLabel:            'Certificate ID',
+    certRegistryLink:       'Visit the Accessibility Registry for more information.',
+
+    // Statement — ACR link
+    viewFullAcr:            'View the full Accessibility Conformance Report →',
+
     // Misc
     learnMore:              'Learn more',
     version:                'Version',
@@ -318,6 +368,56 @@ const UI = {
     // ACR — EN 301 549 report section
     enReport:               'EN 301 549 ataskaita',
     enClauseLabel:          'Skyrius',
+
+    // Statement — intro sentence parts
+    introAppliesTo:         'Ši paraiška dėl prieinamumo taikoma šiems',
+    introWebsite:           'Interneto svetainė',
+    introApp:               'Mobilioji programėlė',
+    introDocs:              'Dokumentai: publikuojami elektroniniai dokumentai',
+    introReferredAs:        'toliau',
+    introCollective:        'skaitmeninės paslaugos',
+
+    // Statement — usage fallback text
+    usageFallback:          'Mes siekiame, kad mūsų skaitmeninės paslaugos būtų įtraukios ir prieinamos visiems žmonėms, nepriklausomai nuo jų gebėjimų.\nKai kuriems naudotojams geresnę patirtį gali padėti užtikrinti jų įrenginio, operacinės sistemos ar naršyklės prieinamumo nustatymai bei pagalbinės technologijos, pavyzdžiui, teksto dydžio, spalvų schemos ar kontrasto keitimas ir ekrano skaitymo programų naudojimas.\nDaugiau informacijos rasite savo įrenginio, operacinės sistemos ar naršyklės prieinamumo pagalbos šaltiniuose, kuriuose paaiškinama, kaip konfigūruoti šiuos nustatymus.\nJei jums reikalinga pagalba pritaikant mūsų paslaugas savo poreikiams, <a href="#feedback-heading">susisiekite su mumis</a>.',
+
+    // Statement — usage section heading
+    usageHeading:           'Kaip turėtumėte galėti naudotis šiomis skaitmeninėmis paslaugomis',
+
+    // Statement — limitations section heading
+    limitationsHeading:     'Šių skaitmeninių paslaugų prieinamumo apribojimai',
+
+    // Statement — feedback
+    feedbackIntro:          'Jei susidūrėte su prieinamumo kliūtimis, praneškite mums šiais būdais:',
+    feedbackNote:           'Kad galėtume greitai išspręsti jūsų problemą, prašome kartu su užklausa pateikti informaciją, rekomenduojamą skiltyje <a href="https://www.w3.org/WAI/users/inaccessible" target="_blank" rel="noopener">„Susisiekimas su organizacijomis dėl neprieinamų svetainių" (išorinė nuoroda, tekstas anglų kalba)</a>. Vertiname ir kruopščiai peržiūrime visus konstruktyvius atsiliepimus apie prieinamumą bei tinkamumą naudoti.',
+
+    // Statement — technical section
+    technicalHeading:       'Techninė informacija apie prieinamumą',
+    technicalCommitment:    'yra įsipareigojusi užtikrinti savo skaitmeninių produktų prieinamumą remiantis',
+
+    // Statement — compliance
+    complianceSubheading:   'Atitikties lygis',
+    complianceNote:         'Atitikties lygis grindžiamas skaitmeninio prieinamumo atitikties vertinimo rezultatais. Išsamią informaciją apie vertinimą, įskaitant jo išvadas, apimtį ir metodus, rasite <a href="acr">Prieinamumo atitikties ataskaitoje</a>.',
+
+    // Statement — preparation
+    preparationHeading:     'Atitikties paraiškos rengimas',
+    preparedOn:             'Ši atitikties paraiška buvo parengta',
+    lastReviewedOn:         'o paskutinį kartą peržiūrėta',
+    testedIn:               'Skaitmeninė paslauga buvo testuota',
+    testedAgainst:          'pagal',
+    testedSample:           'Vertinimo metu buvo nagrinėjama reprezentatyvi naudotojų srautų ir turinio imtis.',
+
+    // Statement — issuance
+    issuanceHeading:        'Oficialus išleidimas ir patvirtinimas',
+    issuedBy:               'Išdavė',
+
+    // Statement — certification
+    certHeading:            'Prieinamumo registracija',
+    certBody:               'Skaitmeninė paslauga yra įtraukta į AxAll prieinamumo registrą.',
+    certIdLabel:            'Pažymėjimo ID',
+    certRegistryLink:       'Daugiau informacijos rasite prieinamumo registro puslapyje.',
+
+    // Statement — ACR link
+    viewFullAcr:            'Peržiūrėti visą prieinamumo atitikties ataskaitą →',
 
     // Misc
     learnMore:              'Sužinoti daugiau',
