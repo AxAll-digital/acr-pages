@@ -3,20 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Accessibility Statement</title>
+  <title>Accessibility Conformance Report</title>
   <script src="/translations.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     body {
       font-family: Arial, sans-serif;
-      background: #fff;
-      color: #1a1b1f;
       font-size: 1rem;
+      color: #1a1b1f;
+      margin: 0;
+      padding: 0;
+      background: #fff;
       line-height: 1.6;
     }
 
-    .page-wrapper {
+    .page {
       max-width: 780px;
       margin: 0 auto;
       padding: 2.5rem 1.5rem 4rem;
@@ -51,20 +65,24 @@
       text-decoration: underline;
     }
 
-    h1 {
+    .acr-title {
       font-size: 2rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
-      line-height: 1.25;
+      margin: 0 0 1.2rem;
+      line-height: 1.3;
     }
 
-    .subtitle {
-      font-size: 1rem;
-      margin-bottom: 2.5rem;
-      line-height: 1.6;
+    .acr-edition {
+      font-size: 1.15rem;
+      font-weight: 400;
+      margin: 0 0 0.2rem;
     }
 
-    section { margin-bottom: 2.5rem; }
+    .acr-vpat-version {
+      font-size: 0.95rem;
+      color: #555;
+      margin: 0 0 2rem;
+    }
 
     h2 {
       font-size: 1.25rem;
@@ -72,466 +90,725 @@
       margin: 2.5rem 0 0.6rem;
     }
 
-    h3.subsection {
+    h3.acr-table-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 2.5rem 0 0.5rem;
+    }
+
+    h3.section-heading {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 2.5rem 0 0.4rem;
+    }
+
+    h3.section-heading a { color: inherit; }
+
+    .eval-block { margin-bottom: 1.25rem; }
+
+    .eval-block-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 2rem 0 0.4rem;
+    }
+
+    .eval-block p {
       font-size: 1rem;
-      font-weight: 600;
-      margin: 1.25rem 0 0.5rem;
-    }
-
-    p { margin-bottom: 0.75rem; }
-    p:last-child { margin-bottom: 0; }
-
-    ul {
-      padding-left: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    li { margin-bottom: 0.35rem; }
-
-    a { color: #1a1b1f; }
-
-    .compliance-badge {
-      display: inline-block;
-      padding: 0.2rem 0.65rem;
-      border-radius: 3px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-    }
-
-    .compliance-badge.partial { background: #fef3c7; color: #78350f; }
-    .compliance-badge.full    { background: #dcfce7; color: #14532d; }
-    .compliance-badge.none    { background: #fee2e2; color: #7f1d1d; }
-
-    .issuance-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-top: 0.75rem;
-    }
-
-    @media (max-width: 520px) {
-      .issuance-grid { grid-template-columns: 1fr; }
-    }
-
-    .issuance-block h3 {
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #555;
-      margin-bottom: 0.5rem;
-    }
-
-    .issuance-block address {
-      font-style: normal;
-      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
       line-height: 1.6;
+    }
+
+    .eval-block ul {
+      margin: 0.25rem 0 0.5rem 1.5rem;
+      padding: 0;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .eval-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin: 0.4rem 0 1rem;
+    }
+
+    .eval-tag {
+      background: #f0f4f8;
+      border: 1px solid #d0dce8;
+      border-radius: 3px;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.8rem;
+      color: #2a3a4a;
+    }
+
+    .acr-field-value {
+      font-size: 1rem;
       white-space: pre-line;
+      margin: 0 0 0.5rem;
+      line-height: 1.6;
     }
 
-    .certificate-block {
-      background: #fff;
-      border: 1px solid #d7e0e5;
-      border-radius: 4px;
-      padding: 1rem 1.25rem;
-      margin-top: 0.75rem;
+    .acr-standards-value {
+      font-size: 1rem;
+      line-height: 2;
+      margin: 0 0 0.5rem;
     }
 
-    .certificate-block p {
-      font-size: 0.9rem;
+    .acr-standards-value a { color: #0057b8; }
+
+    .section-note {
+      font-size: 0.95rem;
+      color: #1a1b1f;
+      margin: 0 0 0.75rem;
+      line-height: 1.6;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #d7e0e5;
+      margin: 2.5rem 0;
+    }
+
+    .acr-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .acr-field-value ol,
+    .acr-field-value ul,
+    #acr-header ol,
+    #acr-header ul {
+      margin: 0.5rem 0 0.5rem 1.5rem;
+      padding: 0;
+      line-height: 1.8;
+    }
+
+    .acr-field-value ol li,
+    .acr-field-value ul li,
+    #acr-header ol li,
+    #acr-header ul li {
       margin-bottom: 0.25rem;
     }
 
-    .certificate-id {
-      font-family: monospace;
-      font-size: 1rem;
+    .acr-table caption {
+      text-align: left;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 0 0 0.5rem 0;
+      color: #1a1b1f;
+      caption-side: top;
+    }
+
+    .acr-table th {
+      background: #1a3a5c;
+      color: #fff;
+      text-align: left;
+      padding: 0.6rem 0.75rem;
       font-weight: 600;
+      border: 1px solid #0d2640;
     }
 
-    .acr-link-block {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #d7e0e5;
-      font-size: 0.9rem;
+    .acr-table td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #c3d2e0;
+      vertical-align: top;
+      line-height: 1.5;
     }
 
-    #loading, #error {
-      text-align: center;
-      padding: 4rem 1rem;
-      color: #555;
+    .acr-table tr:nth-child(even) td { background: #f5f8fb; }
+    .acr-table tr:nth-child(odd)  td { background: #fff; }
+
+    .acr-table tr.en-heading-row td {
+      background: #e8edf2 !important;
+      font-style: italic;
+      font-weight: 600;
+      color: #2a3a4a;
     }
 
-    #error { color: #7f1d1d; }
-    .hidden { display: none; }
+    .acr-conformance-supports { color: #1a6e35; font-weight: 600; }
+    .acr-conformance-partial  { color: #7a4a00; font-weight: 600; }
+    .acr-conformance-not      { color: #a01c1c; font-weight: 600; }
+    .acr-conformance-na       { color: #555;    font-weight: 600; }
+
+    .acr-en-ref {
+      display: block;
+      font-size: 0.85rem;
+      color: #444;
+      margin-top: 0.4rem;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .acr-en-ref ul {
+      margin: 0.2rem 0 0 1.25rem;
+      padding: 0;
+      list-style: disc;
+      font-style: normal;
+    }
+
+    .acr-en-ref ul li { margin-bottom: 0.15rem; }
+
+    .acr-terms ul {
+      padding-left: 1.5rem;
+      margin: 0.5rem 0 1rem;
+    }
+
+    .acr-terms li { margin-bottom: 0.35rem; }
+
+    .acr-note {
+      font-size: 0.95rem;
+      margin: 0.6rem 0;
+      line-height: 1.6;
+    }
+
+    .acr-note a, .section-note a { color: #0057b8; }
+    a { color: #0057b8; }
+    a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-  <div class="page-wrapper">
-    <div id="loading">Loading…</div>
-    <div id="error" class="hidden">This accessibility statement could not be loaded.</div>
+<main>
+<div class="page">
+  <div id="acr-header"><p style="color:#888">Loading report…</p></div>
+  <div id="acr-body"></div>
+</div>
+</main>
 
-    <div id="content" class="hidden">
+<script>
+(async function () {
 
-      <header class="site-header">
-        <img id="client-logo" class="client-logo hidden" src="" alt="" />
-        <div class="axall-badge">
-          Accessibility evaluated by<br>
-          <a href="https://axall.digital" target="_blank" rel="noopener">AxAll UAB</a>
-        </div>
-      </header>
+  function esc(str) {
+    return String(str || '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
 
-      <h1>Accessibility Statement</h1>
-      <p class="subtitle" id="page-subtitle"></p>
+  function getSlug() {
+    const host  = window.location.hostname;
+    const parts = host.split('.');
+    // accessibility.client.com → client
+    if ((parts[0] === 'accessibility' || parts[0] === 'prieinamumas') && parts.length >= 3) {
+      return parts.slice(1, -1).join('.');
+    }
+    return new URLSearchParams(window.location.search).get('slug') || '';
+  }
 
-      <hr style="border:none;border-top:1px solid #d7e0e5;margin:0 0 2.5rem">
+  // Detect lang from subdomain: prieinamumas.* → lt, else → en
+  function getLangFromHost() {
+    const parts = window.location.hostname.split('.');
+    if (parts[0] === 'prieinamumas') return 'lt';
+    return 'en';
+  }
 
-      <!-- How you should be able to use this -->
-      <section aria-labelledby="usage-heading">
-        <h2 id="usage-heading">How you should be able to use this <span id="product-type-label"></span></h2>
-        <div id="usage-text"></div>
-      </section>
+  const rawSlug   = getSlug();
+  const hostLang  = getLangFromHost();
+  // Append lang suffix to slug for KV lookup: axall:lt or axall:en
+  const slug      = rawSlug ? `${rawSlug}:${hostLang}` : '';
 
-      <!-- Compatibility (shown conditionally) -->
-      <section id="compatibility-section" aria-labelledby="compat-heading" class="hidden">
-        <h2 id="compat-heading">Compatibility with assistive technology</h2>
-        <div id="compat-text"></div>
-      </section>
+  let auditData = {}, acrData = {}, scopeData = {};
+  try {
+    const [ar, cr, sr] = await Promise.all([
+      fetch(`https://proxy.axall.digital/api/audit/${slug}`),
+      fetch(`https://proxy.axall.digital/api/acr/${slug}`),
+      fetch(`https://proxy.axall.digital/api/scope/${slug}`)
+    ]);
+    auditData  = await ar.json();
+    acrData    = await cr.json();
+    scopeData  = await sr.json();
+  } catch (e) {
+    document.getElementById('acr-header').innerHTML = '<p>Error loading report data.</p>';
+    return;
+  }
 
-      <!-- Limitations -->
-      <section aria-labelledby="limitations-heading">
-        <h2 id="limitations-heading">Limitations of this <span id="limitations-label"></span>'s accessibility</h2>
-        <div id="limitations-text"></div>
-        <p>For a complete list of known issues and their status, see the <a href="acr">Accessibility Conformance Report</a>.</p>
-      </section>
+  // ── Lang init ─────────────────────────────────────────────────────────────
+  const lang = auditData.lang || hostLang || 'en';
+  const t    = initLang(lang); // from translations.js — sets <html lang>
 
-      <!-- Feedback -->
-      <section aria-labelledby="feedback-heading">
-        <h2 id="feedback-heading">Feedback</h2>
-        <p>If you find anything on this <span id="feedback-label"></span> difficult to use, please contact us:</p>
-        <div id="contact-info"></div>
-        <p>To assist us in addressing your issue, we kindly ask you to provide the details recommended in <a href="https://www.w3.org/WAI/users/inaccessible" target="_blank" rel="noopener">"Contacting Organizations about Inaccessible Websites" (external site)</a> with your request. We appreciate all constructive feedback on the accessibility or usability of this <span id="feedback-label-2"></span> and will thoughtfully review it.</p>
-      </section>
+  // ── Data extraction from new Worker response shape ─────────────────────────
+  const clientName   = auditData.clientDetails || '';
+  const auditTitle   = langField(auditData.auditTitle, auditData.auditTitleLT, lang);
+  const productName  = langField(auditData.productVersion, auditData.productVersionLT, lang);
+  const reportDate   = auditData.auditDate || '';
+  const description  = langField(auditData.productDescription, auditData.productDescriptionLT, lang);
+  const contactText  = langField(auditData.contactInfo, auditData.contactInfoLT, lang);
+  const legal        = langField(auditData.legalDisclaimer, auditData.legalDisclaimerLT, lang);
+  const logoUrl      = auditData.logoUrl || '';
+  const vpat         = auditData.vpat || '';
+  const isEN         = vpat === 'EN 301 549';
+  const evaluators   = auditData.evaluators || [];
+  const methodologies = auditData.methodologies || [];
+  const settings     = auditData.settings || {};
 
-      <!-- Technical information -->
-      <section aria-labelledby="technical-heading">
-        <h2 id="technical-heading">Technical information about this <span id="technical-label"></span>'s accessibility</h2>
-        <p id="client-name-commitment"></p>
-        <h3 class="subsection">Compliance status</h3>
-        <p id="compliance-sentence"></p>
-        <p id="compliance-acr-note"></p>
-      </section>
+  const leadEvaluator     = evaluators.find(e => e.isLead) || evaluators[0] || null;
+  const disabilityReviewer = evaluators.find(e => e.isDisabilityReviewer) || evaluators[1] || null;
 
-      <!-- Preparation -->
-      <section aria-labelledby="preparation-heading">
-        <h2 id="preparation-heading">Preparation of this statement</h2>
-        <p id="preparation-date-sentence"></p>
-        <p id="preparation-testing-sentence"></p>
-      </section>
+  const records      = acrData.rows || [];
+  const scopeRecords = scopeData.rows || [];
 
-      <!-- Issuance -->
-      <section aria-labelledby="issuance-heading">
-        <h2 id="issuance-heading">Official issuance and approval</h2>
-        <div class="issuance-grid">
-          <div class="issuance-block">
-            <h3>Issued by</h3>
-            <address id="issued-by"></address>
-          </div>
-          <div class="issuance-block">
-            <h3>Approved by</h3>
-            <address id="approved-by"></address>
-          </div>
-        </div>
-      </section>
+  /* ── Standards table ──────────────────────────────────────────────────────── */
+  function renderStandards() {
+    const s = settings;
+    if (!vpat) return '<span>—</span>';
 
-      <!-- Certificate -->
-      <section aria-labelledby="cert-heading">
-        <h2 id="cert-heading">Accessibility evaluation certificate</h2>
-        <p>This <span id="cert-label"></span> has been evaluated by AxAll UAB and is listed on the <a id="registry-link" href="https://axall.digital/accessibility-registry" target="_blank" rel="noopener">Axall Accessibility Registry</a>.</p>
-        <div class="certificate-block">
-          <p>Certificate ID</p>
-          <p class="certificate-id" id="certificate-id"></p>
-        </div>
-      </section>
+    const rows = [];
+    const hasEN = isEN;
 
-      <!-- ACR link -->
-      <div class="acr-link-block">
-        <a href="acr">View the full Accessibility Conformance Report →</a>
+    if (hasEN) {
+      const en311Label = langField(s.en311LabelEN, s.en311LabelLT, lang);
+      const en321Label = langField(s.en321LabelEN, s.en321LabelLT, lang);
+      rows.push({
+        guidelineHtml:
+          `<a href="${esc(s.en311URL)}" target="_blank" rel="noopener">${esc(en311Label)}</a>` +
+          ` <em>AND</em> ` +
+          `<a href="${esc(s.en321URL)}" target="_blank" rel="noopener">${esc(en321Label)}</a>`,
+        includedHtml: '(Yes)',
+      });
+      // Auto-inject WCAG 2.0 and 2.1
+      const wcag20Label = langField(s.wcag20LabelEN, s.wcag20LabelLT, lang);
+      const wcag21Label = langField(s.wcag21LabelEN, s.wcag21LabelLT, lang);
+      rows.push({
+        guidelineHtml: `<a href="${esc(s.wcag20URL)}" target="_blank" rel="noopener">${esc(wcag20Label)}</a>`,
+        includedHtml:  `${t.thLevel} A (Yes)<br>${t.thLevel} AA (Yes)<br>${t.thLevel} AAA (No)`,
+      });
+      rows.push({
+        guidelineHtml: `<a href="${esc(s.wcag21URL)}" target="_blank" rel="noopener">${esc(wcag21Label)}</a>`,
+        includedHtml:  `${t.thLevel} A (Yes)<br>${t.thLevel} AA (Yes)<br>${t.thLevel} AAA (No)`,
+      });
+    } else {
+      const wcag21Label = langField(s.wcag21LabelEN, s.wcag21LabelLT, lang);
+      rows.push({
+        guidelineHtml: `<a href="${esc(s.wcag21URL)}" target="_blank" rel="noopener">${esc(wcag21Label)}</a>`,
+        includedHtml:  `${t.thLevel} A (Yes)<br>${t.thLevel} AA (Yes)<br>${t.thLevel} AAA (No)`,
+      });
+    }
+
+    if (!rows.length) return '<span>—</span>';
+
+    let table = `
+    <p>${esc(t.applicableStandards)}:</p>
+    <table class="acr-table acr-standards-table">
+      <caption class="sr-only">${esc(t.applicableStandards)}</caption>
+      <thead><tr>
+        <th style="width:70%">${esc(t.thStandard)}</th>
+        <th style="width:30%;text-align:center">${esc(t.thIncluded)}</th>
+      </tr></thead><tbody>`;
+    rows.forEach(row => {
+      table += `<tr><td>${row.guidelineHtml}</td><td style="text-align:center;vertical-align:middle">${row.includedHtml}</td></tr>`;
+    });
+    return table + '</tbody></table>';
+  }
+
+  /* ── Formatted text renderer ──────────────────────────────────────────────── */
+  function renderFormattedText(text) {
+    if (!text || !text.trim()) return '';
+    const lines = text.split('\n');
+    let html = '';
+    let ulOpen = false, olOpen = false, liOpen = false, subUlOpen = false;
+    const closeSubList = () => { if (subUlOpen) { html += '</ul>'; subUlOpen = false; } };
+    const closeLi      = () => { if (liOpen) { closeSubList(); html += '</li>'; liOpen = false; } };
+    const closeList    = () => {
+      if (ulOpen) { closeLi(); html += '</ul>'; ulOpen = false; }
+      if (olOpen) { closeLi(); html += '</ol>'; olOpen = false; }
+    };
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line) continue;
+      const isBullet   = /^[•●]/.test(line);
+      const isNumbered = /^\d+\.\s/.test(line);
+      const isSub      = /^[-–]/.test(line);
+      if (isBullet) {
+        if (olOpen) { closeLi(); html += '</ol>'; olOpen = false; }
+        if (!ulOpen) { html += '<ul>'; ulOpen = true; } else closeLi();
+        html  += `<li>${esc(line.replace(/^[•●]\s*/, ''))}`;
+        liOpen = true;
+      } else if (isNumbered) {
+        if (ulOpen) { closeLi(); html += '</ul>'; ulOpen = false; }
+        if (!olOpen) { html += '<ol>'; olOpen = true; } else closeLi();
+        html  += `<li>${esc(line.replace(/^\d+\.\s*/, ''))}`;
+        liOpen = true;
+      } else if (isSub) {
+        if (ulOpen || olOpen) {
+          if (!subUlOpen) { html += '<ul>'; subUlOpen = true; }
+          html += `<li>${esc(line.replace(/^[-–]\s*/, ''))}</li>`;
+        } else {
+          if (!ulOpen) { html += '<ul>'; ulOpen = true; } else closeLi();
+          html += `<li>${esc(line.replace(/^[-–]\s*/, ''))}</li>`;
+        }
+      } else {
+        closeList();
+        html += `<p class="acr-field-value">${esc(line)}</p>`;
+      }
+    }
+    closeList();
+    return html || `<p class="acr-field-value">${esc(text)}</p>`;
+  }
+
+  /* ── Evaluation Scope renderer ────────────────────────────────────────────── */
+  function renderEvalScope(rows) {
+    if (!rows || !rows.length) return '';
+    let html = '<ol>';
+    rows.forEach(r => {
+      if (r.url) {
+        html += `<li><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a></li>`;
+      } else if (r.name) {
+        html += `<li>${esc(r.name)}</li>`;
+      }
+    });
+    return html + '</ol>';
+  }
+
+  /* ── Rich text renderer for contact field ─────────────────────────────────── */
+  function renderRichContact(text) {
+    if (!text) return '';
+    const lines = text.split('\n');
+    let html = '';
+    let inList = false;
+    const convertInline = (line) => {
+      return line
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+          (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
+        .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
+          (_, label, url) => `<a href="${url}">${label}</a>`)
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .replace(/(?<![/"'>])([\w.+-]+@[\w-]+\.[\w.]+)(?![^<]*<\/a>)/g,
+          email => `<a href="mailto:${email}">${email}</a>`);
+    };
+    lines.forEach(raw => {
+      const line = raw.trim();
+      if (!line) { if (inList) { html += '</ul>'; inList = false; } return; }
+      if (/^[-*•●]\s+/.test(line)) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += `<li>${convertInline(line.replace(/^[-*•●]\s+/, ''))}</li>`;
+      } else {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<p class="acr-field-value">${convertInline(line)}</p>`;
+      }
+    });
+    if (inList) html += '</ul>';
+    return html;
+  }
+
+  /* ── Contact / Evaluators section ────────────────────────────────────────── */
+  function renderContact(contactTxt, evals) {
+    let html = '';
+    if (contactTxt) html += renderRichContact(contactTxt);
+
+    const lead     = evals.find(e => e.isLead) || evals[0];
+    const disReviewer = evals.find(e => e.isDisabilityReviewer) || (evals.length > 1 ? evals[1] : null);
+
+    if (lead && lead.name) {
+      const heading = disReviewer && disReviewer.name ? t.evaluators : t.evaluators;
+      html += `<h3 class="eval-block-title">${esc(heading)}</h3>`;
+      html += `<p>Lead Evaluator: ${esc(lead.name)}`;
+      const jobTitle = langField(lead.jobTitle, lead.jobTitleLT, lang);
+      if (jobTitle) html += ` — ${esc(jobTitle)}`;
+      html += `</p>`;
+    }
+
+    if (disReviewer && disReviewer.name) {
+      const jobTitle = langField(disReviewer.jobTitle, disReviewer.jobTitleLT, lang);
+      const org      = langField(disReviewer.organisation, disReviewer.organisationLT, lang);
+      html += `<p>Disability Reviewer: ${esc(disReviewer.name)}`;
+      if (jobTitle) html += ` — ${esc(jobTitle)}`;
+      if (disReviewer.disability) html += ` (${esc(disReviewer.disability)})`;
+      html += `</p>`;
+    }
+
+    return html;
+  }
+
+  /* ── Evaluation Methods renderer ──────────────────────────────────────────── */
+  function renderEvalMethods(methods, evalData) {
+    const assistiveTechs = evalData.assistiveTech ? evalData.assistiveTech.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const autoTools      = evalData.automatedTools ? evalData.automatedTools.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+    if (!methods.length && !assistiveTechs.length && !autoTools.length) return '';
+    let html = '';
+
+    methods.forEach(m => {
+      const name     = langField(m.name, m.nameLT, lang);
+      const desc     = langField(m.description, m.descriptionLT, lang);
+      const tools    = langField(m.tools, m.toolsLT, lang);
+      const coverage = langField(m.coverage, m.coverageLT, lang);
+
+      html += `<h3 class="eval-block-title">${esc(name)}`;
+      if (coverage) html += ` <span style="font-weight:400;color:#1a1b1f;">(${esc(coverage)})</span>`;
+      html += `</h3>`;
+      if (desc) html += `<p>${esc(desc)}</p>`;
+      if (tools && tools.trim()) html += renderFormattedText(tools);
+    });
+
+    if (assistiveTechs.length) {
+      html += `<h3 class="eval-block-title">${esc(t.assistiveTech)}</h3>`;
+      html += `<div class="eval-tags">`;
+      assistiveTechs.forEach(tech => { html += `<span class="eval-tag">${esc(tech)}</span>`; });
+      html += `</div>`;
+    }
+
+    if (autoTools.length) {
+      html += `<h3 class="eval-block-title">${esc(t.automatedTools)}</h3>`;
+      html += `<div class="eval-tags">`;
+      autoTools.forEach(tool => { html += `<span class="eval-tag">${esc(tool)}</span>`; });
+      html += `</div>`;
+    }
+
+    return html;
+  }
+
+  /* ── Build evaluation intro sentence ─────────────────────────────────────── */
+  const scopeCount  = scopeRecords.length;
+  const shortLabel  = langField(auditData.productType?.referredAsEN, auditData.productType?.referredAsLT, lang) || 'website';
+  const scopeWord   = shortLabel === 'application' ? 'screens'
+                    : shortLabel === 'document'    ? 'documents'
+                    : shortLabel === 'documents'   ? 'documents'
+                    : shortLabel === 'software'    ? 'screens'
+                    : 'web pages';
+
+  const hasDisReviewer = evaluators.length > 1 && evaluators[1]?.name;
+  let specialistText = 'AxAll UAB specialist';
+  if (hasDisReviewer) {
+    const org = langField(evaluators[1].organisation, evaluators[1].organisationLT, lang);
+    specialistText = `AxAll UAB and ${org || 'disability community'} specialists`;
+  }
+
+  const evalIntro = scopeCount > 0
+    ? `This conformance report is based on the results of an accessibility evaluation conducted by ${specialistText}, which included a sample of ${scopeCount} ${scopeWord}. These ${scopeWord} were selected by AxAll UAB as representative of the overall accessibility and functionality of the ${esc(auditTitle)}. The ${scopeWord} are listed below in the section "${t.scopeSection}".`
+    : `This conformance report is based on the results of an accessibility evaluation conducted by ${specialistText}.`;
+
+  /* ── Header HTML ──────────────────────────────────────────────────────────── */
+  const contactHtml = renderContact(contactText, evaluators);
+  const evalHtml    = renderEvalMethods(methodologies, auditData);
+
+  const headerHtml = `
+    <header class="site-header">
+      ${logoUrl ? `<img class="client-logo" src="${esc(logoUrl)}" alt="${esc(clientName)} logo" />` : '<div></div>'}
+      <div class="axall-badge">
+        ${lang === 'lt' ? 'Prieinamumą įvertino' : 'Accessibility evaluated by'}<br>
+        <a href="https://axall.digital" target="_blank" rel="noopener">AxAll UAB</a>
       </div>
+    </header>
 
-    </div><!-- /#content -->
+    <h1 class="acr-title">${esc(auditTitle) ? esc(auditTitle) + ' ' + esc(t.pageTitle) : esc(t.pageTitle)}</h1>
+    ${vpat ? `<p class="acr-edition">${esc(vpat)} ${esc(t.reportSubtitle)}</p>` : ''}
+    <p class="acr-vpat-version">(${esc(t.vpatEditionNote)})</p>
+
+    <hr/>
+
+    <h2>${esc(t.nameOfProduct)}</h2>
+    <p class="acr-field-value">${esc(productName) || '—'}</p>
+
+    <h2>${esc(t.reportDate)}</h2>
+    <p class="acr-field-value">${esc(reportDate) || '—'}</p>
+
+    ${description ? `<h2>${esc(t.productDescription)}</h2><p class="acr-field-value">${esc(description)}</p>` : ''}
+
+    ${contactHtml ? `<h2>${esc(t.contactInfo)}</h2>${contactHtml}` : ''}
+
+    ${evalHtml ? `<h2>${esc(t.evalMethodsUsed)}</h2><p class="acr-field-value">${evalIntro}</p>${evalHtml}` : ''}
+
+    ${scopeRecords.length ? `<h2>${esc(t.scopeSection)}</h2>${renderEvalScope(scopeRecords)}` : ''}
+
+    <h2>${esc(t.applicableStandards)}</h2>
+    ${renderStandards()}
+  `;
+
+  document.getElementById('acr-header').innerHTML = headerHtml;
+
+  /* ── Parse ACR rows ───────────────────────────────────────────────────────── */
+  const wcagA  = [];
+  const wcagAA = [];
+  const enByChapter = {};
+
+  records.forEach(r => {
+    const criterionId  = r.criterionId || '';
+    const name         = langField(r.criterionName, r.criterionNameLT, lang);
+    const level        = r.level || '';
+    const refUrl       = r.referenceUrl || '';
+    const conformance  = r.conformance || '';
+    const remarks      = langField(r.remarks, r.remarksLT, lang);
+    const enRef        = langField(r.en301549Ref, r.en301549RefLT, lang);
+    const sectionNotes = r.enSectionNoteOverride || r.enSectionNote || '';
+    const row = { criterionId, name, level, refUrl, conformance, remarks, enRef, sectionNotes };
+
+    const firstNum = parseFloat(criterionId);
+    if (isNaN(firstNum)) return;
+    if (firstNum >= 1 && firstNum < 5) {
+      if (level === 'A')       wcagA.push(row);
+      else if (level === 'AA') wcagAA.push(row);
+    } else if (firstNum >= 5 && firstNum <= 13) {
+      const ch = Math.floor(firstNum);
+      if (!enByChapter[ch]) enByChapter[ch] = [];
+      enByChapter[ch].push(row);
+    }
+  });
+
+  const numSort = (a, b) => a.criterionId.localeCompare(b.criterionId, undefined, { numeric: true });
+  wcagA.sort(numSort);
+  wcagAA.sort(numSort);
+  Object.values(enByChapter).forEach(arr => arr.sort(numSort));
+
+  /* ── Renderers ────────────────────────────────────────────────────────────── */
+  function renderEnRef(text) {
+    if (!text || !text.trim()) return '';
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean)
+      .map(l => l.replace(/^[•●\-\*]\s*/, '').trim()).filter(Boolean);
+    if (!lines.length) return '';
+    const label = lang === 'lt' ? 'Taip pat taikoma: EN 301 549 kriterijai' : 'Also applies to: EN 301 549 Criteria';
+    return `<span class="acr-en-ref"><em>${label}</em><ul>${lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul></span>`;
+  }
+
+  function conformanceClass(c) {
+    if (c === 'Supports')           return 'acr-conformance-supports';
+    if (c === 'Partially Supports') return 'acr-conformance-partial';
+    if (c === 'Does Not Support')   return 'acr-conformance-not';
+    if (c === 'Not Applicable')     return 'acr-conformance-na';
+    return '';
+  }
+
+  function renderWcagTable(title, rows, showEnRef) {
+    if (!rows.length) return '';
+    let html = `
+    <table class="acr-table">
+      <caption>${esc(title)}</caption>
+      <thead><tr>
+        <th style="width:38%">${esc(t.thCriteria)}</th>
+        <th style="width:18%">${esc(t.thConformance)}</th>
+        <th style="width:44%">${esc(t.thRemarks)}</th>
+      </tr></thead><tbody>`;
+    rows.forEach(row => {
+      const cls          = conformanceClass(row.conformance);
+      const confLabel    = conformanceLabel(row.conformance, t);
+      const levelLabel   = `(${t.thLevel} ${esc(row.level)})`;
+      const criterionLink = row.refUrl
+        ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a> ${levelLabel}`
+        : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong> ${levelLabel}`;
+      const enRefHtml = (showEnRef && row.enRef) ? renderEnRef(row.enRef) : '';
+      html += `<tr><td>${criterionLink}${enRefHtml}</td><td class="${cls}">${esc(confLabel)}</td><td>${esc(row.remarks)}</td></tr>`;
+    });
+    return html + '</tbody></table>';
+  }
+
+  function renderEnChapterTable(rows) {
+    if (!rows.length) return '';
+    const headingCellLabel = lang === 'lt' ? 'Antraštės eilutė – atsakymo nereikia' : 'Heading cell – no response required';
+    let html = `
+    <table class="acr-table">
+      <thead><tr>
+        <th style="width:38%">${esc(t.thCriteria)}</th>
+        <th style="width:18%">${esc(t.thConformance)}</th>
+        <th style="width:44%">${esc(t.thRemarks)}</th>
+      </tr></thead><tbody>`;
+    rows.forEach(row => {
+      const isHeading = row.conformance.includes('Heading cell');
+      if (isHeading) {
+        html += `<tr class="en-heading-row"><td><strong><em>${esc(row.criterionId)} ${esc(row.name)}</em></strong></td><td>${headingCellLabel}</td><td>${headingCellLabel}</td></tr>`;
+      } else {
+        const cls       = conformanceClass(row.conformance);
+        const confLabel = conformanceLabel(row.conformance, t);
+        const criterionLabel = row.refUrl
+          ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a>`
+          : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong>`;
+        html += `<tr><td>${criterionLabel}</td><td class="${cls}">${esc(confLabel)}</td><td>${esc(row.remarks)}</td></tr>`;
+      }
+    });
+    return html + '</tbody></table>';
+  }
+
+  /* ── EN chapter metadata ──────────────────────────────────────────────────── */
+  const EN_BASE = 'https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf';
+  const EN_CHAPTERS = {
+    4:  { url: `${EN_BASE}#page=20`,
+          note: lang === 'lt'
+            ? 'Netaikoma. Šis skyrius yra informacinis ir jame nėra reikalavimų, kurių laikymasis turi būti tikrinamas. Kiekvienas vertinamo produkto funkcionalumo aspektas aprašytas techninių reikalavimų lentelėse.'
+            : 'Not Applicable. This chapter is informative and does not contain requirements requiring testing. Each aspect of the product\'s functionality under evaluation is described in detail within the technical requirements tables.' },
+    5:  { url: `${EN_BASE}#page=23` },
+    6:  { url: `${EN_BASE}#page=30` },
+    7:  { url: `${EN_BASE}#page=35` },
+    8:  { url: `${EN_BASE}#page=37` },
+    9:  { url: `${EN_BASE}#page=45` },
+    10: { url: `${EN_BASE}#page=52` },
+    11: { url: `${EN_BASE}#page=64` },
+    12: { url: `${EN_BASE}#page=84` },
+    13: { url: `${EN_BASE}#page=86` },
+  };
+
+  /* ── Build body ───────────────────────────────────────────────────────────── */
+  let body = '';
+
+  body += `
+  <hr/>
+  <h2>${esc(t.termsSection)}</h2>
+  <div class="acr-terms">
+    <p>${esc(t.termsIntro)}</p>
+    <ul>
+      <li><strong>${esc(t.termSupports)}</strong>: ${esc(t.termSupportsDesc)}</li>
+      <li><strong>${esc(t.termPartiallySup)}</strong>: ${esc(t.termPartiallySupDesc)}</li>
+      <li><strong>${esc(t.termDoesNotSup)}</strong>: ${esc(t.termDoesNotSupDesc)}</li>
+      <li><strong>${esc(t.termNotApplicable)}</strong>: ${esc(t.termNotApplicableDesc)}</li>
+      <li><strong>${esc(t.termNotEvaluated)}</strong>: ${esc(t.termNotEvaluatedDesc)}</li>
+    </ul>
+    <p class="acr-note"><strong>${lang === 'lt' ? 'Pastaba' : 'Note'}</strong>: ${t.noteWcagSupports}</p>
+    <p class="acr-note"><strong>${lang === 'lt' ? 'Pastaba' : 'Note'}</strong>: ${t.noteWcagVerified}</p>
+    <p class="acr-note"><strong>${lang === 'lt' ? 'Pastaba' : 'Note'}</strong>: ${t.noteEnNotApplicable}</p>
   </div>
+  <hr/>`;
 
-  <script>
-    function slug() {
-      const parts = window.location.hostname.split('.');
-      if (parts[0] === 'accessibility' && parts.length >= 3) return parts[1];
-      return new URLSearchParams(window.location.search).get('slug') || '';
-    }
+  if (isEN) {
+    body += `
+    <h2 id="wcag-report">${esc(t.wcagReport)}</h2>
+    <p>${esc(t.wcagReportIntro)}</p>
+    <ul>${t.wcagReportClauses}</ul>
+    <p class="section-note">${t.wcagReportNote}</p>`;
+  } else {
+    body += `
+    <h2 id="wcag-report">${esc(t.wcagReport)}</h2>
+    <p class="section-note">${t.wcagReportNote}</p>`;
+  }
 
-    function setText(id, val) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = val || '';
-    }
+  body += renderWcagTable(t.tableLevelA,  wcagA,  isEN);
+  body += renderWcagTable(t.tableLevelAA, wcagAA, isEN);
 
-    function setHtml(id, val) {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = val || '';
-    }
+  if (isEN) {
+    body += `<hr/><h2>${esc(t.enReport)}</h2>`;
+    for (let ch = 4; ch <= 13; ch++) {
+      const meta = EN_CHAPTERS[ch];
+      if (!meta) continue;
+      const rows         = enByChapter[ch] || [];
+      const chapterLabel = clauseLabel(`${ch === 4 ? '4 - Functional Performance Statements (FPS)' : ch === 5 ? '5 - Generic Requirements' : ch === 6 ? '6 - ICT with Two-Way Voice Communication' : ch === 7 ? '7 - ICT with Video Capabilities' : ch === 8 ? '8 - Hardware' : ch === 9 ? '9 - Web' : ch === 10 ? '10 - Non-Web Documents' : ch === 11 ? '11 - Software' : ch === 12 ? '12 - Documentation and Support Services' : '13 - ICT Providing Relay or Emergency Service Access'}`, lang);
+      const chapterHeading = `${t.enClauseLabel} ${ch}: ${chapterLabel.replace(/^\d+ - /, '')}`;
 
-    function show(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('hidden');
-    }
-
-    function hide(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('hidden');
-    }
-
-    function formatDate(isoDate) {
-      if (!isoDate) return '';
-      return new Date(isoDate + 'T12:00:00').toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'long', year: 'numeric'
-      });
-    }
-
-    // Renders address block — converts markdown links and bare URLs/emails to HTML
-    function renderAddress(text) {
-      if (!text) return '';
-      return text.split('\n')
-        .filter(l => l.trim())
-        .map(line => {
-          // markdown link [label](url)
-          if (/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/.test(line)) {
-            return line
-              .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
-                (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
-              .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
-                (_, label, url) => `<a href="${url}">${label}</a>`);
-          }
-          // markdown mailto [label](mailto:...)
-          if (/\[([^\]]+)\]\((mailto:[^)]+)\)/.test(line)) {
-            return line.replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
-              (_, label, url) => `<a href="${url}">${label}</a>`);
-          }
-          // bare URL
-          if (/^https?:\/\//.test(line.trim())) {
-            const url = line.trim();
-            return `<a href="${url}" target="_blank" rel="noopener">${url.replace(/^https?:\/\//, '')}</a>`;
-          }
-          // bare domain (www.xxx.xxx)
-          if (/^www\./.test(line.trim())) {
-            const domain = line.trim();
-            return `<a href="https://${domain}" target="_blank" rel="noopener">${domain}</a>`;
-          }
-          // bare email
-          if (/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(line.trim())) {
-            const email = line.trim();
-            return `<a href="mailto:${email}">${email}</a>`;
-          }
-          return line;
-        })
-        .join('<br>');
-    }
-
-    // Renders contact info field — handles Airtable rich text markdown
-    function renderContactInfo(text) {
-      if (!text) return '';
-      const lines = text.split('\n');
-      let html = '';
-      let inList = false;
-
-      const convertInline = (line) => {
-        return line
-          // markdown links [label](url)
-          .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
-            (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
-          .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g,
-            (_, label, url) => `<a href="${url}">${label}</a>`)
-          // bold **text**
-          .replace(/\*\*(.*?)\*\*/g, '$1')
-          // bare emails not already in an href
-          .replace(/(?<![/"'>])([\w.+-]+@[\w-]+\.[\w.]+)(?![^<]*<\/a>)/g,
-            email => `<a href="mailto:${email}">${email}</a>`);
-      };
-
-      lines.forEach(raw => {
-        const line = raw.trim();
-        if (!line) {
-          if (inList) { html += '</ul>'; inList = false; }
-          return;
-        }
-        if (/^[-*•●]\s+/.test(line)) {
-          if (!inList) { html += '<ul>'; inList = true; }
-          html += `<li>${convertInline(line.replace(/^[-*•●]\s+/, ''))}</li>`;
-        } else {
-          if (inList) { html += '</ul>'; inList = false; }
-          html += `<p>${convertInline(line)}</p>`;
-        }
-      });
-
-      if (inList) html += '</ul>';
-      return html;
-    }
-
-    function renderRichText(text) {
-      if (!text || !text.trim()) return '';
-      const lines = text.split('\n');
-      let html = '';
-      lines.forEach(raw => {
-        const line = raw.trim();
-        if (!line) return;
-        if (/^#{1,6}\s+/.test(line)) {
-          html += `<h3 style="font-size:1rem;font-weight:600;margin:1rem 0 0.35rem">${line.replace(/^#{1,6}\s+/, '')}</h3>`;
-        } else if (/^[•●]\s+/.test(line)) {
-          html += `<ul style="padding-left:1.25rem;margin-bottom:0.5rem"><li>${line.replace(/^[•●]\s+/, '')}</li></ul>`;
-        } else {
-          html += `<p>${line}</p>`;
-        }
-      });
-      return html;
-    }
-
-    function renderUsageText(text) {
-      if (!text) return '';
-      let html = text.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
-        (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`
-      );
-      html = html.replace(/\((https?:\/\/[^)]+)\)/g,
-        (_, url) => `(<a href="${url}" target="_blank" rel="noopener">${url.replace(/^https?:\/\//, '')}</a>)`
-      );
-      const paras = html.split(/\n\n+/).filter(p => p.trim());
-      return paras.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
-    }
-
-    async function init() {
-      const s = slug();
-      if (!s) { showError(); return; }
-
-      let data;
-      try {
-        const resp = await fetch(`https://proxy.axall.digital/api/statement/${s}`);
-        if (!resp.ok) throw new Error(resp.status);
-        data = await resp.json();
-      } catch (e) {
-        showError();
-        return;
+      if (ch === 4) {
+        body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${esc(chapterHeading)}</a></h3>`;
+        body += `<p class="section-note">${lang === 'lt' ? 'Pastabos' : 'Notes'}: ${meta.note}</p>`;
+        continue;
+      }
+      if (ch === 9) {
+        const seeLabel = lang === 'lt' ? 'žr. WCAG 2.x skyrių' : 'see WCAG 2.x section';
+        body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${esc(chapterHeading)}</a> (<a href="#wcag-report">${seeLabel}</a>)</h3>`;
+        body += `<p class="section-note">${lang === 'lt' ? 'Žr. WCAG 2.x skyrių aukščiau.' : 'See WCAG 2.x section above.'}</p>`;
+        continue;
       }
 
-      render(data);
+      const contentRows  = rows.filter(r => !r.conformance.includes('Heading cell'));
+      const noteRow      = rows.find(r => r.sectionNotes && r.sectionNotes.trim());
+      const chapterNote  = noteRow ? noteRow.sectionNotes.trim() : '';
+      body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${esc(chapterHeading)}</a></h3>`;
+      if (chapterNote) body += `<p class="section-note">${lang === 'lt' ? 'Pastabos' : 'Notes'}: ${esc(chapterNote)}</p>`;
+      const hasActiveRows = contentRows.some(r => r.conformance !== 'Not Applicable');
+      if (hasActiveRows) body += renderEnChapterTable(rows);
     }
+  }
 
-    function showError() {
-      hide('loading');
-      show('error');
-    }
+  if (legal) {
+    body += `<hr/><h2>${esc(t.legalDisclaimer)}</h2><p style="white-space:pre-line">${esc(legal)}</p>`;
+  }
 
-    function render(d) {
-      hide('loading');
-      show('content');
+  document.getElementById('acr-body').innerHTML = body;
 
-      const label = d.shortLabel || 'product';
-
-      // ── Page title
-      document.title = `Accessibility Statement — ${d.auditTitle}`;
-
-      // ── Intro
-      setHtml('page-subtitle', d.introSentence || '');
-
-      // ── Logo
-      if (d.logoUrl) {
-        const logo = document.getElementById('client-logo');
-        logo.src  = d.logoUrl;
-        logo.alt  = `${d.clientName} logo`;
-        show('client-logo');
-      }
-
-      // ── Product type labels
-      setText('product-type-label',  label);
-      setText('limitations-label',   label);
-      setText('feedback-label',      label);
-      setText('feedback-label-2',    label);
-      setText('technical-label',     label);
-      setText('preparation-label',   label);
-      setText('cert-label',          label);
-
-      // ── How to use
-      setHtml('usage-text', d.usageText
-        ? renderUsageText(d.usageText)
-        : `<p>We strive to make this ${label} inclusive and easy to use for people of all abilities.</p>`
-      );
-
-      // ── Compatibility
-      if (d.showCompat && d.compatText) {
-        setHtml('compat-text', renderRichText(d.compatText));
-        show('compatibility-section');
-      }
-
-      // ── Limitations
-      const limHtml = d.knownLimitations
-        ? renderRichText(d.knownLimitations)
-        : `<p>Parts of this ${label} are not fully accessible. Known limitations are documented in the Accessibility Conformance Report.</p>`;
-      const fixNote = d.plannedFixTimeline
-        ? `<p>We are actively working to address these issues. Significant improvements are planned for ${d.plannedFixTimeline}.</p>`
-        : `<p>We are actively working to address these issues and welcome your feedback.</p>`;
-      setHtml('limitations-text', limHtml + fixNote);
-
-      // ── Feedback
-      setHtml('contact-info', renderContactInfo(d.contactInformation || ''));
-
-      // ── Technical / compliance
-      const labelCapital = label.charAt(0).toUpperCase() + label.slice(1);
-      setText('client-name-commitment',
-        `${d.clientName} is committed to making its ${label} accessible, in accordance with ${d.directive || 'Directive (EU) 2019/882 on the accessibility requirements for products and services (European Accessibility Act, EAA)'}.`
-      );
-
-      const statusLower = (d.complianceStatus || '').toLowerCase();
-      let statusText    = 'partially compliant';
-
-      if (statusLower.includes('fully')) {
-        statusText = 'fully compliant';
-      } else if (statusLower.includes('does not') || statusLower.includes('non')) {
-        statusText = 'not compliant';
-      }
-
-      setHtml('compliance-sentence',
-        `The ${labelCapital} is ${statusText} with the ${d.complianceStandardHtml || d.standard}.`
-      );
-
-      setHtml('compliance-acr-note',
-        `The compliance status is based on the results of a digital accessibility conformance evaluation. Detailed information about the evaluation, including its findings, scope, and methods, can be found in the <a href="acr">Accessibility Conformance Report</a>.`
-      );
-
-      // ── Preparation
-      const preparedOn   = formatDate(d.statementDate);
-      const reviewedOn   = formatDate(d.lastReviewedDate);
-      const reviewedPart = reviewedOn ? ` and last reviewed on <strong>${reviewedOn}</strong>` : '';
-      setHtml('preparation-date-sentence',
-        `This accessibility statement was prepared on <strong>${preparedOn}</strong>${reviewedPart}.`
-      );
-      setHtml('preparation-testing-sentence',
-        `The ${label} underwent testing in <strong>${d.testingPeriod || '—'}</strong> against the ${d.standard || 'applicable standard'}. The evaluation was conducted by AxAll UAB.`
-      );
-
-      // ── Issuance — rendered with link support
-      const issuedByEl = document.getElementById('issued-by');
-      if (issuedByEl) issuedByEl.innerHTML = renderAddress(d.axallDetails) || 'AxAll UAB';
-
-      const approvedByEl = document.getElementById('approved-by');
-      if (approvedByEl) approvedByEl.innerHTML = renderAddress(d.clientDetails) || d.clientName;
-
-      // ── Certificate
-      setText('certificate-id', d.certificateId);
-      if (d.registryUrl) {
-        const link = document.getElementById('registry-link');
-        if (link) link.href = d.registryUrl;
-      }
-
-      document.documentElement.lang = 'en';
-    }
-
-    init();
-  </script>
+})();
+</script>
 </body>
 </html>
