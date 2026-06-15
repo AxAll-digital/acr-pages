@@ -65,12 +65,6 @@
       text-decoration: underline;
     }
 
-    .acr-logo {
-      max-width: 180px;
-      margin-bottom: 2rem;
-      display: block;
-    }
-
     .acr-title {
       font-size: 2rem;
       font-weight: 700;
@@ -108,25 +102,14 @@
       margin: 2.5rem 0 0.4rem;
     }
 
-    h3.section-heading a {
-      color: inherit;
-    }
+    h3.section-heading a { color: inherit; }
 
-    /* Evaluator / method blocks */
-    .eval-block {
-      margin-bottom: 1.25rem;
-    }
+    .eval-block { margin-bottom: 1.25rem; }
 
     .eval-block-title {
       font-size: 1.1rem;
       font-weight: 700;
       margin: 2rem 0 0.4rem;
-    }
-
-    .eval-block-subtitle {
-      font-size: 1rem;
-      color: #1a1b1f;
-      margin-bottom: 0.35rem;
     }
 
     .eval-block p {
@@ -171,9 +154,7 @@
       margin: 0 0 0.5rem;
     }
 
-    .acr-standards-value a {
-      color: #0057b8;
-    }
+    .acr-standards-value a { color: #0057b8; }
 
     .section-note {
       font-size: 0.95rem;
@@ -305,124 +286,114 @@
       .replace(/"/g,'&quot;');
   }
 
-  function lookupVal(v) {
-    if (!v) return '';
-    if (typeof v === 'string') return v;
-    if (typeof v === 'object' && v.name) return v.name;
-    if (Array.isArray(v)) {
-      const first = v[0];
-      if (!first) return '';
-      return typeof first === 'object' && first.name ? first.name : String(first);
-    }
-    if (v.linkedRecordIds && v.valuesByLinkedRecordId) {
-      const id  = v.linkedRecordIds[0];
-      if (!id) return '';
-      const vals = v.valuesByLinkedRecordId[id];
-      if (!vals || !vals.length) return '';
-      const first = vals[0];
-      return typeof first === 'object' && first.name ? first.name : String(first);
-    }
-    return '';
-  }
-
   function getSlug() {
-    const parts = window.location.hostname.split('.');
-    if (parts[0] === 'accessibility' && parts.length >= 3) return parts[1];
+    const host  = window.location.hostname;
+    const parts = host.split('.');
+    // accessibility.client.com → client
+    if ((parts[0] === 'accessibility' || parts[0] === 'prieinamumas') && parts.length >= 3) {
+      return parts.slice(1, -1).join('.');
+    }
     return new URLSearchParams(window.location.search).get('slug') || '';
   }
-  const slug = getSlug();
 
-  let auditData = {}, records = [], scopeRecords = [];
+  // Detect lang from subdomain: prieinamumas.* → lt, else → en
+  function getLangFromHost() {
+    const parts = window.location.hostname.split('.');
+    if (parts[0] === 'prieinamumas') return 'lt';
+    return 'en';
+  }
+
+  const rawSlug   = getSlug();
+  const hostLang  = getLangFromHost();
+  // Append lang suffix to slug for KV lookup: axall:lt or axall:en
+  const slug      = rawSlug ? `${rawSlug}:${hostLang}` : '';
+
+  let auditData = {}, acrData = {}, scopeData = {};
   try {
     const [ar, cr, sr] = await Promise.all([
       fetch(`https://proxy.axall.digital/api/audit/${slug}`),
       fetch(`https://proxy.axall.digital/api/acr/${slug}`),
       fetch(`https://proxy.axall.digital/api/scope/${slug}`)
     ]);
-    auditData    = await ar.json();
-    records      = (await cr.json()).records || [];
-    scopeRecords = (await sr.json()).records || [];
+    auditData  = await ar.json();
+    acrData    = await cr.json();
+    scopeData  = await sr.json();
   } catch (e) {
     document.getElementById('acr-header').innerHTML = '<p>Error loading report data.</p>';
     return;
   }
 
-  const {
-    clientName            = '',
-    auditTitle            = '',
-    productName           = '',
-    reportDate            = '',
-    description           = '',
-    axallContact          = '',
-    leadEvaluator         = null,
-    disabilityReviewer    = null,
-    methodRecords         = [],
-    assistiveTechnologies = [],
-    automatedTools        = [],
-    standard              = '',
-    vpat                  = '',
-    legal                 = '',
-    logoUrl               = ''
-  } = auditData;
+  // ── Lang init ─────────────────────────────────────────────────────────────
+  const lang = auditData.lang || hostLang || 'en';
+  const t    = initLang(lang); // from translations.js — sets <html lang>
 
-  const isEN = vpat === 'EN 301 549';
+  // ── Data extraction from new Worker response shape ─────────────────────────
+  const clientName   = auditData.clientDetails || '';
+  const auditTitle   = langField(auditData.auditTitle, auditData.auditTitleLT, lang);
+  const productName  = langField(auditData.productVersion, auditData.productVersionLT, lang);
+  const reportDate   = auditData.auditDate || '';
+  const description  = langField(auditData.productDescription, auditData.productDescriptionLT, lang);
+  const contactText  = langField(auditData.contactInfo, auditData.contactInfoLT, lang);
+  const legal        = langField(auditData.legalDisclaimer, auditData.legalDisclaimerLT, lang);
+  const logoUrl      = auditData.logoUrl || '';
+  const vpat         = auditData.vpat || '';
+  const isEN         = vpat === 'EN 301 549';
+  const evaluators   = auditData.evaluators || [];
+  const methodologies = auditData.methodologies || [];
+  const settings     = auditData.settings || {};
 
-  /* ── Standards table ─────────────────────────── */
-  function renderStandards(stdStr) {
-    if (!stdStr) return '<span>—</span>';
-    const items = stdStr.split(',').map(s => s.trim()).filter(Boolean);
+  const leadEvaluator     = evaluators.find(e => e.isLead) || evaluators[0] || null;
+  const disabilityReviewer = evaluators.find(e => e.isDisabilityReviewer) || evaluators[1] || null;
+
+  const records      = acrData.rows || [];
+  const scopeRecords = scopeData.rows || [];
+
+  /* ── Standards table ──────────────────────────────────────────────────────── */
+  function renderStandards() {
+    const s = settings;
+    if (!vpat) return '<span>—</span>';
+
     const rows = [];
-    let enAdded = false;
+    const hasEN = isEN;
 
-    const hasEN     = items.some(s => s.toLowerCase().includes('en 301 549'));
-    const hasWcag20 = items.some(s => s.toLowerCase().includes('wcag 2.0'));
-    const hasWcag21 = items.some(s => s.toLowerCase().includes('wcag 2.1'));
     if (hasEN) {
-      if (!hasWcag21) items.unshift('WCAG 2.1 AA');
-      if (!hasWcag20) items.unshift('WCAG 2.0 AA');
+      const en311Label = langField(s.en311LabelEN, s.en311LabelLT, lang);
+      const en321Label = langField(s.en321LabelEN, s.en321LabelLT, lang);
+      rows.push({
+        guidelineHtml:
+          `<a href="${esc(s.en311URL)}" target="_blank" rel="noopener">${esc(en311Label)}</a>` +
+          ` <em>AND</em> ` +
+          `<a href="${esc(s.en321URL)}" target="_blank" rel="noopener">${esc(en321Label)}</a>`,
+        includedHtml: '(Yes)',
+      });
+      // Auto-inject WCAG 2.0 and 2.1
+      const wcag20Label = langField(s.wcag20LabelEN, s.wcag20LabelLT, lang);
+      const wcag21Label = langField(s.wcag21LabelEN, s.wcag21LabelLT, lang);
+      rows.push({
+        guidelineHtml: `<a href="${esc(s.wcag20URL)}" target="_blank" rel="noopener">${esc(wcag20Label)}</a>`,
+        includedHtml:  `${t.thLevel} A (Yes)<br>${t.thLevel} AA (Yes)<br>${t.thLevel} AAA (No)`,
+      });
+      rows.push({
+        guidelineHtml: `<a href="${esc(s.wcag21URL)}" target="_blank" rel="noopener">${esc(wcag21Label)}</a>`,
+        includedHtml:  `${t.thLevel} A (Yes)<br>${t.thLevel} AA (Yes)<br>${t.thLevel} AAA (No)`,
+      });
+    } else {
+      const wcag21Label = langField(s.wcag21LabelEN, s.wcag21LabelLT, lang);
+      rows.push({
+        guidelineHtml: `<a href="${esc(s.wcag21URL)}" target="_blank" rel="noopener">${esc(wcag21Label)}</a>`,
+        includedHtml:  `${t.thLevel} A (Yes)<br>${t.thLevel} AA (Yes)<br>${t.thLevel} AAA (No)`,
+      });
     }
-
-    items.forEach(std => {
-      const lc = std.toLowerCase();
-      if (lc.includes('en 301 549')) {
-        if (enAdded) return;
-        enAdded = true;
-        rows.push({
-          guidelineHtml:
-            `<a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.01.01_60/en_301549v030101p.pdf" target="_blank" rel="noopener">EN 301 549 Accessibility requirements for ICT products and services - V3.1.1 (2019-11)</a>` +
-            ` <em>AND</em> ` +
-            `<a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf" target="_blank" rel="noopener">EN 301 549 Accessibility requirements for ICT products and services - V3.2.1 (2021-03)</a>`,
-          includedHtml: `(Yes)`,
-        });
-      } else if (lc.includes('wcag')) {
-        const is20 = std.includes('2.0');
-        const is22 = std.includes('2.2');
-        const hasAAA = std.toUpperCase().includes('AAA');
-        const hasAA  = std.toUpperCase().includes('AA');
-        const name = is22 ? 'Web Content Accessibility Guidelines 2.2'
-                   : is20 ? 'Web Content Accessibility Guidelines 2.0'
-                   :        'Web Content Accessibility Guidelines 2.1';
-        const url  = is22 ? 'https://www.w3.org/TR/WCAG22/'
-                   : is20 ? 'http://www.w3.org/TR/2008/REC-WCAG20-20081211'
-                   :        'https://www.w3.org/TR/WCAG21/';
-        rows.push({
-          guidelineHtml: `<a href="${url}" target="_blank" rel="noopener">${name}</a>`,
-          includedHtml:  `Level A (Yes)<br>Level AA (${hasAA ? 'Yes' : 'No'})<br>Level AAA (${hasAAA ? 'Yes' : 'No'})`,
-        });
-      } else {
-        rows.push({ guidelineHtml: esc(std), includedHtml: '(Yes)' });
-      }
-    });
 
     if (!rows.length) return '<span>—</span>';
 
     let table = `
-    <p>This report covers the degree of conformance for the following accessibility standard/guidelines:</p>
+    <p>${esc(t.applicableStandards)}:</p>
     <table class="acr-table acr-standards-table">
-      <caption class="sr-only">Applicable Standards and Guidelines</caption>
+      <caption class="sr-only">${esc(t.applicableStandards)}</caption>
       <thead><tr>
-        <th style="width:70%">Standard/Guideline</th>
-        <th style="width:30%;text-align:center">Included In Report</th>
+        <th style="width:70%">${esc(t.thStandard)}</th>
+        <th style="width:30%;text-align:center">${esc(t.thIncluded)}</th>
       </tr></thead><tbody>`;
     rows.forEach(row => {
       table += `<tr><td>${row.guidelineHtml}</td><td style="text-align:center;vertical-align:middle">${row.includedHtml}</td></tr>`;
@@ -430,7 +401,7 @@
     return table + '</tbody></table>';
   }
 
-  /* ── Formatted text renderer ─────────────────── */
+  /* ── Formatted text renderer ──────────────────────────────────────────────── */
   function renderFormattedText(text) {
     if (!text || !text.trim()) return '';
     const lines = text.split('\n');
@@ -475,30 +446,26 @@
     return html || `<p class="acr-field-value">${esc(text)}</p>`;
   }
 
-  /* ── Evaluation Scope renderer ───────────────── */
-  function renderEvalScope(recs) {
-    if (!recs || !recs.length) return '';
+  /* ── Evaluation Scope renderer ────────────────────────────────────────────── */
+  function renderEvalScope(rows) {
+    if (!rows || !rows.length) return '';
     let html = '<ol>';
-    recs.forEach(r => {
-      const f    = r.fields || {};
-      const name = f['Scope Item Title'] || f['Page Title'] || '';
-      const url  = f['URL / Reference link'] || f['Page URL'] || '';
-      if (url) {
-        html += `<li><a href="${esc(url)}" target="_blank" rel="noopener">${esc(name)}</a></li>`;
-      } else if (name) {
-        html += `<li>${esc(name)}</li>`;
+    rows.forEach(r => {
+      if (r.url) {
+        html += `<li><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.name)}</a></li>`;
+      } else if (r.name) {
+        html += `<li>${esc(r.name)}</li>`;
       }
     });
     return html + '</ol>';
   }
 
-  /* ── Rich text renderer for contact field ────── */
+  /* ── Rich text renderer for contact field ─────────────────────────────────── */
   function renderRichContact(text) {
     if (!text) return '';
     const lines = text.split('\n');
     let html = '';
     let inList = false;
-
     const convertInline = (line) => {
       return line
         .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
@@ -509,13 +476,9 @@
         .replace(/(?<![/"'>])([\w.+-]+@[\w-]+\.[\w.]+)(?![^<]*<\/a>)/g,
           email => `<a href="mailto:${email}">${email}</a>`);
     };
-
     lines.forEach(raw => {
       const line = raw.trim();
-      if (!line) {
-        if (inList) { html += '</ul>'; inList = false; }
-        return;
-      }
+      if (!line) { if (inList) { html += '</ul>'; inList = false; } return; }
       if (/^[-*•●]\s+/.test(line)) {
         if (!inList) { html += '<ul>'; inList = true; }
         html += `<li>${convertInline(line.replace(/^[-*•●]\s+/, ''))}</li>`;
@@ -524,150 +487,152 @@
         html += `<p class="acr-field-value">${convertInline(line)}</p>`;
       }
     });
-
     if (inList) html += '</ul>';
     return html;
   }
 
-  /* ── Contact Information renderer ────────────── */
-  function renderContact(contactText, leadEval, disabilityRev) {
+  /* ── Contact / Evaluators section ────────────────────────────────────────── */
+  function renderContact(contactTxt, evals) {
     let html = '';
+    if (contactTxt) html += renderRichContact(contactTxt);
 
-    if (contactText) {
-      html += renderRichContact(contactText);
-    }
+    const lead     = evals.find(e => e.isLead) || evals[0];
+    const disReviewer = evals.find(e => e.isDisabilityReviewer) || (evals.length > 1 ? evals[1] : null);
 
-    if (leadEval && leadEval.name) {
-      html += `<h3 class="eval-block-title">Evaluator${disabilityRev && disabilityRev.name ? 's' : ''}</h3>`;
-      html += `<p>Lead Evaluator: ${esc(leadEval.name)}`;
-      if (leadEval.jobTitle) html += ` — ${esc(leadEval.jobTitle)}`;
+    if (lead && lead.name) {
+      const heading = disReviewer && disReviewer.name ? t.evaluators : t.evaluators;
+      html += `<h3 class="eval-block-title">${esc(heading)}</h3>`;
+      html += `<p>Lead Evaluator: ${esc(lead.name)}`;
+      const jobTitle = langField(lead.jobTitle, lead.jobTitleLT, lang);
+      if (jobTitle) html += ` — ${esc(jobTitle)}`;
       html += `</p>`;
     }
 
-    if (disabilityRev && disabilityRev.name) {
-      if (!leadEval || !leadEval.name) {
-        html += `<h3 class="eval-block-title">Evaluators</h3>`;
-      }
-      html += `<p>Disability Reviewer: ${esc(disabilityRev.name)}`;
-      if (disabilityRev.jobTitle) html += ` — ${esc(disabilityRev.jobTitle)}`;
-      if (disabilityRev.disability) html += ` (${esc(disabilityRev.disability)})`;
+    if (disReviewer && disReviewer.name) {
+      const jobTitle = langField(disReviewer.jobTitle, disReviewer.jobTitleLT, lang);
+      const org      = langField(disReviewer.organisation, disReviewer.organisationLT, lang);
+      html += `<p>Disability Reviewer: ${esc(disReviewer.name)}`;
+      if (jobTitle) html += ` — ${esc(jobTitle)}`;
+      if (disReviewer.disability) html += ` (${esc(disReviewer.disability)})`;
       html += `</p>`;
     }
 
     return html;
   }
 
-  /* ── Evaluation Methods renderer ─────────────── */
-  function renderEvalMethods(methods, assistiveTechs, autoTools) {
+  /* ── Evaluation Methods renderer ──────────────────────────────────────────── */
+  function renderEvalMethods(methods, evalData) {
+    const assistiveTechs = evalData.assistiveTech ? evalData.assistiveTech.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const autoTools      = evalData.automatedTools ? evalData.automatedTools.split(',').map(s => s.trim()).filter(Boolean) : [];
+
     if (!methods.length && !assistiveTechs.length && !autoTools.length) return '';
     let html = '';
 
     methods.forEach(m => {
-      html += `<h3 class="eval-block-title">${esc(m.name)}`;
-      if (m.coverage) html += ` <span style="font-weight:400;color:#1a1b1f;">(${esc(m.coverage)})</span>`;
+      const name     = langField(m.name, m.nameLT, lang);
+      const desc     = langField(m.description, m.descriptionLT, lang);
+      const tools    = langField(m.tools, m.toolsLT, lang);
+      const coverage = langField(m.coverage, m.coverageLT, lang);
+
+      html += `<h3 class="eval-block-title">${esc(name)}`;
+      if (coverage) html += ` <span style="font-weight:400;color:#1a1b1f;">(${esc(coverage)})</span>`;
       html += `</h3>`;
-      if (m.description) html += `<p>${esc(m.description)}</p>`;
-      if (m.tools && m.tools.trim()) {
-        html += renderFormattedText(m.tools);
-      }
+      if (desc) html += `<p>${esc(desc)}</p>`;
+      if (tools && tools.trim()) html += renderFormattedText(tools);
     });
 
     if (assistiveTechs.length) {
-      html += `<h3 class="eval-block-title">Assistive technologies used</h3>`;
+      html += `<h3 class="eval-block-title">${esc(t.assistiveTech)}</h3>`;
       html += `<div class="eval-tags">`;
-      assistiveTechs.forEach(t => { html += `<span class="eval-tag">${esc(t)}</span>`; });
+      assistiveTechs.forEach(tech => { html += `<span class="eval-tag">${esc(tech)}</span>`; });
       html += `</div>`;
     }
 
     if (autoTools.length) {
-      html += `<h3 class="eval-block-title">Automated tools used</h3>`;
+      html += `<h3 class="eval-block-title">${esc(t.automatedTools)}</h3>`;
       html += `<div class="eval-tags">`;
-      autoTools.forEach(t => { html += `<span class="eval-tag">${esc(t)}</span>`; });
+      autoTools.forEach(tool => { html += `<span class="eval-tag">${esc(tool)}</span>`; });
       html += `</div>`;
     }
 
     return html;
   }
 
-  /* ── Header HTML ─────────────────────────────── */
-  const contactHtml   = renderContact(axallContact, leadEvaluator, disabilityReviewer);
-  const evalHtml      = renderEvalMethods(methodRecords, assistiveTechnologies, automatedTools);
+  /* ── Build evaluation intro sentence ─────────────────────────────────────── */
+  const scopeCount  = scopeRecords.length;
+  const shortLabel  = langField(auditData.productType?.referredAsEN, auditData.productType?.referredAsLT, lang) || 'website';
+  const scopeWord   = shortLabel === 'application' ? 'screens'
+                    : shortLabel === 'document'    ? 'documents'
+                    : shortLabel === 'documents'   ? 'documents'
+                    : shortLabel === 'software'    ? 'screens'
+                    : 'web pages';
 
-  // Build evaluation methods intro
-  const scopeCount    = scopeRecords.length;
-  const shortLabel    = auditData.shortLabel || 'website';
-  const scopeItemWord = shortLabel === 'application' ? 'screens'
-                      : shortLabel === 'document'    ? 'documents'
-                      : shortLabel === 'documents'   ? 'documents'
-                      : shortLabel === 'software'    ? 'screens'
-                      : 'web pages';
-
+  const hasDisReviewer = evaluators.length > 1 && evaluators[1]?.name;
   let specialistText = 'AxAll UAB specialist';
-  if (disabilityReviewer && disabilityReviewer.name) {
-    const org = disabilityReviewer.organisation
-      ? `${disabilityReviewer.organisation} `
-      : 'disability community ';
-    specialistText = `AxAll UAB and ${org}specialists`;
+  if (hasDisReviewer) {
+    const org = langField(evaluators[1].organisation, evaluators[1].organisationLT, lang);
+    specialistText = `AxAll UAB and ${org || 'disability community'} specialists`;
   }
 
   const evalIntro = scopeCount > 0
-    ? `This conformance report is based on the results of an accessibility evaluation conducted by ${specialistText}, which included a sample of ${scopeCount} ${scopeItemWord}. These ${scopeItemWord} were selected by AxAll UAB as representative of the overall accessibility and functionality of the ${esc(auditTitle)}. The ${scopeItemWord} are listed below in the section "Evaluation scope".`
+    ? `This conformance report is based on the results of an accessibility evaluation conducted by ${specialistText}, which included a sample of ${scopeCount} ${scopeWord}. These ${scopeWord} were selected by AxAll UAB as representative of the overall accessibility and functionality of the ${esc(auditTitle)}. The ${scopeWord} are listed below in the section "${t.scopeSection}".`
     : `This conformance report is based on the results of an accessibility evaluation conducted by ${specialistText}.`;
+
+  /* ── Header HTML ──────────────────────────────────────────────────────────── */
+  const contactHtml = renderContact(contactText, evaluators);
+  const evalHtml    = renderEvalMethods(methodologies, auditData);
 
   const headerHtml = `
     <header class="site-header">
       ${logoUrl ? `<img class="client-logo" src="${esc(logoUrl)}" alt="${esc(clientName)} logo" />` : '<div></div>'}
       <div class="axall-badge">
-        Accessibility evaluated by<br>
+        ${lang === 'lt' ? 'Prieinamumą įvertino' : 'Accessibility evaluated by'}<br>
         <a href="https://axall.digital" target="_blank" rel="noopener">AxAll UAB</a>
       </div>
     </header>
 
-    <h1 class="acr-title">${esc(auditTitle) ? esc(auditTitle) + ' Accessibility Conformance Report' : 'Accessibility Conformance Report'}</h1>
-    ${vpat ? `<p class="acr-edition">${esc(vpat)} Edition</p>` : ''}
-    <p class="acr-vpat-version">(Based on VPAT® 2.5 Rev)</p>
+    <h1 class="acr-title">${esc(auditTitle) ? esc(auditTitle) + ' ' + esc(t.pageTitle) : esc(t.pageTitle)}</h1>
+    ${vpat ? `<p class="acr-edition">${esc(vpat)} ${esc(t.reportSubtitle)}</p>` : ''}
+    <p class="acr-vpat-version">(${esc(t.vpatEditionNote)})</p>
 
     <hr/>
 
-    <h2>Name of Product/Version</h2>
+    <h2>${esc(t.nameOfProduct)}</h2>
     <p class="acr-field-value">${esc(productName) || '—'}</p>
 
-    <h2>Report Date</h2>
+    <h2>${esc(t.reportDate)}</h2>
     <p class="acr-field-value">${esc(reportDate) || '—'}</p>
 
-    ${description ? `<h2>Product Description</h2><p class="acr-field-value">${esc(description)}</p>` : ''}
+    ${description ? `<h2>${esc(t.productDescription)}</h2><p class="acr-field-value">${esc(description)}</p>` : ''}
 
-    ${contactHtml ? `<h2>Contact Information</h2>${contactHtml}` : ''}
+    ${contactHtml ? `<h2>${esc(t.contactInfo)}</h2>${contactHtml}` : ''}
 
-    ${evalHtml ? `<h2>Evaluation Methods Used</h2><p class="acr-field-value">${evalIntro}</p>${evalHtml}` : ''}
+    ${evalHtml ? `<h2>${esc(t.evalMethodsUsed)}</h2><p class="acr-field-value">${evalIntro}</p>${evalHtml}` : ''}
 
-    ${scopeRecords.length ? `<h2>Evaluation Scope</h2>${renderEvalScope(scopeRecords)}` : ''}
+    ${scopeRecords.length ? `<h2>${esc(t.scopeSection)}</h2>${renderEvalScope(scopeRecords)}` : ''}
 
-    <h2>Applicable Standards/Guidelines</h2>
-    ${renderStandards(standard)}
+    <h2>${esc(t.applicableStandards)}</h2>
+    ${renderStandards()}
   `;
 
   document.getElementById('acr-header').innerHTML = headerHtml;
 
-  /* ── Parse ACR records ────────────────────────── */
+  /* ── Parse ACR rows ───────────────────────────────────────────────────────── */
   const wcagA  = [];
   const wcagAA = [];
   const enByChapter = {};
 
   records.forEach(r => {
-    const f = r.fields;
-    const primary     = lookupVal(f['Audit - Criterion ID']);
-    const dashIdx     = primary.indexOf('—');
-    const criterionId = (dashIdx >= 0 ? primary.slice(dashIdx + 1) : primary).trim();
-    const name        = lookupVal(f['Criterion Name']);
-    const level       = lookupVal(f['Level']);
-    const refUrl      = lookupVal(f['Official Reference URL (from Criterion)']);
-    const conformance = lookupVal(f['Conformance Level']);
-    const remarks     = lookupVal(f['Remarks and Explanations']);
-    const enRef       = lookupVal(f['EN 301 549 Criteria reference']);
-    const sectionNotes = lookupVal(f['EN Section Notes Override'])
-                      || lookupVal(f['EN Section Notes (from Criterion)']);
+    const criterionId  = r.criterionId || '';
+    const name         = langField(r.criterionName, r.criterionNameLT, lang);
+    const level        = r.level || '';
+    const refUrl       = r.referenceUrl || '';
+    const conformance  = r.conformance || '';
+    const remarks      = langField(r.remarks, r.remarksLT, lang);
+    const enRef        = langField(r.en301549Ref, r.en301549RefLT, lang);
+    const sectionNotes = r.enSectionNoteOverride || r.enSectionNote || '';
     const row = { criterionId, name, level, refUrl, conformance, remarks, enRef, sectionNotes };
+
     const firstNum = parseFloat(criterionId);
     if (isNaN(firstNum)) return;
     if (firstNum >= 1 && firstNum < 5) {
@@ -685,12 +650,14 @@
   wcagAA.sort(numSort);
   Object.values(enByChapter).forEach(arr => arr.sort(numSort));
 
+  /* ── Renderers ────────────────────────────────────────────────────────────── */
   function renderEnRef(text) {
     if (!text || !text.trim()) return '';
     const lines = text.split('\n').map(l => l.trim()).filter(Boolean)
       .map(l => l.replace(/^[•●\-\*]\s*/, '').trim()).filter(Boolean);
     if (!lines.length) return '';
-    return `<span class="acr-en-ref"><em>Also applies to: EN 301 549 Criteria</em><ul>${lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul></span>`;
+    const label = lang === 'lt' ? 'Taip pat taikoma: EN 301 549 kriterijai' : 'Also applies to: EN 301 549 Criteria';
+    return `<span class="acr-en-ref"><em>${label}</em><ul>${lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul></span>`;
   }
 
   function conformanceClass(c) {
@@ -705,130 +672,138 @@
     if (!rows.length) return '';
     let html = `
     <table class="acr-table">
-      <caption>${title}</caption>
+      <caption>${esc(title)}</caption>
       <thead><tr>
-        <th style="width:38%">Criteria</th>
-        <th style="width:18%">Conformance Level</th>
-        <th style="width:44%">Remarks and Explanations</th>
+        <th style="width:38%">${esc(t.thCriteria)}</th>
+        <th style="width:18%">${esc(t.thConformance)}</th>
+        <th style="width:44%">${esc(t.thRemarks)}</th>
       </tr></thead><tbody>`;
     rows.forEach(row => {
-      const cls = conformanceClass(row.conformance);
+      const cls          = conformanceClass(row.conformance);
+      const confLabel    = conformanceLabel(row.conformance, t);
+      const levelLabel   = `(${t.thLevel} ${esc(row.level)})`;
       const criterionLink = row.refUrl
-        ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a> (Level ${esc(row.level)})`
-        : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong> (Level ${esc(row.level)})`;
+        ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a> ${levelLabel}`
+        : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong> ${levelLabel}`;
       const enRefHtml = (showEnRef && row.enRef) ? renderEnRef(row.enRef) : '';
-      html += `<tr><td>${criterionLink}${enRefHtml}</td><td class="${cls}">${esc(row.conformance)}</td><td>${esc(row.remarks)}</td></tr>`;
+      html += `<tr><td>${criterionLink}${enRefHtml}</td><td class="${cls}">${esc(confLabel)}</td><td>${esc(row.remarks)}</td></tr>`;
     });
     return html + '</tbody></table>';
   }
 
   function renderEnChapterTable(rows) {
     if (!rows.length) return '';
+    const headingCellLabel = lang === 'lt' ? 'Antraštės eilutė – atsakymo nereikia' : 'Heading cell – no response required';
     let html = `
     <table class="acr-table">
       <thead><tr>
-        <th style="width:38%">Criteria</th>
-        <th style="width:18%">Conformance Level</th>
-        <th style="width:44%">Remarks and Explanations</th>
+        <th style="width:38%">${esc(t.thCriteria)}</th>
+        <th style="width:18%">${esc(t.thConformance)}</th>
+        <th style="width:44%">${esc(t.thRemarks)}</th>
       </tr></thead><tbody>`;
     rows.forEach(row => {
       const isHeading = row.conformance.includes('Heading cell');
       if (isHeading) {
-        html += `<tr class="en-heading-row"><td><strong><em>${esc(row.criterionId)} ${esc(row.name)}</em></strong></td><td>Heading cell – no response required</td><td>Heading cell – no response required</td></tr>`;
+        html += `<tr class="en-heading-row"><td><strong><em>${esc(row.criterionId)} ${esc(row.name)}</em></strong></td><td>${headingCellLabel}</td><td>${headingCellLabel}</td></tr>`;
       } else {
-        const cls = conformanceClass(row.conformance);
+        const cls       = conformanceClass(row.conformance);
+        const confLabel = conformanceLabel(row.conformance, t);
         const criterionLabel = row.refUrl
           ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a>`
           : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong>`;
-        html += `<tr><td>${criterionLabel}</td><td class="${cls}">${esc(row.conformance)}</td><td>${esc(row.remarks)}</td></tr>`;
+        html += `<tr><td>${criterionLabel}</td><td class="${cls}">${esc(confLabel)}</td><td>${esc(row.remarks)}</td></tr>`;
       }
     });
     return html + '</tbody></table>';
   }
 
+  /* ── EN chapter metadata ──────────────────────────────────────────────────── */
   const EN_BASE = 'https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf';
   const EN_CHAPTERS = {
-    4:  { label: 'Clause 4: Functional Performance Statements', url: `${EN_BASE}#page=20`,
-          note: 'Not Applicable. This chapter is informative and does not contain requirements requiring testing. Each aspect of the product\'s functionality under evaluation is described in detail within the technical requirements tables.' },
-    5:  { label: 'Clause 5: Generic Requirements',                             url: `${EN_BASE}#page=23` },
-    6:  { label: 'Clause 6: ICT with Two-Way Voice Communication',             url: `${EN_BASE}#page=30` },
-    7:  { label: 'Clause 7: ICT with Video Capabilities',                      url: `${EN_BASE}#page=35` },
-    8:  { label: 'Clause 8: Hardware',                                         url: `${EN_BASE}#page=37` },
-    9:  { label: 'Clause 9: Web',                                              url: `${EN_BASE}#page=45` },
-    10: { label: 'Clause 10: Non-Web Documents',                               url: `${EN_BASE}#page=52` },
-    11: { label: 'Clause 11: Software',                                        url: `${EN_BASE}#page=64` },
-    12: { label: 'Clause 12: Documentation and Support Services',              url: `${EN_BASE}#page=84` },
-    13: { label: 'Clause 13: ICT Providing Relay or Emergency Service Access', url: `${EN_BASE}#page=86` },
+    4:  { url: `${EN_BASE}#page=20`,
+          note: lang === 'lt'
+            ? 'Netaikoma. Šis skyrius yra informacinis ir jame nėra reikalavimų, kurių laikymasis turi būti tikrinamas. Kiekvienas vertinamo produkto funkcionalumo aspektas aprašytas techninių reikalavimų lentelėse.'
+            : 'Not Applicable. This chapter is informative and does not contain requirements requiring testing. Each aspect of the product\'s functionality under evaluation is described in detail within the technical requirements tables.' },
+    5:  { url: `${EN_BASE}#page=23` },
+    6:  { url: `${EN_BASE}#page=30` },
+    7:  { url: `${EN_BASE}#page=35` },
+    8:  { url: `${EN_BASE}#page=37` },
+    9:  { url: `${EN_BASE}#page=45` },
+    10: { url: `${EN_BASE}#page=52` },
+    11: { url: `${EN_BASE}#page=64` },
+    12: { url: `${EN_BASE}#page=84` },
+    13: { url: `${EN_BASE}#page=86` },
   };
 
+  /* ── Build body ───────────────────────────────────────────────────────────── */
   let body = '';
 
   body += `
   <hr/>
-  <h2>Terms</h2>
+  <h2>${esc(t.termsSection)}</h2>
   <div class="acr-terms">
-    <p>The terms used in the Conformance Level information are defined as follows:</p>
+    <p>${esc(t.termsIntro)}</p>
     <ul>
-      <li><strong>Supports</strong>: The functionality of the product has at least one method that meets the criterion without known defects or meets with equivalent facilitation.</li>
-      <li><strong>Partially Supports</strong>: Some functionality of the product does not meet the criterion.</li>
-      <li><strong>Does Not Support</strong>: The majority of product functionality does not meet the criterion.</li>
-      <li><strong>Not Applicable</strong>: The criterion is not relevant to the product.</li>
-      <li><strong>Not Evaluated</strong>: The product has not been evaluated against the criterion. This can be used only in WCAG 2.0 Level AAA.</li>
+      <li><strong>${esc(t.termSupports)}</strong>: ${esc(t.termSupportsDesc)}</li>
+      <li><strong>${esc(t.termPartiallySup)}</strong>: ${esc(t.termPartiallySupDesc)}</li>
+      <li><strong>${esc(t.termDoesNotSup)}</strong>: ${esc(t.termDoesNotSupDesc)}</li>
+      <li><strong>${esc(t.termNotApplicable)}</strong>: ${esc(t.termNotApplicableDesc)}</li>
+      <li><strong>${esc(t.termNotEvaluated)}</strong>: ${esc(t.termNotEvaluatedDesc)}</li>
     </ul>
-    <p class="acr-note"><strong>Note</strong>: In WCAG tables, the conformance level is marked as "Supports" even when the product does not include content covered by the success criterion. This approach aligns with <a href="https://www.w3.org/TR/WCAG20/#conformance-reqs" target="_blank" rel="noopener">WCAG 2.0 Conformance Requirements</a>.</p>
-    <p class="acr-note"><strong>Note</strong>: Criteria marked as "Supports" indicate that the product's conformance has been determined through evaluations using the <a href="https://docs.google.com/document/d/18CJrqdVmyEddayMyVPwEBnTAhI2yuDlE/edit#heading=h.vndgi1pz3yrt" target="_blank" rel="noopener">testing methods described above</a>.</p>
-    <p class="acr-note"><strong>Note</strong>: In EN 301 549 tables, "Not Applicable" is used in cases where a specific function related to the criterion is not part of the product. For example, if the product is Web, all criteria from Chapter 8: Hardware of EN 301 549 will be marked as "Not Applicable." This aligns with the <a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf" target="_blank" rel="noopener">EN 301 549 Conformance Requirements</a>.</p>
+    <p class="acr-note"><strong>${lang === 'lt' ? 'Pastaba' : 'Note'}</strong>: ${t.noteWcagSupports}</p>
+    <p class="acr-note"><strong>${lang === 'lt' ? 'Pastaba' : 'Note'}</strong>: ${t.noteWcagVerified}</p>
+    <p class="acr-note"><strong>${lang === 'lt' ? 'Pastaba' : 'Note'}</strong>: ${t.noteEnNotApplicable}</p>
   </div>
   <hr/>`;
 
   if (isEN) {
     body += `
-    <h2 id="wcag-report">WCAG 2.x Report</h2>
-    <p>Tables 1 and 2 document conformance with the following criteria from EN 301 549:</p>
-    <ul>
-      <li>Clause 9 — Web</li>
-      <li>Clauses 10.1–10.4 of Clause 10 — Non-web documents</li>
-      <li>Clauses 11.1–11.4 and 11.8.2 of Clause 11 — Software</li>
-      <li>Clauses 12.1.2 and 12.2.4 of Clause 12 — Documentation and support services</li>
-    </ul>
-    <p class="section-note">Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are scoped for full pages, complete processes, and accessibility-supported ways of using technology as documented in the <a href="https://www.w3.org/TR/WCAG20/#conformance-reqs" target="_blank" rel="noopener">WCAG 2.0 Conformance Requirements</a>.</p>`;
+    <h2 id="wcag-report">${esc(t.wcagReport)}</h2>
+    <p>${esc(t.wcagReportIntro)}</p>
+    <ul>${t.wcagReportClauses}</ul>
+    <p class="section-note">${t.wcagReportNote}</p>`;
   } else {
     body += `
-    <h2 id="wcag-report">WCAG 2.x Report</h2>
-    <p class="section-note">Note: When reporting on conformance with the WCAG 2.x Success Criteria, they are scoped for full pages, complete processes, and accessibility-supported ways of using technology as documented in the <a href="https://www.w3.org/TR/WCAG20/#conformance-reqs" target="_blank" rel="noopener">WCAG 2.0 Conformance Requirements</a>.</p>`;
+    <h2 id="wcag-report">${esc(t.wcagReport)}</h2>
+    <p class="section-note">${t.wcagReportNote}</p>`;
   }
 
-  body += renderWcagTable('Table 1: Success Criteria, Level A',  wcagA,  isEN);
-  body += renderWcagTable('Table 2: Success Criteria, Level AA', wcagAA, isEN);
+  body += renderWcagTable(t.tableLevelA,  wcagA,  isEN);
+  body += renderWcagTable(t.tableLevelAA, wcagAA, isEN);
 
   if (isEN) {
-    body += `<hr/><h2>EN 301 549 Report</h2>`;
+    body += `<hr/><h2>${esc(t.enReport)}</h2>`;
     for (let ch = 4; ch <= 13; ch++) {
       const meta = EN_CHAPTERS[ch];
       if (!meta) continue;
-      const rows = enByChapter[ch] || [];
+      const rows         = enByChapter[ch] || [];
+      const chapterLabel = clauseLabel(`${ch === 4 ? '4 - Functional Performance Statements (FPS)' : ch === 5 ? '5 - Generic Requirements' : ch === 6 ? '6 - ICT with Two-Way Voice Communication' : ch === 7 ? '7 - ICT with Video Capabilities' : ch === 8 ? '8 - Hardware' : ch === 9 ? '9 - Web' : ch === 10 ? '10 - Non-Web Documents' : ch === 11 ? '11 - Software' : ch === 12 ? '12 - Documentation and Support Services' : '13 - ICT Providing Relay or Emergency Service Access'}`, lang);
+      const chapterHeading = `${t.enClauseLabel} ${ch}: ${chapterLabel.replace(/^\d+ - /, '')}`;
+
       if (ch === 4) {
-        body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${meta.label}</a></h3>`;
-        body += `<p class="section-note">Notes: ${meta.note}</p>`;
+        body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${esc(chapterHeading)}</a></h3>`;
+        body += `<p class="section-note">${lang === 'lt' ? 'Pastabos' : 'Notes'}: ${meta.note}</p>`;
         continue;
       }
       if (ch === 9) {
-        body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${meta.label}</a> (see <a href="#wcag-report">WCAG 2.x section</a>)</h3>`;
-        body += `<p class="section-note">See WCAG 2.x section above.</p>`;
+        const seeLabel = lang === 'lt' ? 'žr. WCAG 2.x skyrių' : 'see WCAG 2.x section';
+        body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${esc(chapterHeading)}</a> (<a href="#wcag-report">${seeLabel}</a>)</h3>`;
+        body += `<p class="section-note">${lang === 'lt' ? 'Žr. WCAG 2.x skyrių aukščiau.' : 'See WCAG 2.x section above.'}</p>`;
         continue;
       }
-      const contentRows = rows.filter(r => !r.conformance.includes('Heading cell'));
-      const noteRow     = rows.find(r => r.sectionNotes && r.sectionNotes.trim());
-      const chapterNote = noteRow ? noteRow.sectionNotes.trim() : '';
-      body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${meta.label}</a></h3>`;
-      if (chapterNote) body += `<p class="section-note">Notes: ${esc(chapterNote)}</p>`;
+
+      const contentRows  = rows.filter(r => !r.conformance.includes('Heading cell'));
+      const noteRow      = rows.find(r => r.sectionNotes && r.sectionNotes.trim());
+      const chapterNote  = noteRow ? noteRow.sectionNotes.trim() : '';
+      body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${esc(chapterHeading)}</a></h3>`;
+      if (chapterNote) body += `<p class="section-note">${lang === 'lt' ? 'Pastabos' : 'Notes'}: ${esc(chapterNote)}</p>`;
       const hasActiveRows = contentRows.some(r => r.conformance !== 'Not Applicable');
       if (hasActiveRows) body += renderEnChapterTable(rows);
     }
   }
 
   if (legal) {
-    body += `<hr/><h2>Legal Disclaimer</h2><p style="white-space:pre-line">${esc(legal)}</p>`;
+    body += `<hr/><h2>${esc(t.legalDisclaimer)}</h2><p style="white-space:pre-line">${esc(legal)}</p>`;
   }
 
   document.getElementById('acr-body').innerHTML = body;
