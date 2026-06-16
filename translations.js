@@ -79,12 +79,12 @@ function clauseLabel(raw, lang) {
 // -----------------------------------------------------------------------------
 const complianceLabels = {
   en: {
-    'Fully Compliant':     'Fully compliant',
+    'Fully Compliant':     'Compliant',
     'Partially Compliant': 'Partially compliant',
     'Non-Compliant':       'Non-compliant',
   },
   lt: {
-    'Fully Compliant':     'Visiškai atitinka',
+    'Fully Compliant':     'Atitinka',
     'Partially Compliant': 'Iš dalies atitinka',
     'Non-Compliant':       'Neatitinka',
   },
