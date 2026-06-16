@@ -10,6 +10,12 @@
     body { font-family: Arial, sans-serif; background: #fff; color: #1a1b1f; font-size: 1rem; line-height: 1.6; }
     .page-wrapper { max-width: 780px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
     .site-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 2rem; border-bottom: 1px solid #d7e0e5; margin-bottom: 2.5rem; gap: 1rem; }
+    .site-header-center { flex: 1; display: flex; justify-content: center; }
+    .lang-toggle { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; }
+    .lang-current { font-weight: 700; color: #1a1b1f; }
+    .lang-link { color: #1a1b1f; text-decoration: underline; }
+    .lang-link:hover { text-decoration: none; }
+    .lang-sep { color: #aaa; }
     .client-logo { max-height: 40px; max-width: 180px; object-fit: contain; }
     .axall-badge { font-size: 0.75rem; color: #1a1b1f; text-align: right; line-height: 1.4; flex-shrink: 0; }
     .axall-badge a { color: #1a1b1f; text-decoration: underline; }
@@ -43,6 +49,7 @@
 
       <header class="site-header">
         <img id="client-logo" class="client-logo hidden" src="" alt="" />
+        <div class="site-header-center" id="lang-toggle-container"></div>
         <div class="axall-badge" id="axall-badge"></div>
       </header>
 
@@ -125,6 +132,21 @@
 
     function getLangFromHost() {
       return window.location.hostname.split('.')[0] === 'prieinamumas' ? 'lt' : 'en';
+    }
+
+    function buildLangToggle(langs, currentLang) {
+      if (!langs || langs.length < 2) return '';
+      const host = window.location.hostname;
+      const path = window.location.pathname;
+      const domain = host.split('.').slice(1).join('.');
+      const labels = { en: 'English', lt: 'Lietuvių' };
+      const subdomains = { en: 'accessibility', lt: 'prieinamumas' };
+      const links = langs.map(l => {
+        if (l === currentLang) return `<span class="lang-current">${labels[l] || l}</span>`;
+        const altHost = `${subdomains[l] || l}.${domain}`;
+        return `<a href="https://${altHost}${path}" class="lang-link">${labels[l] || l}</a>`;
+      });
+      return `<div class="lang-toggle">${links.join(' <span class="lang-sep">|</span> ')}</div>`;
     }
 
     function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val || ''; }
@@ -287,6 +309,18 @@
       // ── Page meta
       document.title = `${t.statementTitle} — ${auditTitle}`;
       setText('page-title', t.statementTitle);
+
+      // ── Lang toggle
+      const langs = d.langs || [lang];
+      const langToggle = buildLangToggle(langs, lang);
+      const toggleContainer = document.getElementById('lang-toggle-container');
+      if (toggleContainer) {
+        if (langToggle) {
+          toggleContainer.innerHTML = langToggle;
+        } else {
+          toggleContainer.style.display = 'none';
+        }
+      }
 
       // ── Badge
       const badgeLabel = lang === 'lt' ? 'Prieinamumą įvertino' : 'Accessibility evaluated by';
