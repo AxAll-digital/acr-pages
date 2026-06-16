@@ -569,6 +569,14 @@
     return html;
   }
 
+  /* ── Inline markdown converter ────────────────────────────────────────────── */
+  function convertInlineMarkdown(text) {
+    if (!text) return '';
+    return text
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
+      .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g, (_, label, url) => `<a href="${url}">${label}</a>`);
+  }
+
   /* ── Build evaluation intro sentence ─────────────────────────────────────── */
   const scopeCount  = scopeRecords.length;
   const shortLabel  = langField(auditData.productType?.referredAsEN, auditData.productType?.referredAsLT, lang) || 'website';
@@ -609,7 +617,7 @@
     <hr/>
 
     <h2>${esc(t.nameOfProduct)}</h2>
-    <p class="acr-field-value">${renderFormattedText(productName) || '—'}</p>
+    <p class="acr-field-value">${convertInlineMarkdown(productName) || '—'}</p>
 
     <h2>${esc(t.reportDate)}</h2>
     <p class="acr-field-value">${formatReportDate(reportDate, lang) || '—'}</p>
