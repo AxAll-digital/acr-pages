@@ -130,7 +130,7 @@ const UI = {
 
     // ACR header
     reportEdition:          'VPAT® Accessibility Conformance Report',
-    reportSubtitle:         'EN 301 549 Edition',
+    reportSubtitle:         'Edition',
 
     // ACR section headings
     nameOfProduct:          'Name of Product/Version',
@@ -139,6 +139,9 @@ const UI = {
     contactInfo:            'Contact Information',
     notesLabel:             'Notes',
     applicableStandards:    'Applicable Standards/Guidelines',
+    standardsIntro:         'This report covers the degree of conformance for the following accessibility standard/guidelines:',
+    yesLabel:               'Yes',
+    noLabel:                'No',
     termsSection:           'Terms',
     scopeSection:           'Evaluation Scope',
     evaluationSection:      'Evaluation',
@@ -287,7 +290,7 @@ const UI = {
 
     // ACR header
     reportEdition:          'VPAT® prieinamumo atitikties ataskaita',
-    reportSubtitle:         'EN 301 549 leidimas',
+    reportSubtitle:         'leidimas',
 
     // ACR section headings
     nameOfProduct:          'Produkto pavadinimas / versija',
@@ -296,6 +299,9 @@ const UI = {
     contactInfo:            'Kontaktinė informacija',
     notesLabel:             'Pastabos',
     applicableStandards:    'Taikomi standartai ir gairės',
+    standardsIntro:         'Ši ataskaita apima šių prieinamumo standartų ir (arba) gairių atitikties laipsnį:',
+    yesLabel:               'Taip',
+    noLabel:                'Ne',
     termsSection:           'Sąvokos',
     scopeSection:           'Vertinimo imtis',
     evaluationSection:      'Vertinimas',
