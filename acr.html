@@ -348,47 +348,58 @@
   const records      = acrData.rows || [];
   const scopeRecords = scopeData.rows || [];
 
+  // ── Date formatter for ACR (long format: "3 October 2023")
+  function formatReportDate(isoDate, lang) {
+    if (!isoDate) return '';
+    const locale = lang === 'lt' ? 'lt-LT' : 'en-GB';
+    return new Date(isoDate + 'T12:00:00').toLocaleDateString(locale, {
+      day: 'numeric', month: 'long', year: 'numeric'
+    });
+  }
+
   /* ── Standards table ──────────────────────────────────────────────────────── */
   function renderStandards() {
     const s = settings;
     if (!vpat) return '<span>—</span>';
 
     const rows = [];
-    const hasEN = isEN;
 
-    if (hasEN) {
-      const en311Label = langField(s.en311LabelEN, s.en311LabelLT, lang);
-      const en321Label = langField(s.en321LabelEN, s.en321LabelLT, lang);
+    if (isEN) {
+      // Order: WCAG 2.0, WCAG 2.1, EN 301 549
+      const wcag20Label = langField(s.wcag20LabelEN, s.wcag20LabelLT, lang);
+      const wcag21Label = langField(s.wcag21LabelEN, s.wcag21LabelLT, lang);
+      const en311Label  = langField(s.en311LabelEN,  s.en311LabelLT,  lang);
+      const en321Label  = langField(s.en321LabelEN,  s.en321LabelLT,  lang);
+      const yes = t.yesLabel; const no = t.noLabel;
+
+      rows.push({
+        guidelineHtml: `<a href="${esc(s.wcag20URL)}" target="_blank" rel="noopener">${esc(wcag20Label)}</a>`,
+        includedHtml:  `${t.thLevel} A (${yes})<br>${t.thLevel} AA (${yes})<br>${t.thLevel} AAA (${no})`,
+      });
+      rows.push({
+        guidelineHtml: `<a href="${esc(s.wcag21URL)}" target="_blank" rel="noopener">${esc(wcag21Label)}</a>`,
+        includedHtml:  `${t.thLevel} A (${yes})<br>${t.thLevel} AA (${yes})<br>${t.thLevel} AAA (${no})`,
+      });
       rows.push({
         guidelineHtml:
           `<a href="${esc(s.en311URL)}" target="_blank" rel="noopener">${esc(en311Label)}</a>` +
           ` <em>AND</em> ` +
           `<a href="${esc(s.en321URL)}" target="_blank" rel="noopener">${esc(en321Label)}</a>`,
-        includedHtml: '(Yes)',
-      });
-      // Auto-inject WCAG 2.0 and 2.1
-      const wcag20Label = langField(s.wcag20LabelEN, s.wcag20LabelLT, lang);
-      const wcag21Label = langField(s.wcag21LabelEN, s.wcag21LabelLT, lang);
-      rows.push({
-        guidelineHtml: `<a href="${esc(s.wcag20URL)}" target="_blank" rel="noopener">${esc(wcag20Label)}</a>`,
-        includedHtml:  `${t.thLevel} A (Yes)<br>${t.thLevel} AA (Yes)<br>${t.thLevel} AAA (No)`,
-      });
-      rows.push({
-        guidelineHtml: `<a href="${esc(s.wcag21URL)}" target="_blank" rel="noopener">${esc(wcag21Label)}</a>`,
-        includedHtml:  `${t.thLevel} A (Yes)<br>${t.thLevel} AA (Yes)<br>${t.thLevel} AAA (No)`,
+        includedHtml: `(${yes})`,
       });
     } else {
       const wcag21Label = langField(s.wcag21LabelEN, s.wcag21LabelLT, lang);
+      const yes = t.yesLabel; const no = t.noLabel;
       rows.push({
         guidelineHtml: `<a href="${esc(s.wcag21URL)}" target="_blank" rel="noopener">${esc(wcag21Label)}</a>`,
-        includedHtml:  `${t.thLevel} A (Yes)<br>${t.thLevel} AA (Yes)<br>${t.thLevel} AAA (No)`,
+        includedHtml:  `${t.thLevel} A (${yes})<br>${t.thLevel} AA (${yes})<br>${t.thLevel} AAA (${no})`,
       });
     }
 
     if (!rows.length) return '<span>—</span>';
 
     let table = `
-    <p>${esc(t.applicableStandards)}:</p>
+    <p>${esc(t.standardsIntro)}</p>
     <table class="acr-table acr-standards-table">
       <caption class="sr-only">${esc(t.applicableStandards)}</caption>
       <thead><tr>
@@ -591,17 +602,17 @@
       </div>
     </header>
 
-    <h1 class="acr-title">${esc(auditTitle) ? esc(auditTitle) + ' ' + esc(t.pageTitle) : esc(t.pageTitle)}</h1>
+    <h1 class="acr-title">${esc(clientName) ? esc(clientName) + ' ' + esc(t.pageTitle) : esc(t.pageTitle)}</h1>
     ${vpat ? `<p class="acr-edition">${esc(vpat)} ${esc(t.reportSubtitle)}</p>` : ''}
     <p class="acr-vpat-version">(${esc(t.vpatEditionNote)})</p>
 
     <hr/>
 
     <h2>${esc(t.nameOfProduct)}</h2>
-    <p class="acr-field-value">${esc(productName) || '—'}</p>
+    <p class="acr-field-value">${renderFormattedText(productName) || '—'}</p>
 
     <h2>${esc(t.reportDate)}</h2>
-    <p class="acr-field-value">${esc(reportDate) || '—'}</p>
+    <p class="acr-field-value">${formatReportDate(reportDate, lang) || '—'}</p>
 
     ${description ? `<h2>${esc(t.productDescription)}</h2><p class="acr-field-value">${esc(description)}</p>` : ''}
 
