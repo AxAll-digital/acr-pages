@@ -79,12 +79,12 @@ function clauseLabel(raw, lang) {
 // -----------------------------------------------------------------------------
 const complianceLabels = {
   en: {
-    'Fully Compliant':     'Compliant',
+    'Fully Compliant':     'Fully compliant',
     'Partially Compliant': 'Partially compliant',
     'Non-Compliant':       'Non-compliant',
   },
   lt: {
-    'Fully Compliant':     'Atitinka',
+    'Fully Compliant':     'Visiškai atitinka',
     'Partially Compliant': 'Iš dalies atitinka',
     'Non-Compliant':       'Neatitinka',
   },
@@ -107,9 +107,9 @@ const directiveLabels = {
   },
   lt: {
     'Directive (EU) 2019/882 on the accessibility requirements for products and services (European Accessibility Act, EAA)':
-      'Direktyva (ES) 2019/882 dėl gaminių ir paslaugų prieinamumo reikalavimų (Europos prieinamumo aktas, angl. European Accessibility Act, EAA)',
+      'Direktyva (ES) 2019/882 dėl gaminių ir paslaugų prieinamumo reikalavimų (European Accessibility Act, EAA)',
     'Directive (EU) 2016/2102 on the accessibility of the websites and mobile applications of public sector bodies (Web Accessibility Directive, WAD)':
-      'Direktyva (ES) 2016/2102 dėl viešojo sektoriaus institucijų interneto svetainių ir mobiliųjų programų prieinamumo (ES Prieinamumo direktyva, angl. Web Accessibility Directive, WAD)',
+      'Direktyva (ES) 2016/2102 dėl viešojo sektoriaus institucijų interneto svetainių ir mobiliųjų programų prieinamumo (Web Accessibility Directive, WAD)',
   },
 };
 
@@ -147,6 +147,7 @@ const UI = {
     tools:                  'Tools, Techniques and Other Details',
     coverage:               'Evaluation Coverage',
     legalDisclaimer:        'Legal Disclaimer',
+    legalDisclaimerDefault: '© {year} {company}. This report reflects the accessibility status of {product} as of the evaluation date indicated above, prepared in accordance with ITI {vpat} Edition. {company} cannot guarantee that information in this report will remain accurate following the date of publication. Any modification, update, or customisation to {product} may affect the accuracy or applicability of this report. This report is provided for informational purposes only.\n\nAxall UAB confirms that the evaluation results accurately reflect the condition of {product} as evaluated within the scope and on the date defined in this report. If {product} is modified after the evaluation date, or if this report is altered by any party other than Axall UAB, Axall UAB cannot be held responsible for the accuracy of the findings presented herein. It is recommended that this report be reviewed following any significant product changes, and at minimum annually.',
     preparedBy:             'Prepared by',
 
     // Table headers
@@ -301,6 +302,7 @@ const UI = {
     tools:                  'Priemonės, metodai ir kita informacija',
     coverage:               'Vertinimo apimtis',
     legalDisclaimer:        'Atsakomybės ribojimas',
+    legalDisclaimerDefault: '© {year} {company}. Ši ataskaita atspindi {product} prieinamumo būklę aukščiau nurodytos vertinimo datos duomenimis ir parengta vadovaujantis ITI {vpat} Edition kriterijais. {company} negali garantuoti, kad šioje ataskaitoje pateikta informacija išliks tiksli po jos paskelbimo datos. Bet kokie {product} pakeitimai, atnaujinimai ar pritaikymai gali turėti įtakos šios ataskaitos tikslumui ar taikomumui. Ši ataskaita pateikiama tik informaciniais tikslais.\n\n„Axall" UAB patvirtina, kad šioje ataskaitoje pateikti vertinimo rezultatai tiksliai atspindi {product} būklę, nustatytą šioje ataskaitoje apibrėžtos apimties ribose ir vertinimo datą. Jei {product} bus pakeistas po vertinimo datos arba jei šią ataskaitą pakeis bet kuri kita šalis, o ne „Axall" UAB, „Axall" UAB negalės būti laikoma atsakinga už pateiktų rezultatų tikslumą. Rekomenduojama peržiūrėti šią ataskaitą po bet kokių reikšmingų produkto pakeitimų, bet ne rečiau kaip kartą per metus.',
     preparedBy:             'Parengė',
 
     // Table headers
