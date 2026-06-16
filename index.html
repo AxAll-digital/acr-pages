@@ -317,12 +317,11 @@
       const limHtml = knownLims ? renderRichText(knownLims)
         : `<p>${lang === 'lt' ? 'Dalis šių skaitmeninių paslaugų nėra visiškai prieinamos.' : 'Parts of these digital services are not fully accessible.'}</p>`;
       const fixNote = plannedFix
-        ? `<p>${lang === 'lt' ? `Aktyviai dirbame, kad ištaisytume šias problemas. Reikšmingi patobulinimai planuojami ${plannedFix}.` : `We are actively working to address these issues. Significant improvements are planned for ${plannedFix}.`}</p>`
-        : `<p>${lang === 'lt' ? 'Aktyviai dirbame, kad ištaisytume šias problemas, ir laukiame jūsų atsiliepimų.' : 'We are actively working to address these issues and welcome your feedback.'}</p>`;
+        ? `<p>${lang === 'lt' ? `Aktyviai dirbame, kad ištaisytume šias problemas. Reikšmingi patobulinimai planuojami ${plannedFix}.` : `Significant improvements are planned for ${plannedFix}.`}</p>`
+        : '';
       setHtml('limitations-text', limHtml + fixNote);
-      setHtml('acr-link-note', lang === 'lt'
-        ? 'Išsamų žinomų problemų ir jų būsenos sąrašą rasite <a href="acr">Prieinamumo atitikties ataskaitoje</a>.'
-        : 'For a complete list of known issues and their status, see the <a href="acr">Accessibility Conformance Report</a>.');
+      const isFullyCompliant = (d.complianceStatus || '').toLowerCase().includes('fully');
+      setHtml('acr-link-note', isFullyCompliant ? t.acrLinkCompliant : t.acrLinkNonCompliant);
 
       // ── Feedback
       setText('feedback-heading', t.feedbackHeading);
