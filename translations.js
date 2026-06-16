@@ -228,7 +228,7 @@ const UI = {
     usageFallback:          'We aim to make our digital services inclusive and accessible for people of all abilities.\nMany users may benefit from adjusting their device, operating system, or browser accessibility settings or using assistive technologies—for example, screen readers, display and text size adjustments, or color and contrast settings.\nFor guidance, please refer to your device, operating system, or browser accessibility help resources, which explain how to configure these features. If you need help adapting our services to your needs, please <a href="#feedback-heading">contact us for assistance</a>.',
 
     // Statement — usage section heading
-    usageHeading:           'How you should be able to use these digital services',
+    usageHeading:           'Using our digital services',
 
     // Statement — limitations section heading
     limitationsHeading:     'Limitations of these digital services\' accessibility',
@@ -381,7 +381,7 @@ const UI = {
     usageFallback:          'Mes siekiame, kad mūsų skaitmeninės paslaugos būtų įtraukios ir prieinamos visiems žmonėms. Jei naudojate pagalbines technologijas ar specialius prieinamumo nustatymus, mūsų paslaugos sukurtos taip, kad veiktų su standartinėmis įrenginio, naršyklės ir operacinės sistemos prieinamumo funkcijomis. Jei susiduriate su sunkumais, <a href="#feedback-heading">susisiekite su mumis</a>.',
 
     // Statement — usage section heading
-    usageHeading:           'Kaip turėtumėte galėti naudotis šiomis skaitmeninėmis paslaugomis',
+    usageHeading:           'Naudojimasis mūsų skaitmeninėmis paslaugomis',
 
     // Statement — limitations section heading
     limitationsHeading:     'Šių skaitmeninių paslaugų prieinamumo apribojimai',
