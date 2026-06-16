@@ -802,8 +802,21 @@
     }
   }
 
-  if (legal) {
-    body += `<hr/><h2>${esc(t.legalDisclaimer)}</h2><p style="white-space:pre-line">${esc(legal)}</p>`;
+  // Build legal disclaimer — Airtable override takes priority, else use translations.js default
+  function buildDisclaimer(legalOverride, t, clientName, auditTitle, vpat, reportDate) {
+    const text = legalOverride || t.legalDisclaimerDefault;
+    if (!text) return '';
+    const year = reportDate ? new Date(reportDate + 'T12:00:00').getFullYear() : new Date().getFullYear();
+    return text
+      .replace(/\{year\}/g, year)
+      .replace(/\{company\}/g, clientName || '')
+      .replace(/\{product\}/g, auditTitle || '')
+      .replace(/\{vpat\}/g, vpat || 'VPAT® 2.5');
+  }
+
+  const disclaimerText = buildDisclaimer(legal, t, clientName, auditTitle, vpat, reportDate);
+  if (disclaimerText) {
+    body += `<hr/><h2>${esc(t.legalDisclaimer)}</h2><p style="white-space:pre-line">${esc(disclaimerText)}</p>`;
   }
 
   document.getElementById('acr-body').innerHTML = body;
