@@ -238,13 +238,10 @@
       const p1 = document.createElement('p');
       p1.textContent = `${t.introAppliesTo}`;
       const p2 = document.createElement('p');
-      p2.textContent = `(${t.introReferredAs} \u201c${t.introCollective}\u201d)`;
-      const p3 = document.createElement('p');
-      p3.innerHTML = `${t.introProvidedBy} <strong>${clientName}</strong>.`;
+      p2.innerHTML = `(${t.introReferredAs} \u201c${t.introCollective}\u201d) \u2014 ${t.introProvidedBy} <strong>${clientName}</strong>.`;
       wrapper.appendChild(p1);
       wrapper.appendChild(ul);
       wrapper.appendChild(p2);
-      wrapper.appendChild(p3);
       return wrapper.innerHTML;
     }
 
