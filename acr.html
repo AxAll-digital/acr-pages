@@ -609,14 +609,22 @@
     const domain = getDomain(productUrl);
     const href   = productUrl ? (productUrl.startsWith('http') ? productUrl : `https://${productUrl}`) : '';
 
+    // Always build the title line — with URL in brackets if available
+    const titleLine = domain
+      ? `${esc(auditTitle)} (<a href="${href}" target="_blank" rel="noopener">www.${domain}</a>)`
+      : esc(auditTitle);
+
     if (productVersion && productVersion.trim()) {
-      // App with version — title + formatted version block
-      return `${esc(auditTitle)}<br>${renderFormattedText(productVersion)}`;
-    } else if (domain) {
-      // Website/docs — title + URL in brackets
-      return `${esc(auditTitle)} (<a href="${href}" target="_blank" rel="noopener">www.${domain}</a>)`;
+      // App with version — title + URL + version block (all items as flat list)
+      const versionLines = productVersion.split('\n')
+        .map(l => l.trim().replace(/^[•●\-\*]\s*/, '').trim())
+        .filter(Boolean);
+      const versionHtml = versionLines.length
+        ? `<ul>${versionLines.map(l => `<li>${esc(l)}</li>`).join('')}</ul>`
+        : esc(productVersion);
+      return `${titleLine}<br>${versionHtml}`;
     }
-    return esc(auditTitle) || '—';
+    return titleLine || '—';
   }
 
   /* ── Lang toggle ──────────────────────────────────────────────────────────── */
