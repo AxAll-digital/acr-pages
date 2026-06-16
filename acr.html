@@ -350,7 +350,7 @@
   const productName  = langField(auditData.productVersion, auditData.productVersionLT, lang);
 
   // ── Page title (browser tab)
-  document.title = `${t.pageTitle} — ${clientName || auditTitle}`;
+  document.title = `${t.pageTitle} — ${auditTitle}`;
   const reportDate   = auditData.auditDate || '';
   const description  = langField(auditData.productDescription, auditData.productDescriptionLT, lang);
   const contactText  = langField(auditData.contactInfo, auditData.contactInfoLT, lang);
