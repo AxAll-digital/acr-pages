@@ -378,7 +378,7 @@ const UI = {
     introCollective:        'skaitmeninės paslaugos',
 
     // Statement — usage fallback text
-    usageFallback:          'Mes siekiame, kad mūsų skaitmeninės paslaugos būtų įtraukios ir prieinamos visiems žmonėms, nepriklausomai nuo jų gebėjimų.\nKai kuriems naudotojams geresnę patirtį gali padėti užtikrinti jų įrenginio, operacinės sistemos ar naršyklės prieinamumo nustatymai bei pagalbinės technologijos, pavyzdžiui, teksto dydžio, spalvų schemos ar kontrasto keitimas ir ekrano skaitymo programų naudojimas.\nDaugiau informacijos rasite savo įrenginio, operacinės sistemos ar naršyklės prieinamumo pagalbos šaltiniuose, kuriuose paaiškinama, kaip konfigūruoti šiuos nustatymus.\nJei jums reikalinga pagalba pritaikant mūsų paslaugas savo poreikiams, <a href="#feedback-heading">susisiekite su mumis</a>.',
+    usageFallback:          'Mes siekiame, kad mūsų skaitmeninės paslaugos būtų įtraukios ir prieinamos visiems žmonėms. Jei naudojate pagalbines technologijas ar specialius prieinamumo nustatymus, mūsų paslaugos sukurtos taip, kad veiktų su standartinėmis įrenginio, naršyklės ir operacinės sistemos prieinamumo funkcijomis. Jei susiduriate su sunkumais, <a href="#feedback-heading">susisiekite su mumis</a>.',
 
     // Statement — usage section heading
     usageHeading:           'Kaip turėtumėte galėti naudotis šiomis skaitmeninėmis paslaugomis',
