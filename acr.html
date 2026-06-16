@@ -46,6 +46,12 @@
       gap: 1rem;
     }
 
+    .site-header-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
     .client-logo {
       max-height: 40px;
       max-width: 180px;
@@ -267,6 +273,17 @@
     .acr-note a, .section-note a { color: #0057b8; }
     a { color: #0057b8; }
     a:hover { text-decoration: underline; }
+
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+    }
+    .lang-current { font-weight: 700; color: #1a1b1f; }
+    .lang-link { color: #1a1b1f; text-decoration: underline; }
+    .lang-link:hover { text-decoration: none; }
+    .lang-sep { color: #aaa; }
   </style>
 </head>
 <body>
@@ -577,6 +594,28 @@
       .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g, (_, label, url) => `<a href="${url}">${label}</a>`);
   }
 
+  /* ── Lang toggle ──────────────────────────────────────────────────────────── */
+  function buildLangToggle(langs, currentLang) {
+    if (!langs || langs.length < 2) return '';
+    const host = window.location.hostname;
+    const path = window.location.pathname; // '/acr' or '/'
+    const parts = host.split('.');
+    const domain = parts.slice(1).join('.'); // axall.digital or telia.lt
+
+    const labels = { en: 'English', lt: 'Lietuvių' };
+    const subdomains = { en: 'accessibility', lt: 'prieinamumas' };
+
+    const links = langs.map(l => {
+      if (l === currentLang) {
+        return `<span class="lang-current">${labels[l] || l}</span>`;
+      }
+      const altHost = `${subdomains[l] || l}.${domain}`;
+      return `<a href="https://${altHost}${path}" class="lang-link">${labels[l] || l}</a>`;
+    });
+
+    return `<div class="lang-toggle">${links.join(' <span class="lang-sep">|</span> ')}</div>`;
+  }
+
   /* ── Build evaluation intro sentence ─────────────────────────────────────── */
   const scopeCount  = scopeRecords.length;
   const shortLabel  = langField(auditData.productType?.referredAsEN, auditData.productType?.referredAsLT, lang) || 'website';
@@ -601,14 +640,18 @@
   const contactHtml = renderContact(contactText, evaluators);
   const evalHtml    = renderEvalMethods(methodologies, auditData);
 
+  const langs      = auditData.langs || [lang];
+  const langToggle = buildLangToggle(langs, lang);
+
   const headerHtml = `
     <header class="site-header">
       ${logoUrl ? `<img class="client-logo" src="${esc(logoUrl)}" alt="${esc(clientName)} logo" />` : '<div></div>'}
+      ${langToggle ? `<div class="site-header-center">${langToggle}</div>` : ''}
       <div class="axall-badge">
         ${lang === 'lt' ? 'Prieinamumą įvertino' : 'Accessibility evaluated by'}<br>
         <a href="https://axall.digital" target="_blank" rel="noopener">AxAll UAB</a>
       </div>
-    </header>
+    </header>`;
 
     <h1 class="acr-title">${esc(clientName) ? esc(clientName) + ' ' + esc(t.pageTitle) : esc(t.pageTitle)}</h1>
     ${vpat ? `<p class="acr-edition">${esc(vpat)} ${esc(t.reportSubtitle)}</p>` : ''}
