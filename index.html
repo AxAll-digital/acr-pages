@@ -147,9 +147,11 @@
     function renderAddress(text) {
       if (!text) return '';
       return text.split('\n').filter(l => l.trim()).map(line => {
-        if (/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/.test(line))
-          return line.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
-                     .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g, (_, label, url) => `<a href="${url}">${label}</a>`);
+        // Handle any markdown links [label](url) — https or mailto
+        if (/\[([^\]]+)\]\(([^)]+)\)/.test(line))
+          return line
+            .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`)
+            .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g, (_, label, url) => `<a href="${url}">${label}</a>`);
         if (/^https?:\/\//.test(line.trim())) { const u = line.trim(); return `<a href="${u}" target="_blank" rel="noopener">${u.replace(/^https?:\/\//, '')}</a>`; }
         if (/^www\./.test(line.trim())) { const d = line.trim(); return `<a href="https://${d}" target="_blank" rel="noopener">${d}</a>`; }
         if (/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(line.trim())) { const e = line.trim(); return `<a href="mailto:${e}">${e}</a>`; }
@@ -238,7 +240,7 @@
       const p1 = document.createElement('p');
       p1.textContent = `${t.introAppliesTo}`;
       const p2 = document.createElement('p');
-      p2.innerHTML = `(${t.introReferredAs} \u201c${t.introCollective}\u201d) \u2014 ${t.introProvidedBy} <strong>${clientName}</strong>.`;
+      p2.innerHTML = `(${t.introReferredAs} \u201c${t.introCollective}\u201d). ${t.introProvidedBy} <strong>${clientName}</strong>.`;
       wrapper.appendChild(p1);
       wrapper.appendChild(ul);
       wrapper.appendChild(p2);
