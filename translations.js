@@ -217,7 +217,7 @@ const UI = {
     enClauseLabel:          'Clause',
 
     // Statement — intro sentence parts
-    introAppliesTo:         'This accessibility statement applies to the following digital services provided by',
+    introAppliesTo:         'This accessibility statement applies to the following digital services:',
     introWebsite:           'Website',
     introApp:               'Mobile application',
     introDocs:              'Non-Web Documents: published electronic documents',
@@ -370,7 +370,7 @@ const UI = {
     enClauseLabel:          'Skyrius',
 
     // Statement — intro sentence parts
-    introAppliesTo:         'Ši atitikties paraiška dėl prieinamumo (toliau – Atitikties paraiška) taikoma:',
+    introAppliesTo:         'Ši atitikties paraiška dėl prieinamumo (toliau – Atitikties paraiška) taikoma šioms skaitmeninėms paslaugoms:',
     introWebsite:           'Interneto svetainė',
     introApp:               'Mobilioji programėlė',
     introDocs:              'Dokumentai: publikuojami elektroniniai dokumentai',
