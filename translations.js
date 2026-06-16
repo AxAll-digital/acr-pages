@@ -107,9 +107,9 @@ const directiveLabels = {
   },
   lt: {
     'Directive (EU) 2019/882 on the accessibility requirements for products and services (European Accessibility Act, EAA)':
-      'Direktyva (ES) 2019/882 dėl gaminių ir paslaugų prieinamumo reikalavimų (European Accessibility Act, EAA)',
+      'Direktyva (ES) 2019/882 dėl gaminių ir paslaugų prieinamumo reikalavimų (Europos prieinamumo aktas, angl. European Accessibility Act, EAA)',
     'Directive (EU) 2016/2102 on the accessibility of the websites and mobile applications of public sector bodies (Web Accessibility Directive, WAD)':
-      'Direktyva (ES) 2016/2102 dėl viešojo sektoriaus institucijų interneto svetainių ir mobiliųjų programų prieinamumo (Web Accessibility Directive, WAD)',
+      'Direktyva (ES) 2016/2102 dėl viešojo sektoriaus institucijų interneto svetainių ir mobiliųjų programų prieinamumo (ES Prieinamumo direktyva, angl. Web Accessibility Directive, WAD)',
   },
 };
 
