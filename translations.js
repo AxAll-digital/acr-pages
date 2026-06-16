@@ -79,12 +79,12 @@ function clauseLabel(raw, lang) {
 // -----------------------------------------------------------------------------
 const complianceLabels = {
   en: {
-    'Fully Compliant':     'Fully compliant',
+    'Fully Compliant':     'Compliant',
     'Partially Compliant': 'Partially compliant',
     'Non-Compliant':       'Non-compliant',
   },
   lt: {
-    'Fully Compliant':     'Visiškai atitinka',
+    'Fully Compliant':     'Atitinka',
     'Partially Compliant': 'Iš dalies atitinka',
     'Non-Compliant':       'Neatitinka',
   },
@@ -268,6 +268,7 @@ const UI = {
     // Statement — limitations ACR link (conditional on compliance status)
     acrLinkCompliant:       'For details on the evaluation scope and testing methods used, see the <a href="acr">Accessibility Conformance Report</a>.',
     acrLinkNonCompliant:    'We are actively working to address these issues. For a complete list of known issues and their status, see the <a href="acr">Accessibility Conformance Report</a>.',
+    viewFullAcr:            'View the full Accessibility Conformance Report →',
 
     // Misc
     learnMore:              'Learn more',
@@ -424,6 +425,7 @@ const UI = {
     // Statement — limitations ACR link (conditional on compliance status)
     acrLinkCompliant:       'Išsamią informaciją apie vertinimo apimtį ir naudotus testavimo metodus rasite <a href="acr">Prieinamumo atitikties ataskaitoje</a>.',
     acrLinkNonCompliant:    'Aktyviai dirbame, kad ištaisytume šias problemas. Išsamų žinomų problemų ir jų būsenos sąrašą rasite <a href="acr">Prieinamumo atitikties ataskaitoje</a>.',
+    viewFullAcr:            'Peržiūrėti visą prieinamumo atitikties ataskaitą →',
 
     // Misc
     learnMore:              'Sužinoti daugiau',
