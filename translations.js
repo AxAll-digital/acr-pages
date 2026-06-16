@@ -101,9 +101,9 @@ function complianceLabel(raw, lang) {
 const directiveLabels = {
   en: {
     'Directive (EU) 2019/882 on the accessibility requirements for products and services (European Accessibility Act, EAA)':
-      'Directive (EU) 2019/882 — European Accessibility Act (EAA)',
+      'Directive (EU) 2019/882 on the accessibility requirements for products and services (European Accessibility Act, EAA)',
     'Directive (EU) 2016/2102 on the accessibility of the websites and mobile applications of public sector bodies (Web Accessibility Directive, WAD)':
-      'Directive (EU) 2016/2102 — Web Accessibility Directive (WAD)',
+      'Directive (EU) 2016/2102 on the accessibility of the websites and mobile applications of public sector bodies (Web Accessibility Directive, WAD)',
   },
   lt: {
     'Directive (EU) 2019/882 on the accessibility requirements for products and services (European Accessibility Act, EAA)':
