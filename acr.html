@@ -597,6 +597,28 @@
       .replace(/\[([^\]]+)\]\((mailto:[^)]+)\)/g, (_, label, url) => `<a href="${url}">${label}</a>`);
   }
 
+  /* ── Domain extractor ─────────────────────────────────────────────────────── */
+  function getDomain(url) {
+    if (!url) return '';
+    try { return new URL(url.startsWith('http') ? url : 'https://' + url).hostname.replace(/^www\./, ''); }
+    catch { return url.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0]; }
+  }
+
+  /* ── Product name renderer ────────────────────────────────────────────────── */
+  function renderProductName(auditTitle, productVersion, productUrl) {
+    const domain = getDomain(productUrl);
+    const href   = productUrl ? (productUrl.startsWith('http') ? productUrl : `https://${productUrl}`) : '';
+
+    if (productVersion && productVersion.trim()) {
+      // App with version — title + formatted version block
+      return `${esc(auditTitle)}<br>${renderFormattedText(productVersion)}`;
+    } else if (domain) {
+      // Website/docs — title + URL in brackets
+      return `${esc(auditTitle)} (<a href="${href}" target="_blank" rel="noopener">www.${domain}</a>)`;
+    }
+    return esc(auditTitle) || '—';
+  }
+
   /* ── Lang toggle ──────────────────────────────────────────────────────────── */
   function buildLangToggle(langs, currentLang) {
     if (!langs || langs.length < 2) return '';
@@ -663,7 +685,7 @@
     <hr/>
 
     <h2>${esc(t.nameOfProduct)}</h2>
-    <p class="acr-field-value">${convertInlineMarkdown(productName) || '—'}</p>
+    <p class="acr-field-value">${renderProductName(auditTitle, productName, auditData.productUrl)}</p>
 
     <h2>${esc(t.reportDate)}</h2>
     <p class="acr-field-value">${formatReportDate(reportDate, lang) || '—'}</p>
