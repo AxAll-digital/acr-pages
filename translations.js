@@ -278,7 +278,7 @@ const UI = {
   lt: {
     // Document / page
     pageTitle:              'Prieinamumo atitikties ataskaita',
-    statementTitle:         'Paraiška dėl prieinamumo',
+    statementTitle:         'Atitikties paraiška dėl prieinamumo',
     htmlLang:               'lt',
 
     // ACR header
@@ -370,7 +370,7 @@ const UI = {
     enClauseLabel:          'Skyrius',
 
     // Statement — intro sentence parts
-    introAppliesTo:         'Ši paraiška dėl prieinamumo taikoma šiems',
+    introAppliesTo:         'Ši atitikties paraiška dėl prieinamumo (toliau – Atitikties paraiška) taikoma:',
     introWebsite:           'Interneto svetainė',
     introApp:               'Mobilioji programėlė',
     introDocs:              'Dokumentai: publikuojami elektroniniai dokumentai',
