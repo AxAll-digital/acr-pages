@@ -238,7 +238,7 @@
       const p1 = document.createElement('p');
       p1.textContent = `${t.introAppliesTo}`;
       const p2 = document.createElement('p');
-      p2.innerHTML = `(${t.introReferredAs} \u201c${t.introCollective}\u201d). ${t.introProvidedBy} <strong>${clientName}</strong>.`;
+      p2.innerHTML = `(${t.introReferredAs} \u201c${t.introCollective}\u201d) \u2014 ${t.introProvidedBy} <strong>${clientName}</strong>.`;
       wrapper.appendChild(p1);
       wrapper.appendChild(ul);
       wrapper.appendChild(p2);
@@ -336,8 +336,8 @@
       setText('client-name-commitment', `${clientName} ${t.technicalCommitment} ${directive}.`);
       setText('compliance-subheading', t.complianceSubheading);
 
-      // Compliance sentence — product name + status + EN standard + WCAG
-      const productName  = langField(d.productVersion, d.productVersionLT, lang) || auditTitle;
+      // Compliance sentence — audit title + status + EN standard + WCAG
+      const productLabel = auditTitle || langField(d.productVersion, d.productVersionLT, lang);
       const statusLabel  = complianceLabel(d.complianceStatus || '', lang);
       const en321Label   = langField(s.en321LabelEN, s.en321LabelLT, lang);
       const en321Url     = s.en321URL || '';
@@ -345,7 +345,7 @@
       const wcag21Url    = s.wcag21URL || '';
       const isEnStandard = (d.vpat || '').includes('EN 301 549');
 
-      let complianceSentence = `${productName} ${statusLabel}`;
+      let complianceSentence = `${productLabel} ${statusLabel}`;
       if (isEnStandard) {
         complianceSentence += ` ${lang === 'lt' ? 'su' : 'with'} <a href="${en321Url}" target="_blank" rel="noopener">${en321Label}</a> ${lang === 'lt' ? 'ir' : 'and'} <a href="${wcag21Url}" target="_blank" rel="noopener">${wcag21Label}</a>.`;
       } else {
