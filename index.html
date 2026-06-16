@@ -196,31 +196,53 @@
 
     // Builds the intro sentence from VPAT product types + product URL + client name
     function buildIntro(d, t, lang) {
-      const vpatTypes = d.vpatProductTypes || []; // multi-select from Audits
+      const vpatTypes = d.vpatProductTypes || [];
       const productUrl = d.productUrl || '';
       const clientName = d.clientDetails || '';
       const domain = getDomain(productUrl);
+      const href = productUrl.startsWith('http') ? productUrl : `https://${productUrl}`;
+      const display = domain ? 'www.' + domain : productUrl;
 
-      const lines = [];
+      // Build list items as DOM elements to avoid HTML escaping issues
+      const ul = document.createElement('ul');
+
+      const addLi = (html) => {
+        const li = document.createElement('li');
+        li.innerHTML = html;
+        ul.appendChild(li);
+      };
+
+      let added = false;
       vpatTypes.forEach(type => {
-        const lc = (typeof type === 'object' ? type.name : type).toLowerCase();
+        const name = typeof type === 'object' ? (type.name || '') : type;
+        const lc = name.toLowerCase();
         if (lc.includes('web') && !lc.includes('non')) {
-          lines.push(`${t.introWebsite}: ${domain || productUrl}`);
+          addLi(`${t.introWebsite}: <a href="${href}" target="_blank" rel="noopener">${display}</a>`);
+          added = true;
         } else if (lc.includes('mobile') || lc.includes('app')) {
           const appName = langField(d.productVersion, d.productVersionLT, lang) || '';
-          lines.push(`${t.introApp}${appName ? ': ' + appName : ''}`);
+          addLi(`${t.introApp}${appName ? ': ' + appName : ''}`);
+          added = true;
         } else if (lc.includes('document')) {
-          lines.push(t.introDocs);
+          addLi(t.introDocs);
+          added = true;
         }
       });
 
-      // Fallback if no VPAT types set — use product URL
-      if (!lines.length && productUrl) {
-        lines.push(`${t.introWebsite}: ${domain || productUrl}`);
+      // Fallback — no VPAT types or none matched
+      if (!added && productUrl) {
+        addLi(`${t.introWebsite}: <a href="${href}" target="_blank" rel="noopener">${display}</a>`);
       }
 
-      const listHtml = lines.map(l => `<li>${l}</li>`).join('');
-      return `<p>${t.introAppliesTo} ${clientName}:</p><ul>${listHtml}</ul><p>(${t.introReferredAs} &ldquo;${t.introCollective}&rdquo;)</p>`;
+      const wrapper = document.createElement('div');
+      const p1 = document.createElement('p');
+      p1.textContent = `${t.introAppliesTo} ${clientName}:`;
+      const p2 = document.createElement('p');
+      p2.textContent = `(${t.introReferredAs} \u201c${t.introCollective}\u201d)`;
+      wrapper.appendChild(p1);
+      wrapper.appendChild(ul);
+      wrapper.appendChild(p2);
+      return wrapper.innerHTML;
     }
 
     async function init() {
@@ -277,17 +299,10 @@
       // ── Intro subtitle
       setHtml('page-subtitle', buildIntro(d, t, lang));
 
-      // ── Usage
+      // ── Usage — always use translations.js text, ignore Airtable field
       setText('usage-heading', t.usageHeading);
-      if (usageTxt) {
-        // Airtable override — split on double newline into paragraphs
-        const paras = usageTxt.split(/\n\n+/).filter(p => p.trim());
-        setHtml('usage-text', paras.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join(''));
-      } else {
-        // Fallback from translations.js — contains <a> so use innerHTML directly
-        const paras = t.usageFallback.split('\n').filter(p => p.trim());
-        setHtml('usage-text', paras.map(p => `<p>${p}</p>`).join(''));
-      }
+      const usageParas = t.usageFallback.split('\n').filter(p => p.trim());
+      setHtml('usage-text', usageParas.map(p => `<p>${p}</p>`).join(''));
 
       // ── Compatibility
       if (d.productType?.showCompat && compatTxt) {
