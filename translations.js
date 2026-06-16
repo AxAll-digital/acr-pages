@@ -265,8 +265,9 @@ const UI = {
     certIdLabel:            'Certificate ID',
     certRegistryLink:       'Visit the Accessibility Registry for more information.',
 
-    // Statement — ACR link
-    viewFullAcr:            'View the full Accessibility Conformance Report →',
+    // Statement — limitations ACR link (conditional on compliance status)
+    acrLinkCompliant:       'For details on the evaluation scope and testing methods used, see the <a href="acr">Accessibility Conformance Report</a>.',
+    acrLinkNonCompliant:    'We are actively working to address these issues. For a complete list of known issues and their status, see the <a href="acr">Accessibility Conformance Report</a>.',
 
     // Misc
     learnMore:              'Learn more',
@@ -420,8 +421,9 @@ const UI = {
     certIdLabel:            'Pažymėjimo ID',
     certRegistryLink:       'Daugiau informacijos rasite prieinamumo registro puslapyje.',
 
-    // Statement — ACR link
-    viewFullAcr:            'Peržiūrėti visą prieinamumo atitikties ataskaitą →',
+    // Statement — limitations ACR link (conditional on compliance status)
+    acrLinkCompliant:       'Išsamią informaciją apie vertinimo apimtį ir naudotus testavimo metodus rasite <a href="acr">Prieinamumo atitikties ataskaitoje</a>.',
+    acrLinkNonCompliant:    'Aktyviai dirbame, kad ištaisytume šias problemas. Išsamų žinomų problemų ir jų būsenos sąrašą rasite <a href="acr">Prieinamumo atitikties ataskaitoje</a>.',
 
     // Misc
     learnMore:              'Sužinoti daugiau',
