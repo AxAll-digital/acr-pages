@@ -413,8 +413,8 @@ const UI = {
     enReport:               'EN 301 549 ataskaita',
     enClauseLabel:          'Skyrius',
 
-    evalIntroWithScope:     'Ši atitikties ataskaita parengta remiantis prieinamumo vertinimo, kurį atliko {specialist}, rezultatais. Vertinimas apėmė {count} {word} imtį. Šie {word} buvo atrinkti „AxAll" UAB kaip reprezentatyvūs, atspindintys bendrą {title} prieinamumą ir funkcionalumą. {word} sąrašas pateiktas skyriuje „{section}".',
-    evalIntroNoScope:       'Ši atitikties ataskaita parengta remiantis prieinamumo vertinimo, kurį atliko {specialist}, rezultatais.',
+    evalIntroWithScope:     'Ši atitikties ataskaita parengta remiantis „AxAll" UAB atlikto prieinamumo vertinimo rezultatais. Vertinimas apėmė {count} {word} reprezentatyvią imtį, atspindinčią bendrą{title} prieinamumą ir funkcionalumą. Vertintų {word} sąrašas pateiktas skyriuje „{section}".',
+    evalIntroNoScope:       'Ši atitikties ataskaita parengta remiantis „AxAll" UAB atlikto prieinamumo vertinimo rezultatais.',
 
     backToStatement:        'Grįžti į pareiškimą dėl prieinamumo',
     viewFullReport:         'Peržiūrėti visą atitikties ataskaitą',
