@@ -721,7 +721,8 @@
     const criterionId  = r.criterionId || '';
     const name         = langField(r.criterionName, r.criterionNameLT, lang);
     const level        = r.level || '';
-    const refUrl       = r.referenceUrl || '';
+    const rawRefUrl    = r.referenceUrl || '';
+    const refUrl       = rawRefUrl.startsWith('http') ? rawRefUrl : '';
     const conformance  = r.conformance || '';
     const remarks      = langField(r.remarks, r.remarksLT, lang);
     const enRef        = r.en301549Ref || '';
