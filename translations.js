@@ -2,6 +2,19 @@
 // translations.js — AxAll ACR & Statement pages
 // Edit this file to update UI labels and translations.
 // Do not edit index.html or acr.html for translation changes.
+//
+// Structure:
+//   SHARED HELPERS     — 1. Field resolver (used by both pages)
+//   ACR HELPERS        — 2. Conformance label map
+//                        3. EN 301 549 clause section labels
+//                        4. EN 301 549 cross-reference term translations
+//   STATEMENT HELPERS  — 5. Compliance status label map
+//                        6. Applicable Directive label map
+//   UI STRINGS         — all display text, grouped as: SHARED → ACR → STATEMENT
+// =============================================================================
+
+// =============================================================================
+// SHARED HELPERS
 // =============================================================================
 
 // -----------------------------------------------------------------------------
@@ -15,6 +28,10 @@ function langField(enValue, ltValue, lang) {
   }
   return enValue || '';
 }
+
+// =============================================================================
+// ACR HELPERS
+// =============================================================================
 
 // -----------------------------------------------------------------------------
 // 2. Conformance level label map
@@ -103,6 +120,10 @@ function enRefLabel(lang) {
   return lang === 'lt' ? 'Taip pat taikoma EN 301 549 kriterijams:' : 'Also applies to EN 301 549 Criteria:';
 }
 
+// =============================================================================
+// STATEMENT HELPERS
+// =============================================================================
+
 // -----------------------------------------------------------------------------
 // 5. Compliance status label map
 // -----------------------------------------------------------------------------
@@ -145,11 +166,10 @@ function directiveLabel(raw, lang) {
   return (directiveLabels[lang] && directiveLabels[lang][raw]) || raw;
 }
 
-// -----------------------------------------------------------------------------
-// 7. UI string sets
-// Grouped by: SHARED → ACR → STATEMENT → MISC
+// =============================================================================
+// UI STRINGS — grouped as: SHARED → ACR → STATEMENT
 // Add new keys here; use t.keyName in templates.
-// -----------------------------------------------------------------------------
+// =============================================================================
 const UI = {
   en: {
 
@@ -159,7 +179,7 @@ const UI = {
     statementTitle:         'Accessibility Statement',
     htmlLang:               'en',
 
-    // Conformance level labels (used in both ACR tables and Statement)
+    // Conformance level labels (ACR tables)
     supports:               'Supports',
     partiallySup:           'Partially Supports',
     doesNotSup:             'Does Not Support',
@@ -330,7 +350,7 @@ const UI = {
     productDescription:     'Produkto aprašymas',
     evaluators:             'Vertintojai',
     leadEvaluator:          'Pagrindinis vertintojas',
-    disabilityReviewer:     'Neįgalumo ekspertas',
+    disabilityReviewer:     'Ekspertas su negalia',
     organisation:           'Organizacija',
     disability:             'Negalia',
     version:                'Versija',
@@ -348,7 +368,7 @@ const UI = {
     evaluationSection:      'Vertinimas',
     evalMethodsUsed:        'Taikyti vertinimo metodai',
     assistiveTech:          'Testavimas pagalbinėmis technologijomis',
-    automatedTools:         'Testavimas automatizuotais įrankiais',
+    automatedTools:         'Testavimas naudojant automatinius įrankius',
     methodology:            'Vertinimo metodologija',
     tools:                  'Priemonės, metodai ir kita informacija',
     coverage:               'Vertinimo apimtis',
@@ -379,9 +399,9 @@ const UI = {
     termNotEvaluated:       'Nevertinta',
     termNotEvaluatedDesc:   'Produktas nebuvo įvertintas pagal šį kriterijų. Šią reikšmę galima naudoti tik WCAG AAA lygio kriterijams.',
 
-    noteWcagSupports:       'Pastaba: WCAG lentelėse atitikties lygis žymimas kaip „Palaiko" net ir tada, kai produkte nėra turinio, kuriam būtų taikomas sėkmės kriterijus. Tai atitinka <a href="https://www.w3.org/TR/WCAG20/#conformance-reqs" target="_blank" rel="noopener">WCAG 2.0 atitikties sampratos reikalavimus</a>.',
-    noteWcagVerified:       'Pastaba: Kriterijai, pažymėti kaip „Palaiko", nurodo, kad produktas palaiko atitinkamą kriterijų, remiantis <a href="#evaluation">aukščiau aprašytais vertinimo imtimi ir metodais</a>.',
-    noteEnNotApplicable:    'Pastaba: EN 301 549 lentelėse „Netaikoma" žymima tais atvejais, kai konkreti funkcija, kuriai taikomas kriterijus, nėra produkto dalis. Pavyzdžiui, jei produktas yra Saitynas (Web), EN 301 549 skyrius 8. Techninė įranga bus pažymėtas „Netaikoma". Tai atitinka <a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf" target="_blank" rel="noopener">EN 301 549 atitikties sampratos reikalavimus</a>.',
+    noteWcagSupports:       'WCAG lentelėse atitikties lygis žymimas kaip „Palaiko" net ir tada, kai produkte nėra turinio, kuriam būtų taikomas sėkmės kriterijus. Tai atitinka <a href="https://www.w3.org/TR/WCAG20/#conformance-reqs" target="_blank" rel="noopener">WCAG 2.0 atitikties sampratos reikalavimus</a>.',
+    noteWcagVerified:       'Kriterijai, pažymėti kaip „Palaiko", nurodo, kad produktas palaiko atitinkamą kriterijų, remiantis <a href="#evaluation">aukščiau aprašytais vertinimo imtimi ir metodais</a>.',
+    noteEnNotApplicable:    'EN 301 549 lentelėse „Netaikoma" žymima tais atvejais, kai konkreti funkcija, kuriai taikomas kriterijus, nėra produkto dalis. Pavyzdžiui, jei produktas yra Saitynas (Web), EN 301 549 skyrius 8. Techninė įranga bus pažymėtas „Netaikoma". Tai atitinka <a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf" target="_blank" rel="noopener">EN 301 549 atitikties sampratos reikalavimus</a>.',
 
     wcagReport:             'WCAG 2.x ataskaita',
     wcagReportIntro:        '1 ir 2 lentelėse dokumentuojama atitiktis šiems EN 301 549 skyriams:',
@@ -403,7 +423,7 @@ const UI = {
     introAppliesTo:         'Ši atitikties paraiška dėl prieinamumo (toliau – Atitikties paraiška) taikoma šioms skaitmeninėms paslaugoms:',
     introWebsite:           'Interneto svetainė',
     introApp:               'Mobilioji programėlė',
-    introDocs:              'Dokumentai: publikuojami elektroniniai dokumentai',
+    introDocs:              'E. dokumentai: publikuojami elektroniniai dokumentai',
     introReferredAs:        'toliau',
     introCollective:        'skaitmeninės paslaugos',
     introProvidedBy:        'Paslaugas teikia',
