@@ -534,7 +534,7 @@
     if (lead && lead.name) {
       const heading = disReviewer && disReviewer.name ? t.evaluators : t.evaluators;
       html += `<h3 class="eval-block-title">${esc(heading)}</h3>`;
-      html += `<p>Lead Evaluator: ${esc(lead.name)}`;
+      html += `<p>${t.leadEvaluator}: ${esc(lead.name)}`;
       const jobTitle = langField(lead.jobTitle, lead.jobTitleLT, lang);
       if (jobTitle) html += ` — ${esc(jobTitle)}`;
       html += `</p>`;
@@ -543,7 +543,7 @@
     if (disReviewer && disReviewer.name) {
       const jobTitle = langField(disReviewer.jobTitle, disReviewer.jobTitleLT, lang);
       const org      = langField(disReviewer.organisation, disReviewer.organisationLT, lang);
-      html += `<p>Disability Reviewer: ${esc(disReviewer.name)}`;
+      html += `<p>${t.disabilityReviewer}: ${esc(disReviewer.name)}`;
       if (jobTitle) html += ` — ${esc(jobTitle)}`;
       if (disReviewer.disability) html += ` (${esc(disReviewer.disability)})`;
       html += `</p>`;
@@ -660,15 +660,23 @@
                     : 'web pages';
 
   const hasDisReviewer = evaluators.length > 1 && evaluators[1]?.name;
-  let specialistText = 'AxAll UAB specialist';
+  const specialistSingle = lang === 'lt' ? '„AxAll" UAB specialisto' : 'AxAll UAB specialist';
+  let specialistText = specialistSingle;
   if (hasDisReviewer) {
     const org = langField(evaluators[1].organisation, evaluators[1].organisationLT, lang);
-    specialistText = `AxAll UAB and ${org || 'disability community'} specialists`;
+    specialistText = lang === 'lt'
+      ? `„AxAll" UAB ir ${org || 'neįgalumo bendruomenės'} specialistų`
+      : `AxAll UAB and ${org || 'disability community'} specialists`;
   }
 
   const evalIntro = scopeCount > 0
-    ? `This conformance report is based on the results of an accessibility evaluation conducted by ${specialistText}, which included a sample of ${scopeCount} ${scopeWord}. These ${scopeWord} were selected by AxAll UAB as representative of the overall accessibility and functionality of the ${esc(auditTitle)}. The ${scopeWord} are listed below in the section "${t.scopeSection}".`
-    : `This conformance report is based on the results of an accessibility evaluation conducted by ${specialistText}.`;
+    ? t.evalIntroWithScope
+        .replace('{specialist}', specialistText)
+        .replace(/{count}/g, scopeCount)
+        .replace(/{word}/g, scopeWord)
+        .replace('{title}', esc(auditTitle))
+        .replace('{section}', t.scopeSection)
+    : t.evalIntroNoScope.replace('{specialist}', specialistText);
 
   /* ── Header HTML ──────────────────────────────────────────────────────────── */
   const contactHtml = renderContact(contactText, evaluators);
