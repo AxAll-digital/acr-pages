@@ -724,7 +724,7 @@
     const refUrl       = r.referenceUrl || '';
     const conformance  = r.conformance || '';
     const remarks      = langField(r.remarks, r.remarksLT, lang);
-    const enRef        = langField(r.en301549Ref, r.en301549RefLT, lang);
+    const enRef        = r.en301549Ref || '';
     const sectionNotes = r.enSectionNoteOverride || r.enSectionNote || '';
     const row = { criterionId, name, level, refUrl, conformance, remarks, enRef, sectionNotes };
 
