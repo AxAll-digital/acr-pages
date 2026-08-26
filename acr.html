@@ -653,11 +653,22 @@
   /* ── Build evaluation intro sentence ─────────────────────────────────────── */
   const scopeCount  = scopeRecords.length;
   const shortLabel  = langField(auditData.productType?.referredAsEN, auditData.productType?.referredAsLT, lang) || 'website';
+
+  // EN scope word (nominative plural)
   const scopeWord   = shortLabel === 'application' ? 'screens'
                     : shortLabel === 'document'    ? 'documents'
                     : shortLabel === 'documents'   ? 'documents'
                     : shortLabel === 'software'    ? 'screens'
                     : 'web pages';
+
+  // LT scope word (genitive plural — used throughout LT sentence)
+  const scopeWordLT = shortLabel === 'application' ? 'ekranų'
+                    : shortLabel === 'document'    ? 'dokumentų'
+                    : shortLabel === 'documents'   ? 'dokumentų'
+                    : shortLabel === 'software'    ? 'ekranų'
+                    : 'tinklalapių';
+
+  const word = lang === 'lt' ? scopeWordLT : scopeWord;
 
   const hasDisReviewer = evaluators.length > 1 && evaluators[1]?.name;
   const specialistSingle = lang === 'lt' ? '„AxAll" UAB specialisto' : 'AxAll UAB specialist';
@@ -672,8 +683,8 @@
   const evalIntro = scopeCount > 0
     ? t.evalIntroWithScope
         .replace('{specialist}', specialistText)
-        .replace(/{count}/g, scopeCount)
-        .replace(/{word}/g, scopeWord)
+        .replace(/\{count\}/g, scopeCount)
+        .replace(/\{word\}/g, word)
         .replace('{title}', esc(auditTitle))
         .replace('{section}', t.scopeSection)
     : t.evalIntroNoScope.replace('{specialist}', specialistText);
