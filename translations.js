@@ -82,10 +82,10 @@ const enRefTerms = {
   en: {},
   lt: {
     'Web':                           'Saitynas',
-    'Non-web document':              'El. dokumentas',
-    'Open Functionality Software':   'Atviros funkcijos progr. įranga',
-    'Closed Software':               'Uždaros funkcijos progr. įranga',
-    'Closed Functionality Software': 'Uždaros funkcijos progr. įranga',
+    'Non-web document':              'E. dokumentai',
+    'Open Functionality Software':   'Atviros funkcijos programinė įranga',
+    'Closed Software':               'Uždaros funkcijos programinė įranga',
+    'Closed Functionality Software': 'Uždaros funkcijos programinė įranga',
     'Authoring Tool':                'Turinio kūrimo įrankis',
     'Product Docs':                  'Produkto dokumentacija',
     'Support Docs':                  'Pagalbos dokumentacija',
@@ -103,7 +103,7 @@ function translateEnRef(text, lang) {
 
 // Also translates the "Also applies to" label
 function enRefLabel(lang) {
-  return lang === 'lt' ? 'Taip pat taikoma: EN 301 549 kriterijai' : 'Also applies to: EN 301 549 Criteria';
+  return lang === 'lt' ? 'Taip pat taikoma EN 301 549 kriterijams:' : 'Also applies to EN 301 549 Criteria:';
 }
 
 // -----------------------------------------------------------------------------
