@@ -74,6 +74,39 @@ function clauseLabel(raw, lang) {
 }
 
 // -----------------------------------------------------------------------------
+// EN 301 549 cross-reference bracketed term translations
+// Used in "Also applies to" lists: "9.1.1.1 (Web)" → "9.1.1.1 (Saitynas)"
+// Keys must match exactly the terms in parentheses in Airtable EN ref field
+// -----------------------------------------------------------------------------
+const enRefTerms = {
+  en: {},
+  lt: {
+    'Web':                           'Saitynas',
+    'Non-web document':              'El. dokumentas',
+    'Open Functionality Software':   'Atviros funkcijos progr. įranga',
+    'Closed Software':               'Uždaros funkcijos progr. įranga',
+    'Closed Functionality Software': 'Uždaros funkcijos progr. įranga',
+    'Authoring Tool':                'Turinio kūrimo įrankis',
+    'Product Docs':                  'Produkto dokumentacija',
+    'Support Docs':                  'Pagalbos dokumentacija',
+  },
+};
+
+// Translates bracketed terms in EN ref strings e.g. "- 9.1.1.1 (Web)" → "- 9.1.1.1 (Saitynas)"
+function translateEnRef(text, lang) {
+  if (!text || lang === 'en') return text;
+  const terms = enRefTerms[lang] || {};
+  return text.replace(/\(([^)]+)\)/g, (match, term) => {
+    return terms[term] ? `(${terms[term]})` : match;
+  });
+}
+
+// Also translates the "Also applies to" label
+function enRefLabel(lang) {
+  return lang === 'lt' ? 'Taip pat taikoma: EN 301 549 kriterijai' : 'Also applies to: EN 301 549 Criteria';
+}
+
+// -----------------------------------------------------------------------------
 // 4. Compliance status label map
 // Maps Airtable single select values → translated label
 // -----------------------------------------------------------------------------
