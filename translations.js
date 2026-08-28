@@ -171,6 +171,9 @@ const UI = {
     tools:                  'Tools, Techniques and Other Details',
     coverage:               'Evaluation Coverage',
     legalDisclaimer:        'Legal Disclaimer',
+    legalDisclaimerDefault: "Not Applicable. This chapter is informative and does not contain requirements requiring testing. Each aspect of the product's functionality under evaluation is described in detail within the technical requirements tables.",
+    leadEvaluator:          'Lead Evaluator',
+    disabilityReviewer:     'Disability Reviewer',
     preparedBy:             'Prepared by',
 
     // Table headers
@@ -180,6 +183,9 @@ const UI = {
     thStandard:             'Standard/Guideline',
     thIncluded:             'Included In Report',
     thLevel:                'Level',
+    yesLabel:               'Yes',
+    noLabel:                'No',
+    standardsIntro:         'This report covers the degree of conformance for the following accessibility standard/guidelines:',
 
     // Conformance level labels
     supports:               'Supports',
@@ -335,6 +341,9 @@ const UI = {
     tools:                  'Priemonės, metodai ir kita informacija',
     coverage:               'Vertinimo apimtis',
     legalDisclaimer:        'Atsakomybės ribojimas',
+    legalDisclaimerDefault: 'Netaikoma. Šis skyrius yra informacinis ir jame nėra reikalavimų, kurių laikymasis turi būti tikrinamas. Kiekvienas vertinamo produkto funkcionalumo aspektas aprašytas techninių reikalavimų lentelėse.',
+    leadEvaluator:          'Pagrindinis vertintojas',
+    disabilityReviewer:     'Ekspertas su negalia',
     preparedBy:             'Parengė',
 
     // Table headers
@@ -344,6 +353,9 @@ const UI = {
     thStandard:             'Standartas / gairės',
     thIncluded:             'Įtraukta į ataskaitą',
     thLevel:                'Lygis',
+    yesLabel:               'Taip',
+    noLabel:                'Ne',
+    standardsIntro:         'Ši ataskaita apima šių prieinamumo standartų ir (arba) gairių atitikties laipsnį:',
 
     // Conformance level labels
     supports:               'Palaiko',
