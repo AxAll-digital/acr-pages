@@ -701,7 +701,7 @@
       ${logoUrl ? `<img class="client-logo" src="${esc(logoUrl)}" alt="${esc(clientName)} logo" />` : '<div></div>'}
       ${langToggle ? `<div class="site-header-center">${langToggle}</div>` : ''}
       <div class="axall-badge">
-        ${lang === 'lt' ? 'Prieinamumą įvertino' : 'Accessibility evaluated by'}<br>
+        ${t.accessibilityEvaluatedBy}<br>
         <a href="https://axall.digital" target="_blank" rel="noopener">AxAll UAB</a>
       </div>
     </header>
@@ -767,6 +767,15 @@
   Object.values(enByChapter).forEach(arr => arr.sort(numSort));
 
   /* ── Renderers ────────────────────────────────────────────────────────────── */
+  /* ── Remarks auto-translator ─────────────────────────────────────────────── */
+  function translateRemarks(text, lang, t) {
+    if (lang === 'en' || !text) return text;
+    return text
+      .replace(/See information in/gi, t.seeInformationIn)
+      .replace(/\bthrough\b/gi, t.seeThrough)
+      .replace(/\bSee\b/g, t.seeLabel);
+  }
+
   function renderEnRef(text) {
     if (!text || !text.trim()) return '';
     const translated = translateEnRef(text, lang);
@@ -802,14 +811,14 @@
         ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a> ${levelLabel}`
         : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong> ${levelLabel}`;
       const enRefHtml = (showEnRef && row.enRef) ? renderEnRef(row.enRef) : '';
-      html += `<tr><td>${criterionLink}${enRefHtml}</td><td class="${cls}">${esc(confLabel)}</td><td>${esc(row.remarks)}</td></tr>`;
+      html += `<tr><td>${criterionLink}${enRefHtml}</td><td class="${cls}">${esc(confLabel)}</td><td>${esc(translateRemarks(row.remarks, lang, t))}</td></tr>`;
     });
     return html + '</tbody></table>';
   }
 
   function renderEnChapterTable(rows) {
     if (!rows.length) return '';
-    const headingCellLabel = lang === 'lt' ? 'Antraštės eilutė – atsakymo nereikia' : 'Heading cell – no response required';
+    const headingCellLabel = t.headingCellLabel;
     let html = `
     <table class="acr-table">
       <thead><tr>
@@ -827,7 +836,7 @@
         const criterionLabel = row.refUrl
           ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a>`
           : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong>`;
-        html += `<tr><td>${criterionLabel}</td><td class="${cls}">${esc(confLabel)}</td><td>${esc(row.remarks)}</td></tr>`;
+        html += `<tr><td>${criterionLabel}</td><td class="${cls}">${esc(confLabel)}</td><td>${esc(translateRemarks(row.remarks, lang, t))}</td></tr>`;
       }
     });
     return html + '</tbody></table>';
@@ -837,9 +846,7 @@
   const EN_BASE = 'https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf';
   const EN_CHAPTERS = {
     4:  { url: `${EN_BASE}#page=20`,
-          note: lang === 'lt'
-            ? 'Netaikoma. Šis skyrius yra informacinis ir jame nėra reikalavimų, kurių laikymasis turi būti tikrinamas. Kiekvienas vertinamo produkto funkcionalumo aspektas aprašytas techninių reikalavimų lentelėse.'
-            : 'Not Applicable. This chapter is informative and does not contain requirements requiring testing. Each aspect of the product\'s functionality under evaluation is described in detail within the technical requirements tables.' },
+          note: t.clause4Note },
     5:  { url: `${EN_BASE}#page=23` },
     6:  { url: `${EN_BASE}#page=30` },
     7:  { url: `${EN_BASE}#page=35` },
@@ -866,9 +873,9 @@
       <li><strong>${esc(t.termNotApplicable)}</strong>: ${esc(t.termNotApplicableDesc)}</li>
       <li><strong>${esc(t.termNotEvaluated)}</strong>: ${esc(t.termNotEvaluatedDesc)}</li>
     </ul>
-    <p class="acr-note"><strong>${lang === 'lt' ? 'Pastaba' : 'Note'}</strong>: ${t.noteWcagSupports}</p>
-    <p class="acr-note"><strong>${lang === 'lt' ? 'Pastaba' : 'Note'}</strong>: ${t.noteWcagVerified}</p>
-    <p class="acr-note"><strong>${lang === 'lt' ? 'Pastaba' : 'Note'}</strong>: ${t.noteEnNotApplicable}</p>
+    <p class="acr-note"><strong>${t.noteLabel}</strong>: ${t.noteWcagSupports}</p>
+    <p class="acr-note"><strong>${t.noteLabel}</strong>: ${t.noteWcagVerified}</p>
+    <p class="acr-note"><strong>${t.noteLabel}</strong>: ${t.noteEnNotApplicable}</p>
   </div>
   <hr/>`;
 
@@ -898,13 +905,13 @@
 
       if (ch === 4) {
         body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${esc(chapterHeading)}</a></h3>`;
-        body += `<p class="section-note">${lang === 'lt' ? 'Pastabos' : 'Notes'}: ${meta.note}</p>`;
+        body += `<p class="section-note">${t.notesLabel}: ${meta.note}</p>`;
         continue;
       }
       if (ch === 9) {
-        const seeLabel = lang === 'lt' ? 'žr. WCAG 2.x skyrių' : 'see WCAG 2.x section';
+        const seeLabel = t.seeWcagSection;
         body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${esc(chapterHeading)}</a> (<a href="#wcag-report">${seeLabel}</a>)</h3>`;
-        body += `<p class="section-note">${lang === 'lt' ? 'Žr. WCAG 2.x skyrių aukščiau.' : 'See WCAG 2.x section above.'}</p>`;
+        body += `<p class="section-note">${t.seeWcagSectionAbove}</p>`;
         continue;
       }
 
@@ -912,7 +919,7 @@
       const noteRow      = rows.find(r => r.sectionNotes && r.sectionNotes.trim());
       const chapterNote  = noteRow ? noteRow.sectionNotes.trim() : '';
       body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${esc(chapterHeading)}</a></h3>`;
-      if (chapterNote) body += `<p class="section-note">${lang === 'lt' ? 'Pastabos' : 'Notes'}: ${esc(chapterNote)}</p>`;
+      if (chapterNote) body += `<p class="section-note">${t.notesLabel}: ${esc(chapterNote)}</p>`;
       const hasActiveRows = contentRows.some(r => r.conformance !== 'Not Applicable');
       if (hasActiveRows) body += renderEnChapterTable(rows);
     }
