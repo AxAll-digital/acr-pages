@@ -247,6 +247,8 @@ const UI = {
     seeLabel:               'See',
     seeWcagSection:         'see WCAG 2.x section',
     seeWcagSectionAbove:    'See WCAG 2.x section above.',
+    evalIntroWithScope:     'This conformance report is based on the results of an accessibility evaluation conducted by {specialist}, which included a sample of {count} {word}. These {word} were selected by AxAll UAB as representative of the overall accessibility and functionality of the {title}. The {word} are listed below in the section "{section}".',
+    evalIntroNoScope:       'This conformance report is based on the results of an accessibility evaluation conducted by {specialist}.',
     clause4Note:            "Not Applicable. This chapter is informative and does not contain requirements requiring testing. Each aspect of the product's functionality under evaluation is described in detail within the technical requirements tables.",
 
     // Statement — intro sentence parts
@@ -409,6 +411,8 @@ const UI = {
     seeLabel:               'Žr.',
     seeWcagSection:         'žr. WCAG 2.x skyrių',
     seeWcagSectionAbove:    'Žr. WCAG 2.x skyrių aukščiau.',
+    evalIntroWithScope:     'Ši atitikties ataskaita parengta remiantis „AxAll“ UAB atlikto prieinamumo vertinimo rezultatais. Vertinimas apėmė {count} {word} reprezentatyvią imtį, atspindinčią bendrą {title} prieinamumą ir funkcionalumą. Vertintų {word} sąrašas pateiktas skyriuje „{section}“.',
+    evalIntroNoScope:       'Ši atitikties ataskaita parengta remiantis „AxAll“ UAB atlikto prieinamumo vertinimo rezultatais.',
     clause4Note:            'Netaikoma. Šis skyrius yra informacinis ir jame nėra reikalavimų, kurių laikymasis turi būti tikrinamas. Kiekvienas vertinamo produkto funkcionalumo aspektas aprašytas techninių reikalavimų lentelėse.',
 
     // Statement — intro sentence parts
