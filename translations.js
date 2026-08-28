@@ -260,6 +260,16 @@ const UI = {
     // EN 301 549 report
     enReport:               'EN 301 549 Report',
     enClauseLabel:          'Clause',
+    accessibilityEvaluatedBy: 'Accessibility evaluated by',
+    noteLabel:              'Note',
+    notesLabel:             'Notes',
+    headingCellLabel:       'Heading cell – no response required',
+    seeInformationIn:       'See information in',
+    seeThrough:             'through',
+    seeLabel:               'See',
+    seeWcagSection:         'see WCAG 2.x section',
+    seeWcagSectionAbove:    'See WCAG 2.x section above.',
+    clause4Note:            "Not Applicable. This chapter is informative and does not contain requirements requiring testing. Each aspect of the product's functionality under evaluation is described in detail within the technical requirements tables.",
 
     // Eval intro sentences ({specialist}, {count}, {word}, {title}, {section} are placeholders)
     evalIntroWithScope:     'This conformance report is based on the results of an accessibility evaluation conducted by {specialist}, which included a sample of {count} {word}. These {word} were selected by AxAll UAB as representative of the overall accessibility and functionality of the {title}. The {word} are listed below in the section "{section}".',
@@ -350,14 +360,14 @@ const UI = {
     productDescription:     'Produkto aprašymas',
     evaluators:             'Vertintojai',
     leadEvaluator:          'Pagrindinis vertintojas',
-    disabilityReviewer:     'Ekspertas su negalia',
+    disabilityReviewer:     'Neįgalumo ekspertas',
     organisation:           'Organizacija',
     disability:             'Negalia',
     version:                'Versija',
     learnMore:              'Sužinoti daugiau',
 
     // ── ACR ──────────────────────────────────────────────────────────────────
-    reportSubtitle:         'leidimas',
+    reportSubtitle:         'EN 301 549 leidimas',
     vpatEditionNote:        'Parengta pagal VPAT® 2.5 Rev',
     preparedBy:             'Parengė',
 
@@ -368,7 +378,7 @@ const UI = {
     evaluationSection:      'Vertinimas',
     evalMethodsUsed:        'Taikyti vertinimo metodai',
     assistiveTech:          'Testavimas pagalbinėmis technologijomis',
-    automatedTools:         'Testavimas naudojant automatinius įrankius',
+    automatedTools:         'Testavimas automatizuotais įrankiais',
     methodology:            'Vertinimo metodologija',
     tools:                  'Priemonės, metodai ir kita informacija',
     coverage:               'Vertinimo apimtis',
@@ -399,9 +409,9 @@ const UI = {
     termNotEvaluated:       'Nevertinta',
     termNotEvaluatedDesc:   'Produktas nebuvo įvertintas pagal šį kriterijų. Šią reikšmę galima naudoti tik WCAG AAA lygio kriterijams.',
 
-    noteWcagSupports:       'WCAG lentelėse atitikties lygis žymimas kaip „Palaiko" net ir tada, kai produkte nėra turinio, kuriam būtų taikomas sėkmės kriterijus. Tai atitinka <a href="https://www.w3.org/TR/WCAG20/#conformance-reqs" target="_blank" rel="noopener">WCAG 2.0 atitikties sampratos reikalavimus</a>.',
-    noteWcagVerified:       'Kriterijai, pažymėti kaip „Palaiko", nurodo, kad produktas palaiko atitinkamą kriterijų, remiantis <a href="#evaluation">aukščiau aprašytais vertinimo imtimi ir metodais</a>.',
-    noteEnNotApplicable:    'EN 301 549 lentelėse „Netaikoma" žymima tais atvejais, kai konkreti funkcija, kuriai taikomas kriterijus, nėra produkto dalis. Pavyzdžiui, jei produktas yra Saitynas (Web), EN 301 549 skyrius 8. Techninė įranga bus pažymėtas „Netaikoma". Tai atitinka <a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf" target="_blank" rel="noopener">EN 301 549 atitikties sampratos reikalavimus</a>.',
+    noteWcagSupports:       'Pastaba: WCAG lentelėse atitikties lygis žymimas kaip „Palaiko" net ir tada, kai produkte nėra turinio, kuriam būtų taikomas sėkmės kriterijus. Tai atitinka <a href="https://www.w3.org/TR/WCAG20/#conformance-reqs" target="_blank" rel="noopener">WCAG 2.0 atitikties sampratos reikalavimus</a>.',
+    noteWcagVerified:       'Pastaba: Kriterijai, pažymėti kaip „Palaiko", nurodo, kad produktas palaiko atitinkamą kriterijų, remiantis <a href="#evaluation">aukščiau aprašytais vertinimo imtimi ir metodais</a>.',
+    noteEnNotApplicable:    'Pastaba: EN 301 549 lentelėse „Netaikoma" žymima tais atvejais, kai konkreti funkcija, kuriai taikomas kriterijus, nėra produkto dalis. Pavyzdžiui, jei produktas yra Saitynas (Web), EN 301 549 skyrius 8. Techninė įranga bus pažymėtas „Netaikoma". Tai atitinka <a href="https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf" target="_blank" rel="noopener">EN 301 549 atitikties sampratos reikalavimus</a>.',
 
     wcagReport:             'WCAG 2.x ataskaita',
     wcagReportIntro:        '1 ir 2 lentelėse dokumentuojama atitiktis šiems EN 301 549 skyriams:',
@@ -412,9 +422,19 @@ const UI = {
 
     enReport:               'EN 301 549 ataskaita',
     enClauseLabel:          'Skyrius',
+    accessibilityEvaluatedBy: 'Prieinamumą įvertino',
+    noteLabel:              'Pastaba',
+    notesLabel:             'Pastabos',
+    headingCellLabel:       'Antraštės eilutė – atsakymo nereikia',
+    seeInformationIn:       'Žr. informaciją skyriuose',
+    seeThrough:             'iki',
+    seeLabel:               'Žr.',
+    seeWcagSection:         'žr. WCAG 2.x skyrių',
+    seeWcagSectionAbove:    'Žr. WCAG 2.x skyrių aukščiau.',
+    clause4Note:            'Netaikoma. Šis skyrius yra informacinis ir jame nėra reikalavimų, kurių laikymasis turi būti tikrinamas. Kiekvienas vertinamo produkto funkcionalumo aspektas aprašytas techninių reikalavimų lentelėse.',
 
-    evalIntroWithScope:     'Ši atitikties ataskaita parengta remiantis „AxAll" UAB atlikto prieinamumo vertinimo rezultatais. Vertinimas apėmė {count} {word} reprezentatyvią imtį, atspindinčią bendrą {title} prieinamumą ir funkcionalumą. Vertintų {word} sąrašas pateiktas skyriuje „{section}".',
-    evalIntroNoScope:       'Ši atitikties ataskaita parengta remiantis „AxAll" UAB atlikto prieinamumo vertinimo rezultatais.',
+    evalIntroWithScope:     'Ši atitikties ataskaita parengta remiantis prieinamumo vertinimo, kurį atliko {specialist}, rezultatais. Vertinimas apėmė {count} {word} imtį. Šie {word} buvo atrinkti „AxAll" UAB kaip reprezentatyvūs, atspindintys bendrą {title} prieinamumą ir funkcionalumą. {word} sąrašas pateiktas skyriuje „{section}".',
+    evalIntroNoScope:       'Ši atitikties ataskaita parengta remiantis prieinamumo vertinimo, kurį atliko {specialist}, rezultatais.',
 
     backToStatement:        'Grįžti į pareiškimą dėl prieinamumo',
     viewFullReport:         'Peržiūrėti visą atitikties ataskaitą',
@@ -423,7 +443,7 @@ const UI = {
     introAppliesTo:         'Ši atitikties paraiška dėl prieinamumo (toliau – Atitikties paraiška) taikoma šioms skaitmeninėms paslaugoms:',
     introWebsite:           'Interneto svetainė',
     introApp:               'Mobilioji programėlė',
-    introDocs:              'E. dokumentai: publikuojami elektroniniai dokumentai',
+    introDocs:              'Dokumentai: publikuojami elektroniniai dokumentai',
     introReferredAs:        'toliau',
     introCollective:        'skaitmeninės paslaugos',
     introProvidedBy:        'Paslaugas teikia',
