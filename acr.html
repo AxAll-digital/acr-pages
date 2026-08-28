@@ -805,7 +805,7 @@
       </tr></thead><tbody>`;
     rows.forEach(row => {
       const cls          = conformanceClass(row.conformance);
-      const confLabel    = conformanceLabel(row.conformance, t);
+      const confLabel    = translateRemarks(conformanceLabel(row.conformance, t), lang, t);
       const levelLabel   = `(${t.thLevel} ${esc(row.level)})`;
       const criterionLink = row.refUrl
         ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a> ${levelLabel}`
@@ -832,7 +832,7 @@
         html += `<tr class="en-heading-row"><td><strong><em>${esc(row.criterionId)} ${esc(row.name)}</em></strong></td><td>${headingCellLabel}</td><td>${headingCellLabel}</td></tr>`;
       } else {
         const cls       = conformanceClass(row.conformance);
-        const confLabel = conformanceLabel(row.conformance, t);
+        const confLabel = translateRemarks(conformanceLabel(row.conformance, t), lang, t);
         const criterionLabel = row.refUrl
           ? `<a href="${esc(row.refUrl)}" target="_blank" rel="noopener"><strong>${esc(row.criterionId)} ${esc(row.name)}</strong></a>`
           : `<strong>${esc(row.criterionId)} ${esc(row.name)}</strong>`;
