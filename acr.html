@@ -746,8 +746,9 @@
     const conformance  = r.conformance || '';
     const remarks      = langField(r.remarks, r.remarksLT, lang);
     const enRef        = r.en301549Ref || '';
-    const sectionNotes = r.enSectionNoteOverride || r.enSectionNote || '';
-    const row = { criterionId, name, level, refUrl, conformance, remarks, enRef, sectionNotes };
+    const sectionNotes   = r.enSectionNoteOverride || r.enSectionNote   || '';
+    const sectionNotesLT = r.enSectionNoteLT || '';
+    const row = { criterionId, name, level, refUrl, conformance, remarks, enRef, sectionNotes, sectionNotesLT };
 
     const firstNum = parseFloat(criterionId);
     if (isNaN(firstNum)) return;
@@ -916,8 +917,10 @@
       }
 
       const contentRows  = rows.filter(r => !r.conformance.includes('Heading cell'));
-      const noteRow      = rows.find(r => r.sectionNotes && r.sectionNotes.trim());
-      const chapterNote  = noteRow ? noteRow.sectionNotes.trim() : '';
+      const noteRow       = rows.find(r => r.sectionNotes && r.sectionNotes.trim());
+      const chapterNoteEN = noteRow ? noteRow.sectionNotes.trim() : '';
+      const chapterNoteLT = noteRow ? (noteRow.sectionNotesLT || '').trim() : '';
+      const chapterNote   = langField(chapterNoteEN, chapterNoteLT, lang);
       body += `<h3 class="section-heading"><a href="${meta.url}" target="_blank" rel="noopener">${esc(chapterHeading)}</a></h3>`;
       if (chapterNote) body += `<p class="section-note">${t.notesLabel}: ${esc(chapterNote)}</p>`;
       const hasActiveRows = contentRows.some(r => r.conformance !== 'Not Applicable');
