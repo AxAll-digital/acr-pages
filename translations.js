@@ -200,7 +200,7 @@ const UI = {
     // ── ACR ──────────────────────────────────────────────────────────────────
     // Header
     reportSubtitle:         'Edition',
-    vpatEditionNote:        'Based on VPAT® 2.5 Rev',
+    vpatEditionNote:        'Based on VPAT® {version}',
     preparedBy:             'Prepared by',
 
     // Section headings
@@ -368,7 +368,7 @@ const UI = {
 
     // ── ACR ──────────────────────────────────────────────────────────────────
     reportSubtitle:         'leidimas',
-    vpatEditionNote:        'Parengta pagal VPAT® 2.5 Rev',
+    vpatEditionNote:        'Parengta pagal VPAT® {version}',
     preparedBy:             'Parengė',
 
     nameOfProduct:          'Produkto pavadinimas / versija',
