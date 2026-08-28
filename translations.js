@@ -433,8 +433,8 @@ const UI = {
     seeWcagSectionAbove:    'Žr. WCAG 2.x skyrių aukščiau.',
     clause4Note:            'Netaikoma. Šis skyrius yra informacinis ir jame nėra reikalavimų, kurių laikymasis turi būti tikrinamas. Kiekvienas vertinamo produkto funkcionalumo aspektas aprašytas techninių reikalavimų lentelėse.',
 
-    evalIntroWithScope:     'Ši atitikties ataskaita parengta remiantis prieinamumo vertinimo, kurį atliko {specialist}, rezultatais. Vertinimas apėmė {count} {word} imtį. Šie {word} buvo atrinkti „AxAll" UAB kaip reprezentatyvūs, atspindintys bendrą {title} prieinamumą ir funkcionalumą. {word} sąrašas pateiktas skyriuje „{section}".',
-    evalIntroNoScope:       'Ši atitikties ataskaita parengta remiantis prieinamumo vertinimo, kurį atliko {specialist}, rezultatais.',
+    evalIntroWithScope:     'Ši atitikties ataskaita parengta remiantis „AxAll“ UAB atlikto prieinamumo vertinimo rezultatais. Vertinimas apėmė {count} {word} reprezentatyvią imtį, atspindinčią bendrą {title} prieinamumą ir funkcionalumą. Vertintų {word} sąrašas pateiktas skyriuje „{section}“',
+    evalIntroNoScope:       'Ši atitikties ataskaita parengta remiantis „AxAll“ UAB atlikto prieinamumo vertinimo rezultatais.',
 
     backToStatement:        'Grįžti į pareiškimą dėl prieinamumo',
     viewFullReport:         'Peržiūrėti visą atitikties ataskaitą',
